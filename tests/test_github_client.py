@@ -96,6 +96,18 @@ def test_client_paginates_until_it_collects_requested_merged_pulls(
     assert [pull["number"] for pull in pulls] == [101, 99]
 
 
+def test_client_stops_pagination_when_github_returns_empty_page(
+    fake_transport: FakeTransport,
+    repository: RepositoryRef,
+) -> None:
+    fake_transport.queue_json(200, [])
+    client = GitHubClient(transport=fake_transport, token=None)
+
+    pulls = client.list_merged_pull_requests(repository, limit=1)
+
+    assert pulls == []
+
+
 def test_client_returns_pull_request_detail(
     fake_transport: FakeTransport,
     repository: RepositoryRef,
