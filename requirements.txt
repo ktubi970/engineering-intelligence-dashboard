@@ -1,0 +1,6 @@
+-e .
+pandas==3.0.3
+plotly==6.9.0
+requests==2.34.2
+scikit-learn==1.9.0
+streamlit==1.59.2
