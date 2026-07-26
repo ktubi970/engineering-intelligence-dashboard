@@ -42,6 +42,28 @@ def test_refresh_snapshot_writes_privacy_safe_reproducible_files(
     }
 
 
+def test_refresh_snapshot_rejects_private_repository_before_collection(
+    tmp_path: Path,
+    fake_github_client: FakeGitHubClient,
+) -> None:
+    fake_github_client.repository_metadata = {
+        "id": 42,
+        "full_name": "private-owner/private-repository",
+        "private": True,
+    }
+
+    with pytest.raises(DataContractError, match="must be public"):
+        refresh_snapshot(
+            fake_github_client,
+            [RepositoryRef.parse("private-owner/private-repository")],
+            tmp_path,
+            pr_limit=2,
+        )
+
+    assert fake_github_client.collection_requests == []
+    assert list(tmp_path.iterdir()) == []
+
+
 def test_snapshot_files_never_persist_private_or_free_text(
     tmp_path: Path,
     fake_github_client: FakeGitHubClient,

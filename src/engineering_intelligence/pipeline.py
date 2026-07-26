@@ -25,6 +25,8 @@ SOURCE = "GitHub public REST API"
 
 
 class GitHubDataSource(Protocol):
+    def get_repository(self, repository: RepositoryRef) -> dict[str, object]: ...
+
     def list_merged_pull_requests(
         self,
         repository: RepositoryRef,
@@ -63,6 +65,10 @@ def refresh_snapshot(
     pull_frames: list[pd.DataFrame] = []
     workflow_frames: list[pd.DataFrame] = []
     for repository in repositories:
+        metadata = client.get_repository(repository)
+        if metadata.get("private") is not False:
+            raise DataContractError(f"Repository {repository.slug} must be public.")
+
         summaries = client.list_merged_pull_requests(repository, pr_limit)
         details = [
             client.get_pull_request(repository, _pull_number(summary)) for summary in summaries

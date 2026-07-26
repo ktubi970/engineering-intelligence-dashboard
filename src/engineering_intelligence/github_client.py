@@ -52,6 +52,12 @@ class GitHubClient:
         self._transport = transport or RequestsTransport()
         self._token = token
 
+    def get_repository(self, repository: RepositoryRef) -> dict[str, object]:
+        return cast(
+            dict[str, object],
+            self._get_json(f"/repos/{repository.slug}", {}),
+        )
+
     def list_merged_pull_requests(
         self, repository: RepositoryRef, limit: int
     ) -> list[dict[str, object]]:

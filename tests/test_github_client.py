@@ -120,6 +120,23 @@ def test_client_returns_pull_request_detail(
     assert (pull["number"], pull["changed_files"], pull["commits"]) == (101, 7, 3)
 
 
+def test_client_returns_public_repository_visibility(
+    fake_transport: FakeTransport,
+    repository: RepositoryRef,
+) -> None:
+    fake_transport.queue_json(
+        200,
+        {"id": 42, "full_name": "example/project", "private": False},
+    )
+    client = GitHubClient(transport=fake_transport, token=None)
+
+    metadata = client.get_repository(repository)
+
+    assert metadata["private"] is False
+    assert fake_transport.requests[0].url == "https://api.github.com/repos/example/project"
+    assert fake_transport.requests[0].params == {}
+
+
 def test_client_returns_workflow_runs(
     fake_transport: FakeTransport,
     repository: RepositoryRef,

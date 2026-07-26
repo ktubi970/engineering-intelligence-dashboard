@@ -90,6 +90,9 @@ def normalize_workflow_runs(
 ) -> pd.DataFrame:
     rows: list[dict[str, object]] = []
     for record in records:
+        if record.get("status") != "completed":
+            continue
+
         created_at = pd.to_datetime(record.get("created_at"), utc=True)
         updated_at = pd.to_datetime(record.get("updated_at"), utc=True)
         duration_minutes = (updated_at - created_at).total_seconds() / 60

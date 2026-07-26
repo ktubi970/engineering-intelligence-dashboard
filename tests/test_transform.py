@@ -143,6 +143,35 @@ def test_normalize_workflow_runs_uses_exact_schema(
     assert str(frame["updated_at"].dt.tz) == "UTC"
 
 
+def test_normalize_workflow_runs_keeps_only_completed_runs(
+    raw_workflow_runs: list[dict[str, object]],
+) -> None:
+    queued = {
+        **raw_workflow_runs[0],
+        "id": 9003,
+        "status": "queued",
+        "conclusion": None,
+        "updated_at": "2026-01-02T11:00:00Z",
+    }
+    in_progress = {
+        **raw_workflow_runs[0],
+        "id": 9002,
+        "status": "in_progress",
+        "conclusion": None,
+        "updated_at": "2026-01-02T11:06:00Z",
+    }
+    completed = raw_workflow_runs[0]
+
+    frame = normalize_workflow_runs(
+        [queued, completed, in_progress],
+        "pandas-dev/pandas",
+    )
+
+    assert frame["run_id"].tolist() == [9001]
+    assert frame["status"].tolist() == ["completed"]
+    assert frame["conclusion"].tolist() == ["success"]
+
+
 def test_normalize_workflow_runs_rejects_negative_duration(
     raw_workflow_runs: list[dict[str, object]],
 ) -> None:

@@ -104,6 +104,12 @@ class FakeGitHubClient:
         workflow_runs = workflow_payload["workflow_runs"]
         assert isinstance(workflow_runs, list)
         self.workflow_runs = workflow_runs
+        self.repository_metadata: dict[str, object] = {"private": False}
+        self.collection_requests: list[str] = []
+
+    def get_repository(self, repository: RepositoryRef) -> dict[str, object]:
+        del repository
+        return self.repository_metadata
 
     def list_merged_pull_requests(
         self,
@@ -111,6 +117,7 @@ class FakeGitHubClient:
         limit: int,
     ) -> list[dict[str, object]]:
         del repository
+        self.collection_requests.append("pulls")
         return [{"number": number} for number in (101, 99)][:limit]
 
     def get_pull_request(
@@ -119,6 +126,7 @@ class FakeGitHubClient:
         number: int,
     ) -> dict[str, object]:
         del repository
+        self.collection_requests.append("pull detail")
         return self.pull_details[number]
 
     def list_workflow_runs(
@@ -127,6 +135,7 @@ class FakeGitHubClient:
         limit: int,
     ) -> list[dict[str, object]]:
         del repository
+        self.collection_requests.append("workflows")
         return self.workflow_runs[:limit]
 
 
