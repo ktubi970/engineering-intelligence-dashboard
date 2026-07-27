@@ -20,6 +20,13 @@ EVIDENCE_COVERAGE = "94.54%"
 LOCAL_INTEGRATION_TEST_RESULT = "172 passed"
 LOCAL_INTEGRATION_PYTHON = "Python 3.13.9"
 LOCAL_INTEGRATION_FORMAT_RESULT = "34 files already formatted"
+INTEGRATION_COMMIT = "b9e4db677d6d29d0354061d9b86fdc8033a490a9"
+INTEGRATION_SCREENSHOT_BYTES = 91_844
+INTEGRATION_SCREENSHOT_CAPTION = "restoring all six repositories"
+INTEGRATION_SCREENSHOT_URL = (
+    "https://github.com/ktubi970/engineering-intelligence-dashboard/blob/"
+    f"{INTEGRATION_COMMIT}/docs/images/dashboard.png?raw=true"
+)
 
 
 def _artifact_path(relative_path: str) -> Path:
@@ -220,6 +227,7 @@ def test_published_portfolio_claims_match_verified_snapshot_and_evaluation() -> 
 def test_publication_artifacts_are_real_and_match_verified_remote_evidence() -> None:
     screenshot_path = _artifact_path("docs/images/dashboard.png")
     _assert_dashboard_screenshot_contract(screenshot_path)
+    assert screenshot_path.stat().st_size == INTEGRATION_SCREENSHOT_BYTES
 
     requirements_dev = _artifact("requirements-dev.txt").splitlines()
     assert "pillow==12.3.0" in requirements_dev
@@ -238,8 +246,9 @@ def test_publication_artifacts_are_real_and_match_verified_remote_evidence() -> 
         "GitHub public REST API",
         "The random forest has lower MAE than the baseline on this fixed snapshot.",
         "estimated merge time among pull requests that eventually merge",
-        "![MergeLens dashboard overview](https://github.com/ktubi970/engineering-intelligence-dashboard/blob/ce303f2a4b5d81e98a478ec542542698e0f991b1/docs/images/dashboard.png?raw=true)",
-        "restoring all six repositories",
+        f"![MergeLens dashboard overview]({INTEGRATION_SCREENSHOT_URL})",
+        INTEGRATION_SCREENSHOT_CAPTION,
+        f"PNG, {INTEGRATION_SCREENSHOT_BYTES:,} bytes",
         "## Limitations",
     ):
         assert anchor in pull_request_body
@@ -271,6 +280,16 @@ def test_publication_artifacts_are_real_and_match_verified_remote_evidence() -> 
     for document in (readme, quality_evidence, pull_request_body):
         for stale_claim in stale_claims:
             assert stale_claim not in document
+
+    tracked_markdown_paths = (
+        PROJECT_ROOT / "README.md",
+        PROJECT_ROOT / ".github" / "pull_request_body.md",
+        *sorted((PROJECT_ROOT / "docs").rglob("*.md")),
+    )
+    for markdown_path in tracked_markdown_paths:
+        assert stale_claims[2] not in markdown_path.read_text(encoding="utf-8"), (
+            f"Superseded evidence SHA remains in {markdown_path.relative_to(PROJECT_ROOT)}"
+        )
 
     assert "https://github.com/ktubi970/engineering-intelligence-dashboard/pull/1" in (
         quality_evidence
@@ -321,10 +340,7 @@ def test_readme_uses_exact_current_public_tab_names() -> None:
 
 def test_pr_body_pins_screenshot_to_an_immutable_commit_url() -> None:
     pull_request_body = _artifact(".github/pull_request_body.md")
-    expected_url = (
-        "https://github.com/ktubi970/engineering-intelligence-dashboard/blob/"
-        "ce303f2a4b5d81e98a478ec542542698e0f991b1/docs/images/dashboard.png?raw=true"
-    )
+    expected_url = INTEGRATION_SCREENSHOT_URL
     match = re.search(r"!\[MergeLens dashboard overview\]\(([^)]+)\)", pull_request_body)
     assert match is not None
     screenshot_url = match.group(1)
