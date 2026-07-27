@@ -277,10 +277,10 @@ def _write_snapshot_atomically(
             ),
             files={
                 PULL_REQUEST_FILENAME: SnapshotFile(
-                    sha256=_sha256(temporary_paths[0]),
+                    sha256=_canonical_csv_sha256(temporary_paths[0]),
                 ),
                 WORKFLOW_FILENAME: SnapshotFile(
-                    sha256=_sha256(temporary_paths[1]),
+                    sha256=_canonical_csv_sha256(temporary_paths[1]),
                 ),
             },
         )
@@ -486,7 +486,7 @@ def _validate_file_hashes(
         )
         expected = cast(str, entry["sha256"])
         try:
-            actual = _sha256(paths[filename])
+            actual = _canonical_csv_sha256(paths[filename])
         except OSError as error:
             raise DataContractError(
                 f"Snapshot file {filename} must be readable for SHA-256 validation.",
@@ -584,5 +584,8 @@ def _require_positive_integer(value: object, path: str) -> None:
         raise DataContractError(f"{path} must be a positive integer.")
 
 
-def _sha256(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+def _canonical_csv_sha256(path: Path) -> str:
+    """Hash CSV content after normalizing platform line endings to LF."""
+    content = path.read_bytes()
+    canonical_content = content.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+    return hashlib.sha256(canonical_content).hexdigest()

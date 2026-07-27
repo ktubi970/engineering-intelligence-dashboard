@@ -33,14 +33,18 @@ unchanged at that instant.
 - the UTC generation timestamp and GitHub source, visibility, REST API kind, and API version;
 - repository collection order, exact row counts, selection, requested limits, and ordering
   semantics for both tables; and
-- lowercase SHA-256 digests of the exact bytes in `pull_requests.csv` and `workflow_runs.csv`.
+- lowercase SHA-256 digests of logical CSV content after CRLF and bare CR line endings are
+  normalized to LF.
 
 The committed digests are:
 
 | File | SHA-256 |
 | --- | --- |
-| `pull_requests.csv` | `044f3b9cf23651224b07d4c683738b9edc64cf0856ff3e6303ce0d7ed84bc602` |
-| `workflow_runs.csv` | `f255774e67f9b17caf401f7f59d53da9a38d1cc67b536691d45368829c023af0` |
+| `pull_requests.csv` | `69f8bac3e356f4dd0e93b232de14c707a318d36ab04ad9d66001cb936e984d96` |
+| `workflow_runs.csv` | `c88a5cc75968c342d47a68efdeb7c9a17798f31ebf0d2ca5901ffb23d3cc8462` |
+
+`.gitattributes` also pins `data/snapshots/*.csv` checkouts to LF for deterministic future
+checkouts; canonical hash validation remains line-ending independent as defense in depth.
 
 ## Schema
 
@@ -85,12 +89,13 @@ python scripts/refresh_data.py
 The pipeline checks that repositories are public before collection and validates exact table
 schemas, non-null values, scoped uniqueness, repository form, numeric types and ranges, enum
 values, UTC timestamp ordering, and every stored derived value. It serializes both temporary CSVs,
-hashes those exact bytes, creates the manifest, and replaces `metadata.json` last.
+hashes their canonical logical content, creates the manifest, and replaces `metadata.json` last.
 
 Loading validates the manifest's exact keys, types, schema/source enums, UTC timestamp, collection
 settings, row counts, repository set, and both SHA-256 digests before returning revalidated
-frames. A file edit is rejected even if its columns still match. Review diffs and rerun the
-complete quality gate before committing refreshed data.
+frames. A logical content edit is rejected even if its columns still match; platform-only line
+ending changes are accepted. Review diffs and rerun the complete quality gate before committing
+refreshed data.
 
 ## Limitations and bias
 

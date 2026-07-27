@@ -10,6 +10,26 @@ from engineering_intelligence.domain import DataContractError, RepositoryRef
 from engineering_intelligence.pipeline import load_snapshot, refresh_snapshot
 from engineering_intelligence.transform import PULL_REQUEST_COLUMNS, WORKFLOW_COLUMNS
 
+SNAPSHOT_CSV_FILENAMES = ("pull_requests.csv", "workflow_runs.csv")
+
+
+def _logical_csv_sha256(payload: bytes) -> str:
+    canonical = payload.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+    return hashlib.sha256(canonical).hexdigest()
+
+
+def _csv_line_ending_variant(payload: bytes, style: str) -> bytes:
+    canonical = payload.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+    assert b"\n" in canonical
+    if style == "lf":
+        return canonical
+    if style == "crlf":
+        return canonical.replace(b"\n", b"\r\n")
+    if style == "cr":
+        return canonical.replace(b"\n", b"\r")
+    assert style == "mixed"
+    return canonical.replace(b"\n", b"\r\n", 1)
+
 
 def _manifest_for_snapshot(
     data_dir: Path,
@@ -47,9 +67,9 @@ def _manifest_for_snapshot(
         },
         "files": {
             filename: {
-                "sha256": hashlib.sha256((data_dir / filename).read_bytes()).hexdigest(),
+                "sha256": _logical_csv_sha256((data_dir / filename).read_bytes()),
             }
-            for filename in ("pull_requests.csv", "workflow_runs.csv")
+            for filename in SNAPSHOT_CSV_FILENAMES
         },
     }
 
@@ -469,3 +489,58 @@ def test_load_snapshot_compares_repository_sets_independent_of_row_order(
     pulls, workflows, metadata = load_snapshot(tmp_path)
 
     assert len(pulls) == len(workflows) == 4
+
+
+@pytest.mark.parametrize("line_ending_style", ["lf", "crlf", "cr", "mixed"])
+def test_snapshot_manifest_hash_accepts_equivalent_csv_line_endings(
+    tmp_path: Path,
+    fake_github_client: FakeGitHubClient,
+    line_ending_style: str,
+) -> None:
+    refresh_snapshot(
+        fake_github_client,
+        [RepositoryRef.parse("pandas-dev/pandas")],
+        tmp_path,
+        pr_limit=2,
+    )
+    manifest = json.loads((tmp_path / "metadata.json").read_text(encoding="utf-8"))
+
+    for filename in SNAPSHOT_CSV_FILENAMES:
+        path = tmp_path / filename
+        variant = _csv_line_ending_variant(path.read_bytes(), line_ending_style)
+        assert _logical_csv_sha256(variant) == manifest["files"][filename]["sha256"]
+        path.write_bytes(variant)
+
+    pulls, workflows, loaded_manifest = load_snapshot(tmp_path)
+
+    assert len(pulls) == len(workflows) == 2
+    assert loaded_manifest == manifest
+
+
+def test_snapshot_manifest_hash_rejects_logical_csv_content_change(
+    tmp_path: Path,
+    fake_github_client: FakeGitHubClient,
+) -> None:
+    refresh_snapshot(
+        fake_github_client,
+        [RepositoryRef.parse("pandas-dev/pandas")],
+        tmp_path,
+        pr_limit=2,
+    )
+    pull_path = tmp_path / "pull_requests.csv"
+    original = pull_path.read_bytes()
+    assert b"pandas-dev/pandas" in original
+    pull_path.write_bytes(
+        original.replace(b"pandas-dev/pandas", b"pandas-dev/pandaz", 1),
+    )
+
+    with pytest.raises(DataContractError, match="SHA-256"):
+        load_snapshot(tmp_path)
+
+
+def test_snapshot_csv_checkout_is_pinned_to_lf() -> None:
+    attributes_path = Path(__file__).resolve().parents[1] / ".gitattributes"
+    assert attributes_path.is_file(), "Missing .gitattributes snapshot CSV contract."
+
+    attributes = attributes_path.read_text(encoding="utf-8").splitlines()
+    assert "data/snapshots/*.csv text eol=lf" in attributes
