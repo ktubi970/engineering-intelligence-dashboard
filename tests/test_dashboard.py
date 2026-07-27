@@ -247,6 +247,25 @@ def test_data_dir_defaults_to_the_committed_snapshot(
     assert resolve_data_dir() == APP_PATH.parent / "data" / "snapshots"
 
 
+def test_committed_snapshot_exposes_all_six_repository_options(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.delenv("EID_DATA_DIR", raising=False)
+
+    app = AppTest.from_file(APP_PATH)
+    app.run(timeout=30)
+
+    assert not app.exception
+    assert app.sidebar.multiselect[0].options == [
+        "microsoft/vscode",
+        "pandas-dev/pandas",
+        "ruby/ruby",
+        "rust-lang/rust",
+        "streamlit/streamlit",
+        "tensorflow/tensorflow",
+    ]
+
+
 def test_opening_feature_frame_contains_only_the_three_utc_model_inputs() -> None:
     features = opening_feature_frame(
         "alpha/api",

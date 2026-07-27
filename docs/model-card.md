@@ -30,8 +30,8 @@ is a predictive feature. This preserves the explicit human decision recorded as 
 Rows are stable-sorted by UTC creation time. The newest 20% is the fixed chronological test
 candidate set, and its earliest `created_at` is the as-of cutoff. An earlier candidate can train
 the pipeline only when its `merged_at` is strictly before that cutoff.
-With 300 committed rows, that produces 240 earlier candidates and 60 chronological test rows.
-At the fixed cutoff, 17 unavailable labels are purged, leaving 223 training rows.
+With 900 committed rows, that produces 720 earlier candidates and 180 chronological test rows.
+At the fixed cutoff, 98 unavailable labels are purged, leaving 622 training rows.
 
 The resulting boundary is checked directly: maximum training `merged_at` is earlier than the
 cutoff, which is at or before minimum test `created_at`. Evaluation never fits on test targets.
@@ -63,14 +63,14 @@ These values were computed through `load_snapshot(Path("data/snapshots"))` follo
 
 | Measure | Result |
 | --- | ---: |
-| As-of cutoff | 2026-07-20T18:48:28+00:00 |
-| Training rows | 223 |
-| Test rows | 60 |
-| Purged unavailable labels | 17 |
-| Training-median estimate | 18.235 hours |
-| Random-forest MAE | 17.499891193309 hours |
-| Train-median baseline MAE | 20.535763888889 hours |
-| Difference | model is 3.035872695580 hours better |
+| As-of cutoff | 2026-07-24T08:38:56+00:00 |
+| Training rows | 622 |
+| Test rows | 180 |
+| Purged unavailable labels | 98 |
+| Training-median estimate | 9.463611111111 hours |
+| Random-forest MAE | 9.734692264131 hours |
+| Train-median baseline MAE | 12.484162037037 hours |
+| Difference | model is 2.749469772906 hours better |
 | Honest result | random forest wins |
 
 The random forest has lower MAE on this fixed committed-snapshot holdout. That is local evidence
@@ -83,7 +83,7 @@ not general model quality.
 - Pull-request number and calendar context may encode repository process changes but do not
   explain them. Global feature importance is non-causal.
 - Random forests do not extrapolate reliably outside observed feature ranges.
-- The two repositories, recent sample, and merged-only selection create substantial distribution,
+- The six repositories, recent sample, and merged-only selection create substantial distribution,
   survivorship, and repository bias.
 - The dashboard retrains on the selected local rows and disables evaluation below 80 rows. Filtered
   results can differ from this full-snapshot result.

@@ -6,6 +6,9 @@ from pathlib import Path
 import pytest
 from PIL import Image, UnidentifiedImageError
 
+from engineering_intelligence.model import train_merge_time_model
+from engineering_intelligence.pipeline import load_snapshot
+
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -53,6 +56,8 @@ def test_ci_runs_the_binding_quality_gate_on_master_and_pull_requests() -> None:
 
 
 def test_recruiter_readme_and_supporting_documents_publish_the_core_contract() -> None:
+    pulls, workflows, _ = load_snapshot(PROJECT_ROOT / "data" / "snapshots")
+
     readme = _artifact("README.md")
     for anchor in (
         "# MergeLens",
@@ -80,7 +85,12 @@ def test_recruiter_readme_and_supporting_documents_publish_the_core_contract() -
 
     document_anchors = {
         "docs/architecture.md": ("GitHub public REST API", "pandas", "Streamlit", "failure"),
-        "docs/data-card.md": ("300", "199", "privacy", "## Limitations"),
+        "docs/data-card.md": (
+            str(len(pulls)),
+            str(len(workflows)),
+            "privacy",
+            "## Limitations",
+        ),
         "docs/model-card.md": (
             "opening-time",
             "chronological",
@@ -117,36 +127,82 @@ def test_agent_guardrails_allow_scoped_work_and_prohibit_unsafe_claims() -> None
 
 
 def test_published_portfolio_claims_match_verified_snapshot_and_evaluation() -> None:
+    pulls, workflows, _ = load_snapshot(PROJECT_ROOT / "data" / "snapshots")
+    result = train_merge_time_model(pulls)
+    model_mae = f"{result.mae_hours:.12f}"
+    baseline_mae = f"{result.baseline_mae_hours:.12f}"
+    difference = f"{abs(result.mae_hours - result.baseline_mae_hours):.12f}"
+
+    if result.mae_hours < result.baseline_mae_hours:
+        winner = "random forest"
+        result_sentence = (
+            "The random forest has lower MAE than the baseline on this fixed snapshot."
+        )
+        model_card_difference = f"model is {difference} hours better"
+    elif result.baseline_mae_hours < result.mae_hours:
+        winner = "baseline"
+        result_sentence = "The model underperforms the baseline on this snapshot."
+        model_card_difference = f"model is {difference} hours worse"
+    else:
+        winner = "tie"
+        result_sentence = "The model matches the baseline on this snapshot."
+        model_card_difference = "model and baseline are equal"
+
+    honest_result = "tie" if winner == "tie" else f"{winner} wins"
+
     readme = _artifact("README.md")
     for claim in (
-        "300 merged pull requests and 199 completed workflow runs",
-        "The newest 20% (60 rows) is a fixed chronological holdout.",
-        "Of the 240 earlier candidates, 223 have labels available before the cutoff; "
-        "17 are purged.",
-        "- As-of cutoff: **2026-07-20T18:48:28+00:00**",
-        "- Random-forest MAE: **17.499891193309 hours**",
-        "- Training-median baseline MAE: **20.535763888889 hours**",
-        "- Winner: **random forest**, by **3.035872695580 hours**",
+        "900 merged pull requests and 560 completed workflow runs",
+        "The newest 20% (180 rows) is a fixed chronological holdout.",
+        "Of the 720 earlier candidates, 622 have labels available before the cutoff; "
+        "98 are purged.",
+        "- As-of cutoff: **2026-07-24T08:38:56+00:00**",
+        "- Random-forest MAE: **9.734692264131 hours**",
+        "- Training-median baseline MAE: **12.484162037037 hours**",
+        "- Winner: **random forest**, by **2.749469772906 hours**",
         "The random forest has lower MAE than the baseline on this fixed snapshot.",
         "estimated merge time among pull requests that eventually merge",
+        f"{len(pulls)} merged pull requests and {len(workflows)} completed workflow runs",
+        f"- Time-safe training rows: **{result.train_rows}**",
+        f"- Chronological test rows: **{result.test_rows}**",
+        f"- Purged unavailable labels: **{result.purged_rows}**",
+        f"- Training-median estimate: **{result.baseline_hours:.12f} hours**",
+        f"The newest 20% ({result.test_rows} rows) is a fixed chronological holdout.",
+        f"- Random-forest MAE: **{model_mae} hours**",
+        f"- Training-median baseline MAE: **{baseline_mae} hours**",
+        f"- Winner: **{winner}**, by **{difference} hours**",
+        result_sentence,
     ):
         assert claim in readme
 
     model_card = _artifact("docs/model-card.md")
+    training_rows = result.train_rows
     for claim in (
-        "With 300 committed rows, that produces 240 earlier candidates and 60 chronological "
+        "With 900 committed rows, that produces 720 earlier candidates and 180 chronological "
         "test rows.",
-        "17 unavailable labels are purged, leaving 223 training rows.",
-        "| As-of cutoff | 2026-07-20T18:48:28+00:00 |",
-        "| Training rows | 223 |",
-        "| Test rows | 60 |",
-        "| Purged unavailable labels | 17 |",
-        "| Random-forest MAE | 17.499891193309 hours |",
-        "| Train-median baseline MAE | 20.535763888889 hours |",
-        "| Difference | model is 3.035872695580 hours better |",
+        "98 unavailable labels are purged, leaving 622 training rows.",
+        "| As-of cutoff | 2026-07-24T08:38:56+00:00 |",
+        "| Training rows | 622 |",
+        "| Test rows | 180 |",
+        "| Purged unavailable labels | 98 |",
+        "| Random-forest MAE | 9.734692264131 hours |",
+        "| Train-median baseline MAE | 12.484162037037 hours |",
+        "| Difference | model is 2.749469772906 hours better |",
         "| Honest result | random forest wins |",
         "The random forest has lower MAE on this fixed committed-snapshot holdout.",
         "estimated merge time among pull requests that eventually merge",
+        f"With {len(pulls)} committed rows, that produces {len(pulls) - result.test_rows} earlier "
+        f"candidates and {result.test_rows} chronological test rows.",
+        f"| Test rows | {result.test_rows} |",
+        f"| As-of cutoff | {result.cutoff.isoformat()} |",
+        f"| Training rows | {training_rows} |",
+        f"| Purged unavailable labels | {result.purged_rows} |",
+        f"| Training-median estimate | {result.baseline_hours:.12f} hours |",
+        f"| Random-forest MAE | {model_mae} hours |",
+        f"| Train-median baseline MAE | {baseline_mae} hours |",
+        f"| Difference | {model_card_difference} |",
+        f"| Honest result | {honest_result} |",
+        "The random forest has lower MAE on this fixed committed-snapshot holdout.",
     ):
         assert claim in model_card
 
@@ -303,3 +359,21 @@ def test_readme_explains_the_codex_sol_ultra_engineering_workflow() -> None:
         "does not claim that every historical change or subagent",
     ):
         assert failure_or_guardrail in lowered
+
+
+def test_committed_snapshot_covers_the_six_default_repositories() -> None:
+    expected_repositories = [
+        "pandas-dev/pandas",
+        "streamlit/streamlit",
+        "microsoft/vscode",
+        "tensorflow/tensorflow",
+        "rust-lang/rust",
+        "ruby/ruby",
+    ]
+
+    pulls, workflows, metadata = load_snapshot(PROJECT_ROOT / "data" / "snapshots")
+
+    assert metadata["repositories"] == expected_repositories
+    assert set(pulls["repository"]) == set(expected_repositories)
+    assert set(workflows["repository"]).issubset(expected_repositories)
+    assert len(pulls) == 150 * len(expected_repositories)

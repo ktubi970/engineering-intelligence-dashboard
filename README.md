@@ -14,7 +14,7 @@ model as better than a simple baseline when it is not.
 
 Open one local Streamlit app to compare repository delivery signals, explore recent merge-time
 patterns, and test an opening-time forecast. The committed demo works offline after installation:
-300 merged pull requests and 199 completed workflow runs from two public repositories are already
+900 merged pull requests and 560 completed workflow runs from six public repositories are already
 included. The fixed holdout is evaluated with only labels available at its cutoff; on this
 snapshot, the random forest has lower MAE than the baseline.
 
@@ -117,6 +117,9 @@ streamlit run streamlit_app.py
 Use the sidebar to filter repositories and an inclusive UTC date range. The forecast remains
 available only when at least 80 pull-request rows are selected.
 
+The committed snapshot contains `pandas-dev/pandas`, `streamlit/streamlit`, `microsoft/vscode`,
+`tensorflow/tensorflow`, `rust-lang/rust`, and `ruby/ruby`.
+
 ## Optional data refresh
 
 Refreshing is explicit and is the only normal path that calls GitHub. It accepts public
@@ -146,19 +149,19 @@ proof that GitHub Actions has passed.
 
 ## Model results
 
-The committed 300-row pull-request snapshot is stable-sorted by `created_at`.
-The newest 20% (60 rows) is a fixed chronological holdout.
+The committed 900-row pull-request snapshot is stable-sorted by `created_at`.
+The newest 20% (180 rows) is a fixed chronological holdout.
 Its earliest opening time is the as-of cutoff.
-Of the 240 earlier candidates, 223 have labels available before the cutoff; 17 are purged.
+Of the 720 earlier candidates, 622 have labels available before the cutoff; 98 are purged.
 
-- As-of cutoff: **2026-07-20T18:48:28+00:00**
-- Time-safe training rows: **223**
-- Chronological test rows: **60**
-- Purged unavailable labels: **17**
-- Training-median estimate: **18.235 hours**
-- Random-forest MAE: **17.499891193309 hours**
-- Training-median baseline MAE: **20.535763888889 hours**
-- Winner: **random forest**, by **3.035872695580 hours**
+- As-of cutoff: **2026-07-24T08:38:56+00:00**
+- Time-safe training rows: **622**
+- Chronological test rows: **180**
+- Purged unavailable labels: **98**
+- Training-median estimate: **9.463611111111 hours**
+- Random-forest MAE: **9.734692264131 hours**
+- Training-median baseline MAE: **12.484162037037 hours**
+- Winner: **random forest**, by **2.749469772906 hours**
 
 The random forest has lower MAE than the baseline on this fixed snapshot. This single holdout does
 not establish future or general superiority, so both estimates and both empirical MAEs remain
@@ -169,7 +172,7 @@ This is an experimental, non-causal estimate and never a developer score. See th
 
 ## Limitations
 
-The snapshot is recent, point-in-time, and limited to two public open-source repositories. It
+The snapshot is recent, point-in-time, and limited to six large public open-source projects. It
 contains merged pull requests rather than every opened pull request, so it has selection and
 survivorship bias. Repository process changes and future data may shift results. Feature
 importance and the size/delay plot describe patterns; neither identifies causes.
