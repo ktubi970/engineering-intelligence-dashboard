@@ -50,9 +50,11 @@ the interactive app simple and makes the same logical CSV inputs reproducible in
    discarding unapproved raw fields. Its validators independently recompute those values and
    enforce repository, identifier, numeric, enum, and timestamp invariants.
 4. `pipeline.py` validates both frames, serializes both temporary CSV files, and computes SHA-256
-   after normalizing CRLF and bare CR line endings to LF. This canonicalization is limited to
-   snapshot CSV hashing; it does not rewrite other files. `.gitattributes` pins committed snapshot
-   CSV checkouts to LF. The pipeline then creates an exact schema-v2 manifest with the generation
+   after parsing each CSV with newline preservation and reserializing rows with LF record
+   separators. CR and LF characters embedded inside quoted cells remain distinct content and are
+   preserved in the hash. This canonicalization is limited to snapshot CSV hashing; it does not
+   rewrite other files. `.gitattributes` pins committed snapshot CSV checkouts to LF. The pipeline
+   then creates an exact schema-v2 manifest with the generation
    time, public GitHub source/API version, repository order, row counts, selection, requested
    per-repository limits, API-default ordering, and file digests.
 5. Each final file is replaced atomically, with metadata last as the natural completion marker.
