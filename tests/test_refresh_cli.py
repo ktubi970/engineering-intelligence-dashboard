@@ -7,6 +7,15 @@ from conftest import FakeGitHubClient
 from engineering_intelligence.pipeline import GitHubDataSource, load_snapshot
 from scripts.refresh_data import main
 
+EXPECTED_DEFAULT_REPOSITORIES = [
+    "pandas-dev/pandas",
+    "streamlit/streamlit",
+    "microsoft/vscode",
+    "tensorflow/tensorflow",
+    "rust-lang/rust",
+    "ruby/ruby",
+]
+
 
 def _client_factory(
     client: FakeGitHubClient,
@@ -42,14 +51,11 @@ def test_cli_uses_default_repositories_environment_token_and_sanitized_output(
     output = capsys.readouterr()
     assert exit_code == 0
     assert captured_tokens == [secret]
-    assert metadata["repositories"] == [
-        "pandas-dev/pandas",
-        "streamlit/streamlit",
-    ]
-    assert len(pulls) == 2
-    assert len(workflows) == 2
+    assert metadata["repositories"] == EXPECTED_DEFAULT_REPOSITORIES
+    assert len(pulls) == 6
+    assert len(workflows) == 6
     assert output.out == (
-        f"Refreshed 2 pull requests and 2 workflow runs across 2 repositories into {tmp_path}.\n"
+        f"Refreshed 6 pull requests and 6 workflow runs across 6 repositories into {tmp_path}.\n"
     )
     assert secret not in output.out + output.err
     assert "Authorization" not in output.out + output.err

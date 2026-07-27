@@ -10,6 +10,10 @@ from engineering_intelligence.pipeline import GitHubDataSource, refresh_snapshot
 DEFAULT_REPOSITORIES = (
     RepositoryRef.parse("pandas-dev/pandas"),
     RepositoryRef.parse("streamlit/streamlit"),
+    RepositoryRef.parse("microsoft/vscode"),
+    RepositoryRef.parse("tensorflow/tensorflow"),
+    RepositoryRef.parse("rust-lang/rust"),
+    RepositoryRef.parse("ruby/ruby"),
 )
 DEFAULT_OUTPUT_DIR = Path("data/snapshots")
 
