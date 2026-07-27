@@ -98,6 +98,11 @@ def evaluation_summary(
     )
 
 
+def preferred_forecast(model_mae: float, baseline_mae: float) -> str:
+    """Choose the lower-error estimate, defaulting a tie to the simpler baseline."""
+    return "random forest" if model_mae < baseline_mae else "train-median baseline"
+
+
 def _render_filters(
     pulls: pd.DataFrame,
     workflows: pd.DataFrame,
@@ -191,6 +196,10 @@ def _render_forecast(pulls: pd.DataFrame) -> None:
     st.plotly_chart(feature_importance_figure(importance), width="stretch")
 
     st.subheader("What-if forecast")
+    st.caption(
+        "Target: estimated merge time among pull requests that eventually merge. "
+        "Inputs are available when the pull request opens."
+    )
     repositories = sorted(pulls["repository"].unique())
     latest_opening = pulls["created_at"].max().to_pydatetime()
     with st.form("opening-time-forecast"):
@@ -215,15 +224,39 @@ def _render_forecast(pulls: pd.DataFrame) -> None:
             opening_date,
             opening_time,
         )
-        prediction = float(result.model.predict_hours(features)[0])
-        st.success(f"Forecast merge time: {prediction:.1f} hours")
+        model_prediction = float(result.model.predict_hours(features)[0])
+        baseline_message = (
+            f"Train-median baseline estimate: {result.baseline_hours:.1f} hours\n\n"
+            f"Held-out MAE: {result.baseline_mae_hours:.1f} hours — "
+            "empirical error context, not a prediction interval."
+        )
+        model_message = (
+            f"Experimental random-forest estimate: {model_prediction:.1f} hours\n\n"
+            f"Held-out MAE: {result.mae_hours:.1f} hours — "
+            "empirical error context, not a prediction interval."
+        )
+        estimate_columns = st.columns(2)
+        if (
+            preferred_forecast(result.mae_hours, result.baseline_mae_hours)
+            == "train-median baseline"
+        ):
+            estimate_columns[0].success(f"Validated default — {baseline_message}")
+            estimate_columns[1].info(model_message)
+        else:
+            estimate_columns[0].info(baseline_message)
+            estimate_columns[1].success(f"Validated default — {model_message}")
 
 
 def _render_evaluation(result: ModelResult) -> None:
-    columns = st.columns(3)
+    columns = st.columns(4)
     columns[0].markdown(f"**Model MAE**\n\n{result.mae_hours:.1f} hours")
     columns[1].markdown(f"**Train-median baseline MAE**\n\n{result.baseline_mae_hours:.1f} hours")
-    columns[2].markdown(f"**Chronological test rows**\n\n{result.test_rows:,}")
+    columns[2].markdown(f"**Time-safe training rows**\n\n{result.train_rows:,}")
+    columns[3].markdown(f"**Chronological test rows**\n\n{result.test_rows:,}")
+    st.caption(
+        f"As-of cutoff: {result.cutoff.isoformat()} · "
+        f"Purged labels unavailable at cutoff: {result.purged_rows:,}."
+    )
 
     level, message = evaluation_summary(result.mae_hours, result.baseline_mae_hours)
     if level == "success":

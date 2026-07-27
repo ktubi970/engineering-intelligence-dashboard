@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 import pytest
@@ -10,18 +12,21 @@ from engineering_intelligence.model import (
     chronological_split,
     train_merge_time_model,
 )
+from engineering_intelligence.pipeline import load_snapshot
 
 
 @pytest.fixture(scope="module")
 def model_frame() -> pd.DataFrame:
     row_number = pd.Series(range(100), dtype="int64")
     created_at = pd.date_range("2025-01-01", periods=100, freq="6h", tz="UTC")
+    merge_hours = pd.Series([12.0, 30.0, 48.0, 66.0] * 25, dtype="float64")
     return pd.DataFrame(
         {
             "repository": ["example/service"] * 100,
             "number": 1_001 + row_number,
             "created_at": created_at,
-            "merge_hours": [12.0, 30.0, 48.0, 66.0] * 25,
+            "merged_at": created_at + pd.to_timedelta(merge_hours, unit="h"),
+            "merge_hours": merge_hours,
             "title_length": [20.0] * 100,
             "body_length": [100.0] * 100,
             "author_association": ["CONTRIBUTOR"] * 100,
@@ -49,8 +54,9 @@ def test_chronological_split_keeps_future_rows_out_of_training(
 
     train, test = chronological_split(shuffled, test_fraction=0.2)
 
-    assert train["created_at"].max() < test["created_at"].min()
-    assert (len(train), len(test)) == (80, 20)
+    cutoff = test["created_at"].min()
+    assert train["merged_at"].max() < cutoff <= test["created_at"].min()
+    assert (len(train), len(test)) == (74, 20)
 
 
 def test_chronological_split_preserves_input_order_for_equal_timestamps() -> None:
@@ -62,6 +68,15 @@ def test_chronological_split_preserves_input_order_for_equal_timestamps() -> Non
                     "2026-01-01T00:00:00Z",
                     "2026-01-01T00:00:00Z",
                     "2026-01-03T00:00:00Z",
+                ],
+                utc=True,
+            ),
+            "merged_at": pd.to_datetime(
+                [
+                    "2026-01-02T01:00:00Z",
+                    "2026-01-01T01:00:00Z",
+                    "2026-01-01T02:00:00Z",
+                    "2026-01-04T00:00:00Z",
                 ],
                 utc=True,
             ),
@@ -83,7 +98,10 @@ def test_chronological_split_rejects_fewer_than_two_rows(model_frame: pd.DataFra
 def test_trained_model_beats_median_baseline_on_predictable_data(
     trained_result: ModelResult,
 ) -> None:
+    assert trained_result.cutoff == pd.Timestamp("2025-01-21T00:00:00Z")
+    assert trained_result.train_rows == 74
     assert trained_result.test_rows == 20
+    assert trained_result.purged_rows == 6
     assert trained_result.mae_hours < trained_result.baseline_mae_hours
     assert trained_result.feature_importance["opened_hour"] > 0
     assert set(trained_result.feature_importance) == {
@@ -179,7 +197,6 @@ def test_training_is_deterministic_when_forbidden_probes_are_present(
     trained_result: ModelResult,
 ) -> None:
     probed = model_frame.assign(
-        merged_at=pd.date_range("2030-01-01", periods=100, tz="UTC"),
         future_outcome=np.linspace(-1_000_000.0, 1_000_000.0, 100),
     )
 
@@ -196,6 +213,32 @@ def test_training_is_deterministic_when_forbidden_probes_are_present(
     assert repeated.baseline_mae_hours == trained_result.baseline_mae_hours
     assert repeated.feature_importance == pytest.approx(
         trained_result.feature_importance, abs=1e-12
+    )
+
+
+def test_mutating_labels_unavailable_at_cutoff_cannot_change_training_result() -> None:
+    pulls, _, _ = load_snapshot(Path("data/snapshots"))
+    ordered = pulls.sort_values("created_at", kind="mergesort")
+    cutoff = ordered.iloc[240]["created_at"]
+    unavailable = (pulls["created_at"] < cutoff) & (pulls["merged_at"] >= cutoff)
+    assert int(unavailable.sum()) == 17
+
+    original = train_merge_time_model(pulls)
+    mutated = pulls.copy()
+    mutated.loc[unavailable, "merge_hours"] += 1_000_000.0
+    repeated = train_merge_time_model(mutated)
+    test = ordered.iloc[240:]
+
+    np.testing.assert_allclose(
+        repeated.model.predict_hours(test),
+        original.model.predict_hours(test),
+        rtol=0.0,
+        atol=1e-12,
+    )
+    assert repeated.mae_hours == pytest.approx(original.mae_hours, abs=1e-12)
+    assert repeated.baseline_mae_hours == pytest.approx(
+        original.baseline_mae_hours,
+        abs=1e-12,
     )
 
 

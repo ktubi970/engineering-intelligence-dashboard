@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 from datetime import UTC, date, time
 from pathlib import Path
@@ -8,6 +9,7 @@ import pandas as pd
 import pytest
 from streamlit.testing.v1 import AppTest
 
+import engineering_intelligence.dashboard as dashboard
 from engineering_intelligence.dashboard import (
     evaluation_summary,
     opening_feature_frame,
@@ -104,6 +106,40 @@ def test_forecast_form_accepts_only_opening_time_features(
             "Merge time",
         }
     )
+
+
+def test_forecast_submission_shows_both_estimates_and_highlights_validated_winner(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("EID_DATA_DIR", str(APP_PATH.parent / "data" / "snapshots"))
+
+    app = AppTest.from_file(APP_PATH)
+    app.run(timeout=30)
+    app.button[0].click()
+    app.run(timeout=30)
+
+    assert not app.exception
+    success_estimates = [
+        message.value for message in app.success if "estimate" in message.value.lower()
+    ]
+    info_estimates = [message.value for message in app.info if "estimate" in message.value.lower()]
+    assert len(success_estimates) == 1
+    assert "Validated default — Experimental random-forest estimate" in success_estimates[0]
+    assert any("Train-median baseline estimate" in value for value in info_estimates)
+
+    estimate_cards = success_estimates + info_estimates
+    assert len(estimate_cards) == 2
+    assert all("Held-out MAE" in value for value in estimate_cards)
+    assert all(
+        "empirical error context, not a prediction interval" in value for value in estimate_cards
+    )
+
+    visible_text = "\n".join(
+        element.value
+        for collection in (app.caption, app.info, app.success, app.markdown)
+        for element in collection
+    )
+    assert "estimated merge time among pull requests that eventually merge" in visible_text
 
 
 def test_small_snapshot_has_readable_forecast_state_without_exception(
@@ -221,6 +257,22 @@ def test_evaluation_summary_names_the_actual_lower_mae(
     assert "8.0" in message
 
 
+@pytest.mark.parametrize(
+    ("model_mae", "baseline_mae", "expected"),
+    [
+        (8.0, 12.0, "random forest"),
+        (12.0, 8.0, "train-median baseline"),
+        (8.0, 8.0, "train-median baseline"),
+    ],
+)
+def test_preferred_forecast_uses_lower_mae_and_defaults_ties_to_baseline(
+    model_mae: float,
+    baseline_mae: float,
+    expected: str,
+) -> None:
+    assert dashboard.preferred_forecast(model_mae, baseline_mae) == expected
+
+
 def _write_filter_snapshot(data_dir: Path) -> None:
     _write_snapshot(data_dir, pull_request_rows=12)
     workflows = pd.DataFrame(
@@ -258,8 +310,11 @@ def _write_filter_snapshot(data_dir: Path) -> None:
     metadata_path = data_dir / "metadata.json"
     metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
     metadata["repositories"] = ["alpha/api", "beta/web", "ops/infra"]
-    metadata["workflow_run_rows"] = 3
-    metadata_path.write_text(json.dumps(metadata), encoding="utf-8")
+    metadata["row_counts"]["workflow_runs"] = 3
+    metadata["files"]["workflow_runs.csv"]["sha256"] = hashlib.sha256(
+        (data_dir / "workflow_runs.csv").read_bytes()
+    ).hexdigest()
+    metadata_path.write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
 
 
 def _write_snapshot(data_dir: Path, pull_request_rows: int) -> None:
@@ -322,22 +377,53 @@ def _write_snapshot(data_dir: Path, pull_request_rows: int) -> None:
         },
         columns=WORKFLOW_COLUMNS,
     )
-    pulls.to_csv(data_dir / "pull_requests.csv", index=False, date_format="%Y-%m-%dT%H:%M:%SZ")
+    pull_path = data_dir / "pull_requests.csv"
+    workflow_path = data_dir / "workflow_runs.csv"
+    pulls.to_csv(pull_path, index=False, date_format="%Y-%m-%dT%H:%M:%SZ")
     workflows.to_csv(
-        data_dir / "workflow_runs.csv",
+        workflow_path,
         index=False,
         date_format="%Y-%m-%dT%H:%M:%SZ",
     )
     (data_dir / "metadata.json").write_text(
         json.dumps(
             {
-                "schema_version": 1,
+                "schema_version": 2,
                 "generated_at_utc": "2026-07-26T00:00:00Z",
-                "source": "GitHub public REST API",
+                "source": {
+                    "provider": "github",
+                    "visibility": "public",
+                    "api": "rest",
+                    "api_version": "2022-11-28",
+                },
                 "repositories": ["alpha/api", "beta/web"],
-                "pull_request_rows": pull_request_rows,
-                "workflow_run_rows": workflow_count,
-            }
-        ),
+                "row_counts": {
+                    "pull_requests": pull_request_rows,
+                    "workflow_runs": workflow_count,
+                },
+                "collection": {
+                    "pull_requests": {
+                        "selection": "merged",
+                        "limit_per_repository": 150,
+                        "order": "api_default",
+                    },
+                    "workflow_runs": {
+                        "selection": "completed",
+                        "limit_per_repository": 150,
+                        "order": "api_default",
+                    },
+                },
+                "files": {
+                    "pull_requests.csv": {
+                        "sha256": hashlib.sha256(pull_path.read_bytes()).hexdigest(),
+                    },
+                    "workflow_runs.csv": {
+                        "sha256": hashlib.sha256(workflow_path.read_bytes()).hexdigest(),
+                    },
+                },
+            },
+            indent=2,
+        )
+        + "\n",
         encoding="utf-8",
     )

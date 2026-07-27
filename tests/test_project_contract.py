@@ -120,23 +120,33 @@ def test_published_portfolio_claims_match_verified_snapshot_and_evaluation() -> 
     readme = _artifact("README.md")
     for claim in (
         "300 merged pull requests and 199 completed workflow runs",
-        "model and the newest 20% (60 rows) is held out for evaluation.",
-        "- Random-forest MAE: **26.624744394610 hours**",
-        "- Training-median baseline MAE: **21.071861111111 hours**",
-        "- Winner: **baseline**, by **5.552883283499 hours**",
-        "The model underperforms the baseline on this snapshot.",
+        "The newest 20% (60 rows) is a fixed chronological holdout.",
+        "Of the 240 earlier candidates, 223 have labels available before the cutoff; "
+        "17 are purged.",
+        "- As-of cutoff: **2026-07-20T18:48:28+00:00**",
+        "- Random-forest MAE: **17.499891193309 hours**",
+        "- Training-median baseline MAE: **20.535763888889 hours**",
+        "- Winner: **random forest**, by **3.035872695580 hours**",
+        "The random forest has lower MAE than the baseline on this fixed snapshot.",
+        "estimated merge time among pull requests that eventually merge",
     ):
         assert claim in readme
 
     model_card = _artifact("docs/model-card.md")
     for claim in (
-        "With 300 committed rows, that produces 240 training rows and 60\ntest rows.",
+        "With 300 committed rows, that produces 240 earlier candidates and 60 chronological "
+        "test rows.",
+        "17 unavailable labels are purged, leaving 223 training rows.",
+        "| As-of cutoff | 2026-07-20T18:48:28+00:00 |",
+        "| Training rows | 223 |",
         "| Test rows | 60 |",
-        "| Random-forest MAE | 26.624744394610 hours |",
-        "| Train-median baseline MAE | 21.071861111111 hours |",
-        "| Difference | model is 5.552883283499 hours worse |",
-        "| Honest result | baseline wins |",
-        "The model underperforms the baseline on the committed snapshot.",
+        "| Purged unavailable labels | 17 |",
+        "| Random-forest MAE | 17.499891193309 hours |",
+        "| Train-median baseline MAE | 20.535763888889 hours |",
+        "| Difference | model is 3.035872695580 hours better |",
+        "| Honest result | random forest wins |",
+        "The random forest has lower MAE on this fixed committed-snapshot holdout.",
+        "estimated merge time among pull requests that eventually merge",
     ):
         assert claim in model_card
 
@@ -160,7 +170,8 @@ def test_publication_artifacts_are_real_and_match_verified_remote_evidence() -> 
         "--cov-report=term-missing --cov-fail-under=85",
         "300 merged pull requests and 199 completed workflow runs",
         "GitHub public REST API",
-        "The model underperforms the baseline on this snapshot.",
+        "The random forest has lower MAE than the baseline on this fixed snapshot.",
+        "estimated merge time among pull requests that eventually merge",
         "![MergeLens dashboard overview](https://github.com/ktubi970/engineering-intelligence-dashboard/blob/ce303f2a4b5d81e98a478ec542542698e0f991b1/docs/images/dashboard.png?raw=true)",
         "## Limitations",
     ):

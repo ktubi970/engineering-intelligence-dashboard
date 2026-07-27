@@ -15,7 +15,8 @@ model as better than a simple baseline when it is not.
 Open one local Streamlit app to compare repository delivery signals, explore recent merge-time
 patterns, and test an opening-time forecast. The committed demo works offline after installation:
 300 merged pull requests and 199 completed workflow runs from two public repositories are already
-included. The forecast is evaluated chronologically; on this snapshot, the simpler baseline wins.
+included. The fixed holdout is evaluated with only labels available at its cutoff; on this
+snapshot, the random forest has lower MAE than the baseline.
 
 ## Agentic engineering with Codex, Sol, and Ultra reasoning
 
@@ -56,7 +57,8 @@ See [Agentic development](docs/agentic-development.md) for the vertical-slice re
 - **Drivers & retrospective patterns:** high-contrast Plotly views of change size, merge delay,
   and repository medians, labeled as retrospective and non-causal.
 - **Forecast & trust:** an opening-time-only random-forest forecast shown beside its train-median
-  baseline, test-row count, feature importance, and explicit use warning.
+  baseline, each held-out MAE, time-safe training/test/purged counts, feature importance, and an
+  explicit non-causal-use warning.
 
 ## Live demo
 
@@ -81,7 +83,9 @@ The screenshot is a genuine 1440x1000 capture from the locally running applicati
   buckets.
 - **Workflow success:** successful conclusions divided by completed workflow runs with a recorded
   conclusion.
-- **MAE:** mean absolute error in hours on the newest chronological test rows. Lower is better.
+- **MAE:** mean absolute error in hours on the newest fixed chronological test rows. Lower is
+  better. Earlier candidates train only when their merge label was available strictly before the
+  test cutoff.
 
 ## Architecture
 
@@ -142,16 +146,25 @@ proof that GitHub Actions has passed.
 
 ## Model results
 
-The committed 300-row pull-request snapshot is sorted by `created_at`; the oldest 80% trains the
-model and the newest 20% (60 rows) is held out for evaluation.
+The committed 300-row pull-request snapshot is stable-sorted by `created_at`.
+The newest 20% (60 rows) is a fixed chronological holdout.
+Its earliest opening time is the as-of cutoff.
+Of the 240 earlier candidates, 223 have labels available before the cutoff; 17 are purged.
 
-- Random-forest MAE: **26.624744394610 hours**
-- Training-median baseline MAE: **21.071861111111 hours**
-- Winner: **baseline**, by **5.552883283499 hours**
+- As-of cutoff: **2026-07-20T18:48:28+00:00**
+- Time-safe training rows: **223**
+- Chronological test rows: **60**
+- Purged unavailable labels: **17**
+- Training-median estimate: **18.235 hours**
+- Random-forest MAE: **17.499891193309 hours**
+- Training-median baseline MAE: **20.535763888889 hours**
+- Winner: **random forest**, by **3.035872695580 hours**
 
-The model underperforms the baseline on this snapshot. That result is not hidden or reframed.
-Inputs are only repository, pull-request number, and UTC calendar features derived from creation
-time. This is an experimental, non-causal estimate and never a developer score. See the
+The random forest has lower MAE than the baseline on this fixed snapshot. This single holdout does
+not establish future or general superiority, so both estimates and both empirical MAEs remain
+visible. Inputs are only repository, pull-request number, and UTC calendar features derived from
+creation time. The target is estimated merge time among pull requests that eventually merge.
+This is an experimental, non-causal estimate and never a developer score. See the
 [Model card](docs/model-card.md).
 
 ## Limitations

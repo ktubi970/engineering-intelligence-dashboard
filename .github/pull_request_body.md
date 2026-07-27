@@ -21,9 +21,10 @@
 .venv\Scripts\python.exe -m pytest --cov=engineering_intelligence --cov-report=term-missing --cov-fail-under=85
 ```
 
-Observed local results on Python 3.13.9: Ruff lint passed, Ruff format reported 31 files
-already formatted, and pytest collected and passed 96 tests with 96.10% coverage (85% required).
-These local Windows results cover the current branch changes.
+Earlier local results on Python 3.13.9 recorded Ruff lint passing, Ruff format reporting 31 files
+already formatted, and pytest passing 96 tests with 96.10% coverage (85% required). That evidence
+predates the time-safe evaluation correction; the coordinator must record a fresh integrated gate
+after the concurrent scopes are combined.
 
 ## Public data provenance
 
@@ -33,13 +34,19 @@ stores repository-scoped delivery fields rather than developer identities or cre
 
 ## Honest model result
 
-- Random-forest MAE: 26.624744394610 hours
-- Training-median baseline MAE: 21.071861111111 hours
+- As-of cutoff: 2026-07-20T18:48:28+00:00
+- Time-safe training rows: 223
 - Chronological test rows: 60
-- Winner: baseline, by 5.552883283499 hours
+- Purged unavailable labels: 17
+- Training-median estimate: 18.235 hours
+- Random-forest MAE: 17.499891193309 hours
+- Training-median baseline MAE: 20.535763888889 hours
+- Winner: random forest, by 3.035872695580 hours
 
-The model underperforms the baseline on this snapshot. The forecast is experimental, non-causal,
-and never a developer performance score.
+The random forest has lower MAE than the baseline on this fixed snapshot. Both estimates remain
+visible because one holdout does not establish future superiority. The displayed target is
+estimated merge time among pull requests that eventually merge. The forecast is experimental,
+non-causal, and never a developer performance score.
 
 ## Screenshot
 
@@ -57,5 +64,7 @@ restoring both repositories and the full date range.
 - Initial PR: https://github.com/ktubi970/engineering-intelligence-dashboard/pull/1
 - The recent point-in-time snapshot covers two public repositories and only merged pull requests,
   so it includes selection and survivorship bias.
+- The fixed chronological holdout is one local evaluation; repository or time-window changes can
+  change which estimate wins.
 - Retrospective patterns and feature importance describe associations, not causes.
 - Future repository process or data changes can shift metrics and forecast error.

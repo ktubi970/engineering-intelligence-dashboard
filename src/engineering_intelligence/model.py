@@ -43,7 +43,11 @@ class ModelResult:
     model: MergeTimeModel
     mae_hours: float
     baseline_mae_hours: float
+    baseline_hours: float
+    cutoff: pd.Timestamp
+    train_rows: int
     test_rows: int
+    purged_rows: int
     feature_importance: dict[str, float]
 
 
@@ -51,15 +55,22 @@ def chronological_split(
     frame: pd.DataFrame,
     test_fraction: float = 0.2,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
-    """Split rows into an older training set and a newer test set."""
+    """Hold out the newest openings and keep only labels known at that cutoff."""
     if len(frame) < 2:
         raise ValueError("Chronological splitting requires at least two rows.")
 
     ordered = frame.sort_values("created_at", kind="mergesort").reset_index(drop=True)
     split_at = int(len(ordered) * (1 - test_fraction))
 
-    train = ordered.iloc[:split_at].copy()
     test = ordered.iloc[split_at:].copy()
+    cutoff = pd.to_datetime(test["created_at"], utc=True).min()
+    train_candidates = ordered.iloc[:split_at]
+    available_labels = pd.to_datetime(train_candidates["merged_at"], utc=True) < cutoff
+    train = train_candidates.loc[available_labels].copy()
+
+    max_train_merged_at = pd.to_datetime(train["merged_at"], utc=True).max()
+    min_test_created_at = pd.to_datetime(test["created_at"], utc=True).min()
+    assert max_train_merged_at < cutoff <= min_test_created_at
     return train, test
 
 
@@ -92,13 +103,19 @@ def train_merge_time_model(frame: pd.DataFrame, min_samples: int = 80) -> ModelR
 
     model = MergeTimeModel(pipeline)
     predictions = model.predict_hours(test)
-    baseline = np.full(len(test), float(train_target.median()))
+    baseline_hours = float(train_target.median())
+    baseline = np.full(len(test), baseline_hours)
+    cutoff = pd.to_datetime(test["created_at"], utc=True).min()
 
     return ModelResult(
         model=model,
         mae_hours=float(mean_absolute_error(test_target, predictions)),
         baseline_mae_hours=float(mean_absolute_error(test_target, baseline)),
+        baseline_hours=baseline_hours,
+        cutoff=cutoff,
+        train_rows=len(train),
         test_rows=len(test),
+        purged_rows=len(frame) - len(train) - len(test),
         feature_importance=_aggregate_feature_importance(pipeline),
     )
 
