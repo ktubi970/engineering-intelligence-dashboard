@@ -93,3 +93,28 @@ def test_agent_guardrails_allow_scoped_work_and_prohibit_unsafe_claims() -> None
         "evidence before completion",
     ):
         assert prohibition in agents
+
+
+def test_published_portfolio_claims_match_verified_snapshot_and_evaluation() -> None:
+    readme = _artifact("README.md")
+    for claim in (
+        "300 merged pull requests and 199 completed workflow runs",
+        "model and the newest 20% (60 rows) is held out for evaluation.",
+        "- Random-forest MAE: **26.624744394610 hours**",
+        "- Training-median baseline MAE: **21.071861111111 hours**",
+        "- Winner: **baseline**, by **5.552883283499 hours**",
+        "The model underperforms the baseline on this snapshot.",
+    ):
+        assert claim in readme
+
+    model_card = _artifact("docs/model-card.md")
+    for claim in (
+        "With 300 committed rows, that produces 240 training rows and 60\ntest rows.",
+        "| Test rows | 60 |",
+        "| Random-forest MAE | 26.624744394610 hours |",
+        "| Train-median baseline MAE | 21.071861111111 hours |",
+        "| Difference | model is 5.552883283499 hours worse |",
+        "| Honest result | baseline wins |",
+        "The model underperforms the baseline on the committed snapshot.",
+    ):
+        assert claim in model_card
