@@ -126,6 +126,27 @@ The percentage shown as `96%` is pytest-cov's table display; `96.10%` is its rep
 total. These are local Windows results for the current branch and are distinct from the initial
 hosted `f987033` result above.
 
+## Active repository expansion local evidence
+
+This section records local Windows browser evidence collected on 2026-07-27 for
+`codex/add-active-repositories`. The committed snapshot contains 900 pull-request rows and 560
+workflow-run rows and was generated at `2026-07-27T13:56:40.155501Z`.
+
+A named Playwright CLI session (`active-repositories`) verified:
+
+- the `Repository` multiselect exposed exactly the sorted choices `microsoft/vscode`,
+  `pandas-dev/pandas`, `ruby/ruby`, `rust-lang/rust`, `streamlit/streamlit`, and
+  `tensorflow/tensorflow`;
+- all six repositories produced the expected 900 merged pull requests, while selecting only
+  `microsoft/vscode` produced 150 merged pull requests without an application exception;
+- `Overview`, `Drivers & retrospective patterns`, and `Forecast & trust` all rendered
+  successfully;
+- the browser console contained 0 errors; and
+- the restored 1440x1000 Overview was captured as `docs/images/dashboard.png` (PNG, 91,844
+  bytes).
+
+This is local evidence for `codex/add-active-repositories`, not deployment or CI evidence.
+
 ## Verified live deployment
 
 Public URL:
