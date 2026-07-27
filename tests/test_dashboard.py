@@ -21,6 +21,12 @@ WARNING = "Experimental forecast — not a causal measure and never a developer 
 APP_PATH = Path(__file__).parents[1] / "streamlit_app.py"
 
 
+def _logical_csv_sha256(path: Path) -> str:
+    content = path.read_bytes()
+    canonical_content = content.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+    return hashlib.sha256(canonical_content).hexdigest()
+
+
 @pytest.fixture
 def snapshot_dir(tmp_path: Path) -> Path:
     _write_snapshot(tmp_path, pull_request_rows=100)
@@ -334,9 +340,9 @@ def _write_filter_snapshot(data_dir: Path) -> None:
     metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
     metadata["repositories"] = ["alpha/api", "beta/web", "ops/infra"]
     metadata["row_counts"]["workflow_runs"] = 3
-    metadata["files"]["workflow_runs.csv"]["sha256"] = hashlib.sha256(
-        (data_dir / "workflow_runs.csv").read_bytes()
-    ).hexdigest()
+    metadata["files"]["workflow_runs.csv"]["sha256"] = _logical_csv_sha256(
+        data_dir / "workflow_runs.csv"
+    )
     metadata_path.write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
 
 
@@ -451,10 +457,10 @@ def _write_snapshot(
                 },
                 "files": {
                     "pull_requests.csv": {
-                        "sha256": hashlib.sha256(pull_path.read_bytes()).hexdigest(),
+                        "sha256": _logical_csv_sha256(pull_path),
                     },
                     "workflow_runs.csv": {
-                        "sha256": hashlib.sha256(workflow_path.read_bytes()).hexdigest(),
+                        "sha256": _logical_csv_sha256(workflow_path),
                     },
                 },
             },
