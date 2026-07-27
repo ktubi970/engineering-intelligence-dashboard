@@ -1,12 +1,40 @@
 import json
+import socket
 from collections import deque
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 from pathlib import Path
 
 import pytest
 
 from engineering_intelligence.domain import RepositoryRef
+
+
+@pytest.fixture(autouse=True)
+def block_outbound_network(
+    monkeypatch: pytest.MonkeyPatch,
+) -> tuple[Callable[..., None], Callable[..., None]]:
+    def network_error(address: object) -> AssertionError:
+        return AssertionError(
+            "Outbound network is disabled during tests; "
+            f"attempted socket connection to {address!r}. "
+            "Use an injected transport or in-process test client."
+        )
+
+    def reject_socket_connection(_socket: object, address: object) -> None:
+        raise network_error(address)
+
+    def reject_create_connection(
+        address: object,
+        *_args: object,
+        **_kwargs: object,
+    ) -> None:
+        raise network_error(address)
+
+    monkeypatch.setattr(socket.socket, "connect", reject_socket_connection)
+    monkeypatch.setattr(socket.socket, "connect_ex", reject_socket_connection)
+    monkeypatch.setattr(socket, "create_connection", reject_create_connection)
+    return reject_socket_connection, reject_create_connection
 
 
 @dataclass

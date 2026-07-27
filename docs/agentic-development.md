@@ -116,3 +116,36 @@ omitted.
   Exact commands and results are in the quality-evidence document.
 - **Residual risk:** GitHub Actions has not yet run; screenshot and deployment evidence remain
   explicitly deferred to Task 9.
+
+## Task 9 - publication QA and live evidence
+
+- **Request:** exercise the real local Streamlit UI, capture a genuine publication screenshot,
+  publish the demo, and distinguish local browser, hosted CI, and live observations.
+- **Human decision:** preserve the honest baseline-winning model result and label every claim by
+  environment and revision rather than treating a deployment URL as proof.
+- **Files/outcome:** browser and quality evidence, exact public tab labels, a 1440x1000 PNG, and
+  the live-demo/CI references; commits `f987033` and `ce303f2`.
+- **RED/GREEN:** local Playwright covered repository/date filters, empty states, Plotly hover,
+  forecast safeguards, desktop/narrow overflow, and a zero-error application console. The final
+  Task 9 gate passed 91 tests with 96.10% coverage; Ruff lint and format checks passed.
+- **Review/fix:** the later publication-evidence pass pinned the screenshot URL to immutable SHA
+  `ce303f2a4b5d81e98a478ec542542698e0f991b1`, decoded and verified the real PNG, enforced exact
+  1440x1000 dimensions, and added corrupt/wrong-size negative cases in commit `a439c9c`.
+- **Residual risk:** the live deployment evidence is scoped to initial SHA `f987033`, whose first
+  two tab labels differ from the current local labels. Local, CI, and live evidence are not
+  interchangeable.
+
+## Reviewer-driven hardening - current passes
+
+A later read-only review opened bounded follow-up slices. A coordinator assigned disjoint file
+ownership, required RED/GREEN evidence, and left integration of concurrent commits to the root
+owner rather than letting agents overwrite each other's work.
+
+- **Collection and isolation scope:** workflow runs now paginate at no more than 100 records per
+  request, accumulate only completed runs, continue past partial/non-completed pages, and stop on
+  the requested bound, an empty page, or a short final page. An autouse stdlib guard rejects
+  outbound `socket.connect`, `socket.connect_ex`, and `socket.create_connection` entry points
+  while injected transports and in-process AppTest remain network-free.
+- **RED/GREEN:** the focused pagination/guard slice moved from 4 failed and 1 passed to 5 passed;
+  the complete GitHub client suite then passed 18 tests. No real network request was used.
+- **Evidence boundary:** other concurrent review findings are owned and verified separately; this

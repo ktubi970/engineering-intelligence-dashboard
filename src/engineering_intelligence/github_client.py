@@ -94,14 +94,25 @@ class GitHubClient:
         )
 
     def list_workflow_runs(self, repository: RepositoryRef, limit: int) -> list[dict[str, object]]:
-        payload = cast(
-            dict[str, object],
-            self._get_json(
-                f"/repos/{repository.slug}/actions/runs",
-                {"per_page": limit, "page": 1},
-            ),
-        )
-        return cast(list[dict[str, object]], payload["workflow_runs"])[:limit]
+        completed: list[dict[str, object]] = []
+        page = 1
+        per_page = min(limit, 100)
+        while len(completed) < limit:
+            payload = cast(
+                dict[str, object],
+                self._get_json(
+                    f"/repos/{repository.slug}/actions/runs",
+                    {"per_page": per_page, "page": page},
+                ),
+            )
+            records = cast(list[dict[str, object]], payload["workflow_runs"])
+            if not records:
+                break
+            completed.extend(record for record in records if record.get("status") == "completed")
+            if len(completed) >= limit or len(records) < per_page:
+                break
+            page += 1
+        return completed[:limit]
 
     def _get_json(self, path: str, params: Mapping[str, object]) -> object:
         response = self._transport.get(
