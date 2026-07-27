@@ -31,6 +31,12 @@ def small_snapshot_dir(tmp_path: Path) -> Path:
     return tmp_path
 
 
+@pytest.fixture
+def filter_snapshot_dir(tmp_path: Path) -> Path:
+    _write_filter_snapshot(tmp_path)
+    return tmp_path
+
+
 def test_dashboard_loads_snapshot_and_shows_exact_core_sections(
     snapshot_dir: Path,
     monkeypatch: pytest.MonkeyPatch,
@@ -129,6 +135,45 @@ def test_empty_repository_filter_has_readable_state_without_exception(
     assert any("No pull requests match the selected filters." in info.value for info in app.info)
 
 
+def test_repository_filter_includes_and_handles_workflow_only_repository(
+    filter_snapshot_dir: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("EID_DATA_DIR", str(filter_snapshot_dir))
+    app = AppTest.from_file(APP_PATH)
+    app.run(timeout=20)
+
+    repository_filter = app.sidebar.multiselect[0]
+    assert repository_filter.options == ["alpha/api", "beta/web", "ops/infra"]
+
+    repository_filter.set_value(["ops/infra"])
+    app.run(timeout=20)
+
+    assert not app.exception
+    assert app.metric[0].value == "0"
+    assert app.metric[3].value == "100.0%"
+
+
+def test_merge_date_filter_applies_same_inclusive_utc_window_to_workflows(
+    filter_snapshot_dir: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("EID_DATA_DIR", str(filter_snapshot_dir))
+    app = AppTest.from_file(APP_PATH)
+    app.run(timeout=20)
+
+    app.sidebar.date_input[0].set_value(
+        (
+            date(2025, 1, 1),
+            date(2025, 1, 1),
+        )
+    )
+    app.run(timeout=20)
+
+    assert not app.exception
+    assert app.metric[3].value == "100.0%"
+
+
 def test_data_dir_defaults_to_the_committed_snapshot(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -174,6 +219,47 @@ def test_evaluation_summary_names_the_actual_lower_mae(
     assert level == expected_level
     assert message.startswith(expected_winner)
     assert "8.0" in message
+
+
+def _write_filter_snapshot(data_dir: Path) -> None:
+    _write_snapshot(data_dir, pull_request_rows=12)
+    workflows = pd.DataFrame(
+        {
+            "repository": ["alpha/api", "alpha/api", "ops/infra"],
+            "run_id": [3_001, 3_002, 3_003],
+            "workflow_name": ["CI", "CI", "Deploy"],
+            "status": ["completed", "completed", "completed"],
+            "conclusion": ["success", "failure", "success"],
+            "created_at": pd.to_datetime(
+                [
+                    "2025-01-01T12:00:00Z",
+                    "2025-01-04T12:00:00Z",
+                    "2025-01-01T18:00:00Z",
+                ],
+                utc=True,
+            ),
+            "updated_at": pd.to_datetime(
+                [
+                    "2025-01-01T12:10:00Z",
+                    "2025-01-04T12:10:00Z",
+                    "2025-01-01T18:10:00Z",
+                ],
+                utc=True,
+            ),
+            "duration_minutes": [10.0, 10.0, 10.0],
+        },
+        columns=WORKFLOW_COLUMNS,
+    )
+    workflows.to_csv(
+        data_dir / "workflow_runs.csv",
+        index=False,
+        date_format="%Y-%m-%dT%H:%M:%SZ",
+    )
+    metadata_path = data_dir / "metadata.json"
+    metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+    metadata["repositories"] = ["alpha/api", "beta/web", "ops/infra"]
+    metadata["workflow_run_rows"] = 3
+    metadata_path.write_text(json.dumps(metadata), encoding="utf-8")
 
 
 def _write_snapshot(data_dir: Path, pull_request_rows: int) -> None:

@@ -12,8 +12,8 @@ COLORBLIND_PALETTE = (
     "#D55E00",
     "#009E73",
     "#CC79A7",
-    "#E69F00",
-    "#56B4E9",
+    "#A66F00",
+    "#2A7FA8",
 )
 EMPTY_MESSAGE = "No data available for the selected filters."
 

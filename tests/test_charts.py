@@ -113,3 +113,35 @@ def test_all_charts_show_a_readable_empty_state() -> None:
     for figure in figures:
         assert len(figure.data) == 0
         assert [annotation.text for annotation in figure.layout.annotations] == [EMPTY_MESSAGE]
+
+
+def test_every_rendered_palette_color_has_three_to_one_contrast_on_white() -> None:
+    repositories = [f"example/repository-{index}" for index in range(6)]
+    frame = pd.DataFrame(
+        {
+            "repository": repositories,
+            "merge_hours": [12.0, 18.0, 24.0, 30.0, 36.0, 42.0],
+        }
+    )
+
+    figure = repository_comparison_figure(frame)
+    rendered_colors = figure.data[0].marker.color
+
+    assert len(rendered_colors) == 6
+    assert all(_contrast_against_white(color) >= 3.0 for color in rendered_colors)
+
+
+def _contrast_against_white(hex_color: str) -> float:
+    red, green, blue = (int(hex_color[index : index + 2], 16) / 255 for index in (1, 3, 5))
+    luminance = (
+        0.2126 * _linear_channel(red)
+        + 0.7152 * _linear_channel(green)
+        + 0.0722 * _linear_channel(blue)
+    )
+    return 1.05 / (luminance + 0.05)
+
+
+def _linear_channel(channel: float) -> float:
+    if channel <= 0.04045:
+        return channel / 12.92
+    return ((channel + 0.055) / 1.055) ** 2.4

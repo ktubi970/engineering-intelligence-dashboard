@@ -102,22 +102,31 @@ def _render_filters(
     pulls: pd.DataFrame,
     workflows: pd.DataFrame,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
-    repositories = sorted(pulls["repository"].unique())
+    repositories = sorted(set(pulls["repository"]) | set(workflows["repository"]))
     selected_repositories = st.sidebar.multiselect(
         "Repository",
         repositories,
         default=repositories,
     )
-    repository_mask = pulls["repository"].isin(selected_repositories)
-    filtered_pulls = pulls.loc[repository_mask].copy()
+    filtered_pulls = pulls.loc[pulls["repository"].isin(selected_repositories)].copy()
     filtered_workflows = workflows.loc[workflows["repository"].isin(selected_repositories)].copy()
 
-    if pulls.empty:
-        st.sidebar.caption("Merge date range unavailable: the snapshot has no pull requests.")
+    timestamp_bounds = [
+        (pulls["merged_at"].min(), pulls["merged_at"].max()) if not pulls.empty else None,
+        (
+            workflows["created_at"].min(),
+            workflows["created_at"].max(),
+        )
+        if not workflows.empty
+        else None,
+    ]
+    populated_bounds = [bounds for bounds in timestamp_bounds if bounds is not None]
+    if not populated_bounds:
+        st.sidebar.caption("Date range unavailable: the snapshot has no delivery records.")
         return filtered_pulls, filtered_workflows
 
-    minimum_date = pulls["merged_at"].min().date()
-    maximum_date = pulls["merged_at"].max().date()
+    minimum_date = min(bounds[0] for bounds in populated_bounds).date()
+    maximum_date = max(bounds[1] for bounds in populated_bounds).date()
     selected_dates = st.sidebar.date_input(
         "Merge date range",
         value=(minimum_date, maximum_date),
@@ -130,6 +139,9 @@ def _render_filters(
         end = pd.Timestamp(end_date, tz="UTC") + pd.Timedelta(days=1)
         filtered_pulls = filtered_pulls.loc[
             (filtered_pulls["merged_at"] >= start) & (filtered_pulls["merged_at"] < end)
+        ].copy()
+        filtered_workflows = filtered_workflows.loc[
+            (filtered_workflows["created_at"] >= start) & (filtered_workflows["created_at"] < end)
         ].copy()
     return filtered_pulls, filtered_workflows
 
