@@ -184,9 +184,9 @@ total. `git diff --check` also completed without output. These are local Windows
 
 ## Integrated six-repository merge local evidence
 
-This section records local Windows evidence for the resolved integration of the six-repository
-snapshot with the schema-2 manifest and time-safe model evaluation. No network collection ran
-during integration.
+This section records local Windows evidence for the resolved six-repository snapshot, schema-2
+manifest, time-safe model evaluation, and record-aware canonical CSV hashing. No network collection
+ran during integration.
 
 ### First integrated local quality gate
 
@@ -205,7 +205,7 @@ C:\tmp\engineering-intelligence-dashboard\.venv\Scripts\python.exe -m ruff forma
 ```
 
 ```text
-33 files already formatted
+34 files already formatted
 ```
 
 ```powershell
@@ -213,10 +213,10 @@ C:\tmp\engineering-intelligence-dashboard\.venv\Scripts\python.exe -m pytest --c
 ```
 
 ```text
-collected 166 items
-TOTAL  799 statements  45 missed  94%
-Required test coverage of 85% reached. Total coverage: 94.37%
-166 passed in 71.52s
+collected 172 items
+TOTAL  806 statements  44 missed  95%
+Required test coverage of 85% reached. Total coverage: 94.54%
+172 passed in 145.90s
 ```
 
 `git diff --check` completed without output. These are local integration results, not hosted CI or
