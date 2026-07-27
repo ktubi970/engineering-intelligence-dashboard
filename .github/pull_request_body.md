@@ -3,15 +3,16 @@
 ## Verified summary
 
 - Loads offline from the committed, privacy-minimized snapshot.
-- Live demo: https://engineering-intelligence-dashboard-jq9xccatzgwy9y9hcrwmor.streamlit.app/
-- The initial deployment on `f987033` anonymously loaded 300 merged pull requests with no visible
-  traceback; its deployed tabs were Delivery pulse, Bottlenecks, and Forecast & trust.
-- This branch locally presents Overview, Drivers & retrospective patterns, and Forecast & trust.
+- Deployment URL: https://engineering-intelligence-dashboard-jq9xccatzgwy9y9hcrwmor.streamlit.app/
+  An anonymous check currently returns HTTP 303 to Streamlit authentication, so it is auth-gated.
+- The current branch locally presents Overview, Drivers & retrospective patterns, and Forecast &
+  trust.
 - Repository/date filters, readable empty states, Plotly hover, forecast safeguards, and desktop
   and narrow overflow behavior were exercised in a real local Playwright browser.
 - The local browser console reported 0 errors after the required interactions.
-- The initial GitHub Actions quality check passed in 57s on `f987033`:
-  https://github.com/ktubi970/engineering-intelligence-dashboard/actions/runs/30259194189/job/89954838617
+- GitHub Actions passed lint, format, and **170 passed** with **94.54%** coverage:
+  https://github.com/ktubi970/engineering-intelligence-dashboard/actions/runs/30282867104/job/90033339637
+  on commit `82e86b2fedc2526f6fc1eff6ce27941efbe0a00b`.
 
 ## Local quality commands
 
@@ -21,10 +22,9 @@
 .venv\Scripts\python.exe -m pytest --cov=engineering_intelligence --cov-report=term-missing --cov-fail-under=85
 ```
 
-Earlier local results on Python 3.13.9 recorded Ruff lint passing, Ruff format reporting 31 files
-already formatted, and pytest passing 96 tests with 96.10% coverage (85% required). That evidence
-predates the time-safe evaluation correction; the coordinator must record a fresh integrated gate
-after the concurrent scopes are combined.
+The integrated local gate on Python 3.13.9 recorded Ruff lint passing, 31 files already formatted,
+and **170 passed** in 72.27 seconds with **94.54%** coverage (85% required). It includes the
+time-safe model, snapshot-integrity, dashboard, project-contract, and no-network tests.
 
 ## Public data provenance
 
@@ -57,10 +57,9 @@ restoring both repositories and the full date range.
 
 ## Limitations
 
-- Remote browser and CI evidence is scoped to initial SHA `f987033`. Its deployed first two tab
-  labels differ from the locally verified branch labels recorded above.
-- The anonymous Streamlit shell logged account/API 403/404 responses while the application iframe
-  loaded normally with no visible traceback and no horizontal iframe overflow.
+- The Streamlit deployment is currently auth-gated; the owner must make it public, reboot it, and
+  repeat an anonymous check before describing it as a public live demo.
+- The screenshot and Playwright evidence prove the local UI, not the current remote deployment.
 - Initial PR: https://github.com/ktubi970/engineering-intelligence-dashboard/pull/1
 - The recent point-in-time snapshot covers two public repositories and only merged pull requests,
   so it includes selection and survivorship bias.

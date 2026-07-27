@@ -62,13 +62,15 @@ See [Agentic development](docs/agentic-development.md) for the vertical-slice re
 
 ## Live demo
 
-[Open the verified public Streamlit dashboard](https://engineering-intelligence-dashboard-jq9xccatzgwy9y9hcrwmor.streamlit.app/).
-Anonymous verification on 2026-07-27 confirmed that the initial published revision `f987033`
-loaded the committed snapshot with 300 merged pull requests and no visible traceback.
+[Open the Streamlit deployment](https://engineering-intelligence-dashboard-jq9xccatzgwy9y9hcrwmor.streamlit.app/).
 
-The initial GitHub Actions quality check [passed in 57s](https://github.com/ktubi970/engineering-intelligence-dashboard/actions/runs/30259194189/job/89954838617)
-on `f987033`. That hosted result is scoped to the initial published revision; the local test results
-below cover the documentation and tab-label changes in this evidence commit.
+On 2026-07-27, an anonymous HTTP check returned **HTTP 303** and redirected to
+`share.streamlit.io/-/auth/app`. The deployment is currently **auth-gated**, so it is not yet a
+recruiter-accessible public showcase. The app owner must make it public and reboot it in Streamlit.
+
+GitHub Actions [passed the complete quality gate](https://github.com/ktubi970/engineering-intelligence-dashboard/actions/runs/30282867104/job/90033339637)
+on commit `82e86b2fedc2526f6fc1eff6ce27941efbe0a00b`: **170 passed** with **94.54%**
+coverage. The job ran lint, format checking, and the test suite on Linux with Python 3.13.
 
 ![MergeLens dashboard overview](docs/images/dashboard.png)
 

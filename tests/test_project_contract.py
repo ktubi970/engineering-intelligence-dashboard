@@ -7,6 +7,13 @@ import pytest
 from PIL import Image, UnidentifiedImageError
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
+EVIDENCE_COMMIT = "82e86b2fedc2526f6fc1eff6ce27941efbe0a00b"
+EVIDENCE_CI_URL = (
+    "https://github.com/ktubi970/engineering-intelligence-dashboard/"
+    "actions/runs/30282867104/job/90033339637"
+)
+EVIDENCE_TEST_RESULT = "170 passed"
+EVIDENCE_COVERAGE = "94.54%"
 
 
 def _artifact_path(relative_path: str) -> Path:
@@ -179,26 +186,37 @@ def test_publication_artifacts_are_real_and_match_verified_remote_evidence() -> 
 
     quality_evidence = _artifact("docs/quality-evidence.md")
     live_url = "https://engineering-intelligence-dashboard-jq9xccatzgwy9y9hcrwmor.streamlit.app/"
-    ci_url = (
-        "https://github.com/ktubi970/engineering-intelligence-dashboard/"
-        "actions/runs/30259194189/job/89954838617"
-    )
     for document in (readme, quality_evidence, pull_request_body):
         assert live_url in document
-        assert ci_url in document
-        assert "f987033" in document
-        assert "passed in 57s" in document
+        assert EVIDENCE_CI_URL in document
+        assert EVIDENCE_COMMIT in document
+        assert EVIDENCE_TEST_RESULT in document
+        assert EVIDENCE_COVERAGE in document
         lowered = document.lower()
         assert "phase a" not in lowered
         assert "pending" not in lowered
+        assert "verified public streamlit dashboard" not in lowered
+
+    stale_claims = (
+        "30259194189",
+        "89954838617",
+        "f987033",
+        "passed in 57s",
+        "91 passed",
+        "96 tests",
+    )
+    for document in (readme, quality_evidence, pull_request_body):
+        for stale_claim in stale_claims:
+            assert stale_claim not in document
 
     assert "https://github.com/ktubi970/engineering-intelligence-dashboard/pull/1" in (
         quality_evidence
     )
     for remote_observation in (
-        "MergeLens \u00b7 Streamlit",
-        "`Delivery pulse`, `Bottlenecks`, and `Forecast & trust`",
-        "account/API 403/404",
+        "HTTP 303",
+        "share.streamlit.io/-/auth/app",
+        "auth-gated",
+        "reboots it in Streamlit Community Cloud.",
     ):
         assert remote_observation in quality_evidence
 
