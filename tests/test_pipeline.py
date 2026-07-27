@@ -7,7 +7,11 @@ import pytest
 from conftest import FakeGitHubClient
 
 from engineering_intelligence.domain import DataContractError, RepositoryRef
-from engineering_intelligence.pipeline import load_snapshot, refresh_snapshot
+from engineering_intelligence.pipeline import (
+    _canonical_csv_sha256,
+    load_snapshot,
+    refresh_snapshot,
+)
 from engineering_intelligence.transform import PULL_REQUEST_COLUMNS, WORKFLOW_COLUMNS
 
 SNAPSHOT_CSV_FILENAMES = ("pull_requests.csv", "workflow_runs.csv")
@@ -29,6 +33,16 @@ def _csv_line_ending_variant(payload: bytes, style: str) -> bytes:
         return canonical.replace(b"\n", b"\r")
     assert style == "mixed"
     return canonical.replace(b"\n", b"\r\n", 1)
+
+
+def _csv_payload(record_separator: str, embedded_line_break: str) -> bytes:
+    return record_separator.join(
+        (
+            "repository,workflow_name",
+            f'pandas-dev/pandas,"build{embedded_line_break}matrix"',
+            "",
+        ),
+    ).encode("utf-8")
 
 
 def _manifest_for_snapshot(
@@ -544,3 +558,59 @@ def test_snapshot_csv_checkout_is_pinned_to_lf() -> None:
 
     attributes = attributes_path.read_text(encoding="utf-8").splitlines()
     assert "data/snapshots/*.csv text eol=lf" in attributes
+
+
+@pytest.mark.parametrize("record_separator", ["\n", "\r\n", "\r"])
+def test_canonical_csv_hash_normalizes_record_separators(
+    tmp_path: Path,
+    record_separator: str,
+) -> None:
+    canonical_path = tmp_path / "canonical.csv"
+    variant_path = tmp_path / "variant.csv"
+    canonical_path.write_bytes(_csv_payload("\n", "\r"))
+    variant_path.write_bytes(_csv_payload(record_separator, "\r"))
+
+    assert _canonical_csv_sha256(variant_path) == _canonical_csv_sha256(canonical_path)
+
+
+def test_canonical_csv_hash_preserves_embedded_quoted_line_breaks(
+    tmp_path: Path,
+) -> None:
+    embedded_cr_path = tmp_path / "embedded-cr.csv"
+    embedded_lf_path = tmp_path / "embedded-lf.csv"
+    embedded_cr_path.write_bytes(_csv_payload("\n", "\r"))
+    embedded_lf_path.write_bytes(_csv_payload("\n", "\n"))
+
+    assert _canonical_csv_sha256(embedded_cr_path) != _canonical_csv_sha256(
+        embedded_lf_path,
+    )
+
+
+@pytest.mark.parametrize(
+    "malformed_payload",
+    [
+        pytest.param(b"\xff", id="invalid-utf-8"),
+        pytest.param(
+            b'repository,workflow_name\npandas-dev/pandas,"unterminated\n',
+            id="malformed-csv",
+        ),
+    ],
+)
+def test_snapshot_hash_validation_rejects_malformed_csv(
+    tmp_path: Path,
+    fake_github_client: FakeGitHubClient,
+    malformed_payload: bytes,
+) -> None:
+    refresh_snapshot(
+        fake_github_client,
+        [RepositoryRef.parse("pandas-dev/pandas")],
+        tmp_path,
+        pr_limit=2,
+    )
+    (tmp_path / "pull_requests.csv").write_bytes(malformed_payload)
+
+    with pytest.raises(
+        DataContractError,
+        match="must be valid UTF-8 CSV for SHA-256 validation",
+    ):
+        load_snapshot(tmp_path)

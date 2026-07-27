@@ -33,8 +33,9 @@ unchanged at that instant.
 - the UTC generation timestamp and GitHub source, visibility, REST API kind, and API version;
 - repository collection order, exact row counts, selection, requested limits, and ordering
   semantics for both tables; and
-- lowercase SHA-256 digests of logical CSV content after CRLF and bare CR line endings are
-  normalized to LF.
+- lowercase SHA-256 digests computed after parsing each CSV and reserializing rows with LF record
+  separators. CR and LF characters embedded inside quoted cells remain distinct,
+  content-sensitive data.
 
 The committed digests are:
 
@@ -44,7 +45,7 @@ The committed digests are:
 | `workflow_runs.csv` | `01f67427f36a288c0d0c6c732b9fbab5996b21e642ef5d52d08987b9b4474373` |
 
 `.gitattributes` also pins `data/snapshots/*.csv` checkouts to LF for deterministic future
-checkouts; canonical hash validation remains line-ending independent as defense in depth.
+checkouts; record-aware hash validation remains record-separator independent as defense in depth.
 
 ## Schema
 
@@ -89,13 +90,14 @@ python scripts/refresh_data.py
 The pipeline checks that repositories are public before collection and validates exact table
 schemas, non-null values, scoped uniqueness, repository form, numeric types and ranges, enum
 values, UTC timestamp ordering, and every stored derived value. It serializes both temporary CSVs,
-hashes their canonical logical content, creates the manifest, and replaces `metadata.json` last.
+hashes their parsed rows with canonical LF record separators, creates the manifest, and replaces
+`metadata.json` last.
 
 Loading validates the manifest's exact keys, types, schema/source enums, UTC timestamp, collection
 settings, row counts, repository set, and both SHA-256 digests before returning revalidated
-frames. A logical content edit is rejected even if its columns still match; platform-only line
-ending changes are accepted. Review diffs and rerun the complete quality gate before committing
-refreshed data.
+frames. A logical cell edit, including changing an embedded CR to LF, is rejected even if its
+columns still match; record-separator-only changes are accepted. Review diffs and rerun the
+complete quality gate before committing refreshed data.
 
 ## Limitations and bias
 

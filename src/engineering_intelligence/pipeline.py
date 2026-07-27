@@ -1,4 +1,6 @@
+import csv
 import hashlib
+import io
 import json
 import re
 from collections.abc import Mapping, Sequence
@@ -491,6 +493,10 @@ def _validate_file_hashes(
             raise DataContractError(
                 f"Snapshot file {filename} must be readable for SHA-256 validation.",
             ) from error
+        except (UnicodeError, csv.Error) as error:
+            raise DataContractError(
+                f"Snapshot file {filename} must be valid UTF-8 CSV for SHA-256 validation.",
+            ) from error
         if actual != expected:
             raise DataContractError(
                 f"Snapshot file {filename} SHA-256 does not match metadata.",
@@ -585,7 +591,11 @@ def _require_positive_integer(value: object, path: str) -> None:
 
 
 def _canonical_csv_sha256(path: Path) -> str:
-    """Hash CSV content after normalizing platform line endings to LF."""
-    content = path.read_bytes()
-    canonical_content = content.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
-    return hashlib.sha256(canonical_content).hexdigest()
+    """Hash parsed CSV rows with LF record separators and exact cell text."""
+    canonical_content = io.StringIO(newline="")
+    writer = csv.writer(canonical_content, lineterminator="\n")
+    with path.open("r", encoding="utf-8", newline="") as handle:
+        reader = csv.reader(handle, strict=True)
+        writer.writerows(reader)
+
+    return hashlib.sha256(canonical_content.getvalue().encode("utf-8")).hexdigest()
