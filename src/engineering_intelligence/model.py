@@ -11,16 +11,13 @@ from sklearn.metrics import mean_absolute_error
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder
 
-CATEGORICAL_FEATURES = ("repository", "author_association")
+RAW_FEATURES = ("repository", "number", "created_at")
+CATEGORICAL_FEATURES = ("repository",)
 NUMERIC_FEATURES = (
-    "title_length",
-    "body_length",
-    "labels_count",
-    "additions",
-    "deletions",
-    "change_size",
-    "changed_files",
-    "commits",
+    "number",
+    "opened_year",
+    "opened_month",
+    "opened_day",
     "opened_weekday",
     "opened_hour",
 )
@@ -36,7 +33,7 @@ class MergeTimeModel:
     pipeline: Pipeline
 
     def predict_hours(self, features: pd.DataFrame) -> np.ndarray:
-        feature_frame = _select_features(features)
+        feature_frame = _derive_features(features)
         log_predictions = self.pipeline.predict(feature_frame)
         return np.maximum(np.expm1(log_predictions), 0.0)
 
@@ -88,14 +85,13 @@ def train_merge_time_model(frame: pd.DataFrame, min_samples: int = 80) -> ModelR
         ]
     )
 
-    train_features = _select_features(train)
-    test_features = _select_features(test)
+    train_features = _derive_features(train)
     train_target = train["merge_hours"]
     test_target = test["merge_hours"]
     pipeline.fit(train_features, np.log1p(train_target))
 
     model = MergeTimeModel(pipeline)
-    predictions = model.predict_hours(test_features)
+    predictions = model.predict_hours(test)
     baseline = np.full(len(test), float(train_target.median()))
 
     return ModelResult(
@@ -108,10 +104,15 @@ def train_merge_time_model(frame: pd.DataFrame, min_samples: int = 80) -> ModelR
 
 
 def _build_preprocessor() -> ColumnTransformer:
-    numeric_pipeline = Pipeline([("imputer", SimpleImputer(strategy="median"))])
+    numeric_pipeline = Pipeline(
+        [("imputer", SimpleImputer(strategy="median", keep_empty_features=True))]
+    )
     categorical_pipeline = Pipeline(
         [
-            ("imputer", SimpleImputer(strategy="most_frequent")),
+            (
+                "imputer",
+                SimpleImputer(strategy="most_frequent", keep_empty_features=True),
+            ),
             ("one_hot", OneHotEncoder(handle_unknown="ignore")),
         ]
     )
@@ -147,9 +148,22 @@ def _aggregate_feature_importance(pipeline: Pipeline) -> dict[str, float]:
     return importance
 
 
-def _select_features(frame: pd.DataFrame) -> pd.DataFrame:
-    missing = [feature for feature in MODEL_FEATURES if feature not in frame]
+def _derive_features(frame: pd.DataFrame) -> pd.DataFrame:
+    missing = [feature for feature in RAW_FEATURES if feature not in frame]
     if missing:
         missing_names = ", ".join(missing)
-        raise ValueError(f"Missing required model features: {missing_names}.")
-    return frame.loc[:, MODEL_FEATURES]
+        raise ValueError(f"Missing required model fields: {missing_names}.")
+
+    created_at = pd.to_datetime(frame["created_at"], utc=True)
+    return pd.DataFrame(
+        {
+            "repository": frame["repository"],
+            "number": frame["number"],
+            "opened_year": created_at.dt.year,
+            "opened_month": created_at.dt.month,
+            "opened_day": created_at.dt.day,
+            "opened_weekday": created_at.dt.weekday,
+            "opened_hour": created_at.dt.hour,
+        },
+        index=frame.index,
+    )

@@ -14,23 +14,25 @@ from engineering_intelligence.model import (
 
 @pytest.fixture(scope="module")
 def model_frame() -> pd.DataFrame:
-    row_number = pd.Series(range(100), dtype="float64")
+    row_number = pd.Series(range(100), dtype="int64")
+    created_at = pd.date_range("2025-01-01", periods=100, freq="6h", tz="UTC")
     return pd.DataFrame(
         {
             "repository": ["example/service"] * 100,
-            "created_at": pd.date_range("2025-01-01", periods=100, tz="UTC"),
-            "merge_hours": 6.0 + row_number * 1.5,
-            "title_length": 10.0 + row_number,
-            "body_length": 50.0 + row_number * 2.0,
+            "number": 1_001 + row_number,
+            "created_at": created_at,
+            "merge_hours": [12.0, 30.0, 48.0, 66.0] * 25,
+            "title_length": [20.0] * 100,
+            "body_length": [100.0] * 100,
             "author_association": ["CONTRIBUTOR"] * 100,
-            "labels_count": row_number % 4,
-            "additions": 20.0 + row_number * 3.0,
-            "deletions": 5.0 + row_number,
-            "change_size": 25.0 + row_number * 4.0,
-            "changed_files": 1.0 + row_number % 8,
-            "commits": 1.0 + row_number % 5,
-            "opened_weekday": row_number % 7,
-            "opened_hour": row_number % 24,
+            "labels_count": [1.0] * 100,
+            "additions": [100.0] * 100,
+            "deletions": [20.0] * 100,
+            "change_size": [120.0] * 100,
+            "changed_files": [4.0] * 100,
+            "commits": [2.0] * 100,
+            "opened_weekday": created_at.weekday,
+            "opened_hour": created_at.hour,
         }
     )
 
@@ -83,18 +85,13 @@ def test_trained_model_beats_median_baseline_on_predictable_data(
 ) -> None:
     assert trained_result.test_rows == 20
     assert trained_result.mae_hours < trained_result.baseline_mae_hours
-    assert trained_result.feature_importance["change_size"] > 0
+    assert trained_result.feature_importance["opened_hour"] > 0
     assert set(trained_result.feature_importance) == {
         "repository",
-        "author_association",
-        "title_length",
-        "body_length",
-        "labels_count",
-        "additions",
-        "deletions",
-        "change_size",
-        "changed_files",
-        "commits",
+        "number",
+        "opened_year",
+        "opened_month",
+        "opened_day",
         "opened_weekday",
         "opened_hour",
     }
@@ -110,7 +107,7 @@ def test_metrics_are_calculated_only_on_the_chronological_test_set(
     expected_test_mae = float(np.abs(test["merge_hours"].to_numpy() - predictions).mean())
 
     assert trained_result.mae_hours == pytest.approx(expected_test_mae)
-    assert trained_result.baseline_mae_hours == pytest.approx(75.0)
+    assert trained_result.baseline_mae_hours == pytest.approx(18.0)
 
 
 def test_training_rejects_too_few_rows(model_frame: pd.DataFrame) -> None:
@@ -127,14 +124,13 @@ def test_training_does_not_mutate_input(model_frame: pd.DataFrame) -> None:
     pd.testing.assert_frame_equal(shuffled, original)
 
 
-def test_unknown_categories_and_missing_numbers_produce_non_negative_predictions(
+def test_unknown_repository_and_missing_number_produce_non_negative_predictions(
     model_frame: pd.DataFrame,
     trained_result: ModelResult,
 ) -> None:
     features = model_frame.tail(1).copy()
     features["repository"] = "unseen/project"
-    features["author_association"] = "UNSEEN_ASSOCIATION"
-    features["change_size"] = np.nan
+    features["number"] = np.nan
 
     predictions = trained_result.model.predict_hours(features)
 
@@ -142,17 +138,35 @@ def test_unknown_categories_and_missing_numbers_produce_non_negative_predictions
     assert predictions[0] >= 0.0
 
 
-def test_target_and_post_open_columns_are_excluded_from_predictions(
+def test_forbidden_fields_cannot_change_opening_time_predictions(
     model_frame: pd.DataFrame,
     trained_result: ModelResult,
 ) -> None:
-    features = model_frame.tail(2).copy()
+    features = model_frame.tail(4).copy()
     expected = trained_result.model.predict_hours(features)
     probed = features.assign(
-        merge_hours=[-999_999.0, 999_999.0],
-        merged_at=pd.to_datetime(["2035-01-01T00:00:00Z", "2040-01-01T00:00:00Z"]),
-        closed_at=pd.to_datetime(["2036-01-01T00:00:00Z", "2041-01-01T00:00:00Z"]),
-        developer_performance_score=[-1_000_000.0, 1_000_000.0],
+        merge_hours=[999_999.0, -999_999.0, 500_000.0, -500_000.0],
+        title_length=[999_999.0, 1.0, 888_888.0, 2.0],
+        body_length=[1.0, 999_999.0, 2.0, 888_888.0],
+        author_association=["OWNER", "MEMBER", "NONE", "FIRST_TIMER"],
+        labels_count=[999.0, 0.0, 888.0, 1.0],
+        additions=[999_999.0, 0.0, 888_888.0, 1.0],
+        deletions=[0.0, 999_999.0, 1.0, 888_888.0],
+        change_size=[1.0, 2.0, 999_999.0, 888_888.0],
+        changed_files=[999.0, 1.0, 888.0, 2.0],
+        commits=[999.0, 1.0, 888.0, 2.0],
+        opened_weekday=[6, 6, 6, 6],
+        opened_hour=[1, 2, 3, 4],
+        merged_at=pd.to_datetime(
+            [
+                "2035-01-01T00:00:00Z",
+                "2036-01-01T00:00:00Z",
+                "2037-01-01T00:00:00Z",
+                "2038-01-01T00:00:00Z",
+            ]
+        ),
+        future_outcome=[-1_000_000.0, 1_000_000.0, -2_000_000.0, 2_000_000.0],
+        developer_performance_score=[-10.0, 10.0, -20.0, 20.0],
     )
 
     actual = trained_result.model.predict_hours(probed)
@@ -160,7 +174,7 @@ def test_target_and_post_open_columns_are_excluded_from_predictions(
     np.testing.assert_allclose(actual, expected, rtol=0.0, atol=1e-12)
 
 
-def test_training_is_deterministic_when_leakage_probes_are_present(
+def test_training_is_deterministic_when_forbidden_probes_are_present(
     model_frame: pd.DataFrame,
     trained_result: ModelResult,
 ) -> None:
@@ -185,20 +199,48 @@ def test_training_is_deterministic_when_leakage_probes_are_present(
     )
 
 
-def test_prediction_rejects_missing_allowlisted_features(
+@pytest.mark.parametrize("missing_column", ["repository", "number", "created_at"])
+def test_prediction_rejects_missing_raw_opening_fields(
     model_frame: pd.DataFrame,
     trained_result: ModelResult,
+    missing_column: str,
 ) -> None:
-    missing_change_size = model_frame.tail(1).drop(columns=["change_size"])
+    incomplete = model_frame.tail(1).drop(columns=[missing_column])
 
-    with pytest.raises(ValueError, match="change_size"):
-        trained_result.model.predict_hours(missing_change_size)
+    with pytest.raises(ValueError, match=missing_column):
+        trained_result.model.predict_hours(incomplete)
 
 
-def test_training_rejects_missing_allowlisted_features(
+def test_training_rejects_missing_raw_opening_fields(
     model_frame: pd.DataFrame,
 ) -> None:
-    missing_commits = model_frame.drop(columns=["commits"])
+    missing_number = model_frame.drop(columns=["number"])
 
-    with pytest.raises(ValueError, match="commits"):
-        train_merge_time_model(missing_commits, min_samples=80)
+    with pytest.raises(ValueError, match="number"):
+        train_merge_time_model(missing_number, min_samples=80)
+
+
+def test_fully_missing_training_repository_keeps_categorical_dimension(
+    model_frame: pd.DataFrame,
+) -> None:
+    frame = model_frame.copy()
+    frame.loc[:79, "repository"] = np.nan
+
+    result = train_merge_time_model(frame, min_samples=80)
+    predictions = result.model.predict_hours(frame.tail(1))
+
+    assert result.feature_importance["repository"] == 0.0
+    assert np.isfinite(predictions).all()
+
+
+def test_fully_missing_training_number_keeps_numeric_dimension(
+    model_frame: pd.DataFrame,
+) -> None:
+    frame = model_frame.copy()
+    frame.loc[:79, "number"] = np.nan
+
+    result = train_merge_time_model(frame, min_samples=80)
+    predictions = result.model.predict_hours(frame.tail(1))
+
+    assert result.feature_importance["number"] == 0.0
+    assert np.isfinite(predictions).all()
