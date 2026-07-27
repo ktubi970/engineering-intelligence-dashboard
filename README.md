@@ -17,13 +17,45 @@ patterns, and test an opening-time forecast. The committed demo works offline af
 300 merged pull requests and 199 completed workflow runs from two public repositories are already
 included. The forecast is evaluated chronologically; on this snapshot, the simpler baseline wins.
 
+## Agentic engineering with Codex, Sol, and Ultra reasoning
+
+This finishing pass used Codex running GPT-5.6 Sol with Ultra reasoning
+(`Codex + Sol + Ultra`). It is one scoped part of the current evidence-hardening workflow.
+It does not claim that every historical change or subagent used the same model or reasoning level.
+
+A coordinator uses task decomposition to give scoped implementation agents bounded changes.
+Git worktrees and commit boundaries isolate concurrent scopes; agents return diffs and test
+evidence, and read-only independent review agents report findings without mutating the branch.
+
+The loop is test-first: state the contract, capture RED, add the smallest implementation, and
+capture GREEN before broader gates. Local RED evidence for this change was `1 failed, 7 passed`
+when the required README section was absent. A separate mutation-style RED against the
+signature-and-size-only screenshot validator was `2 failed, 8 deselected`: it accepted both a
+corrupt PNG and a valid 1440x999 PNG. Pillow decode/verify plus the exact 1440x1000 check made the
+same two cases GREEN at `2 passed, 8 deselected`.
+
+The binding anchors are `tests/test_project_contract.py`, `.github/workflows/ci.yml`,
+`requirements-dev.txt`, and [AGENTS.md](AGENTS.md). The local gate combines Ruff, pytest, and
+coverage; GitHub Actions runs the same commands in CI. Playwright visual QA exercises the running
+browser separately. Gate output is labeled local, CI, or live and still requires human approval
+before merge, push, or deployment.
+
+Agent and reviewer interactions are designed around known failure modes: diff review catches
+hallucinated changes, mutation-proven negative cases expose weak tests, and SHA/environment labels
+surface drift between local, CI, and live.
+Guardrails require no secret output and no developer scoring. Evidence, not AI claims, proves
+completion; an agent's status report is never sufficient.
+
+See [Agentic development](docs/agentic-development.md) for the vertical-slice record and
+[AGENTS.md](AGENTS.md) for the binding repository constraints.
+
 ## Features
 
-- Delivery pulse: merged pull-request count, median and P90 merge time, workflow success, and
+- **Overview:** merged pull-request count, median and P90 merge time, workflow success, and
   weekly trends with shared repository/date filters.
-- Bottleneck exploration: high-contrast Plotly views of change size, merge delay, and repository
-  medians, labeled as retrospective and non-causal.
-- Forecast and trust: an opening-time-only random-forest forecast shown beside its train-median
+- **Drivers & retrospective patterns:** high-contrast Plotly views of change size, merge delay,
+  and repository medians, labeled as retrospective and non-causal.
+- **Forecast & trust:** an opening-time-only random-forest forecast shown beside its train-median
   baseline, test-row count, feature importance, and explicit use warning.
 
 ## Live demo
@@ -104,8 +136,8 @@ python -m ruff format --check .
 python -m pytest --cov=engineering_intelligence --cov-report=term-missing --cov-fail-under=85
 ```
 
-Tests use fixtures or committed local data and make no network calls. Exact current local results
-are recorded in [Quality evidence](docs/quality-evidence.md); a workflow definition is not itself
+Tests use fixtures or committed local data and make no network calls. Task-by-task local and
+hosted results are recorded in [Quality evidence](docs/quality-evidence.md); a workflow is not
 proof that GitHub Actions has passed.
 
 ## Model results

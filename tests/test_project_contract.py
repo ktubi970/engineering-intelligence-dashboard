@@ -3,6 +3,9 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
+import pytest
+from PIL import Image, UnidentifiedImageError
+
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -14,6 +17,20 @@ def _artifact_path(relative_path: str) -> Path:
 
 def _artifact(relative_path: str) -> str:
     return _artifact_path(relative_path).read_text(encoding="utf-8")
+
+
+def _assert_dashboard_screenshot_contract(screenshot_path: Path) -> None:
+    screenshot = screenshot_path.read_bytes()
+    assert screenshot.startswith(b"\x89PNG\r\n\x1a\n")
+    assert len(screenshot) > 50_000
+    with Image.open(screenshot_path) as image:
+        assert image.format == "PNG", f"Expected PNG, got {image.format}"
+        image.verify()
+    with Image.open(screenshot_path) as image:
+        assert image.format == "PNG", f"Expected PNG, got {image.format}"
+        assert image.size == (1_440, 1_000), (
+            f"Expected dashboard screenshot size 1440x1000, got {image.size}"
+        )
 
 
 def test_ci_runs_the_binding_quality_gate_on_master_and_pull_requests() -> None:
@@ -125,9 +142,11 @@ def test_published_portfolio_claims_match_verified_snapshot_and_evaluation() -> 
 
 
 def test_publication_artifacts_are_real_and_match_verified_remote_evidence() -> None:
-    screenshot = _artifact_path("docs/images/dashboard.png").read_bytes()
-    assert screenshot.startswith(b"\x89PNG\r\n\x1a\n")
-    assert len(screenshot) > 50_000
+    screenshot_path = _artifact_path("docs/images/dashboard.png")
+    _assert_dashboard_screenshot_contract(screenshot_path)
+
+    requirements_dev = _artifact("requirements-dev.txt").splitlines()
+    assert "pillow==12.3.0" in requirements_dev
 
     readme = _artifact("README.md")
     assert "![MergeLens dashboard overview](docs/images/dashboard.png)" in readme
@@ -142,7 +161,7 @@ def test_publication_artifacts_are_real_and_match_verified_remote_evidence() -> 
         "300 merged pull requests and 199 completed workflow runs",
         "GitHub public REST API",
         "The model underperforms the baseline on this snapshot.",
-        "![MergeLens dashboard overview](https://github.com/ktubi970/engineering-intelligence-dashboard/blob/codex/engineering-intelligence-dashboard/docs/images/dashboard.png?raw=true)",
+        "![MergeLens dashboard overview](https://github.com/ktubi970/engineering-intelligence-dashboard/blob/ce303f2a4b5d81e98a478ec542542698e0f991b1/docs/images/dashboard.png?raw=true)",
         "## Limitations",
     ):
         assert anchor in pull_request_body
@@ -171,3 +190,105 @@ def test_publication_artifacts_are_real_and_match_verified_remote_evidence() -> 
         "account/API 403/404",
     ):
         assert remote_observation in quality_evidence
+
+
+def test_publication_screenshot_contract_rejects_corrupt_png(tmp_path: Path) -> None:
+    corrupt_screenshot = tmp_path / "corrupt-dashboard.png"
+    corrupt_screenshot.write_bytes(b"\x89PNG\r\n\x1a\n" + (b"\x00" * 60_000))
+
+    with pytest.raises(UnidentifiedImageError):
+        _assert_dashboard_screenshot_contract(corrupt_screenshot)
+
+
+def test_publication_screenshot_contract_rejects_wrong_dimensions(
+    tmp_path: Path,
+) -> None:
+    source_screenshot = _artifact_path("docs/images/dashboard.png")
+    wrong_size_screenshot = tmp_path / "wrong-size-dashboard.png"
+    with Image.open(source_screenshot) as source_image:
+        source_image.crop((0, 0, 1_440, 999)).save(
+            wrong_size_screenshot,
+            format="PNG",
+        )
+    assert wrong_size_screenshot.stat().st_size > 50_000
+
+    with pytest.raises(AssertionError, match="1440x1000"):
+        _assert_dashboard_screenshot_contract(wrong_size_screenshot)
+
+
+def test_readme_uses_exact_current_public_tab_names() -> None:
+    readme = _artifact("README.md")
+
+    for tab_name in (
+        "Overview",
+        "Drivers & retrospective patterns",
+        "Forecast & trust",
+    ):
+        assert tab_name in readme
+
+
+def test_pr_body_pins_screenshot_to_an_immutable_commit_url() -> None:
+    pull_request_body = _artifact(".github/pull_request_body.md")
+    expected_url = (
+        "https://github.com/ktubi970/engineering-intelligence-dashboard/blob/"
+        "ce303f2a4b5d81e98a478ec542542698e0f991b1/docs/images/dashboard.png?raw=true"
+    )
+    match = re.search(r"!\[MergeLens dashboard overview\]\(([^)]+)\)", pull_request_body)
+    assert match is not None
+    screenshot_url = match.group(1)
+
+    assert screenshot_url == expected_url
+    assert re.fullmatch(
+        r"https://github\.com/ktubi970/engineering-intelligence-dashboard/blob/"
+        r"[0-9a-f]{40}/docs/images/dashboard\.png\?raw=true",
+        screenshot_url,
+    )
+    assert "codex/engineering-intelligence-dashboard" not in screenshot_url
+
+
+def test_readme_explains_the_codex_sol_ultra_engineering_workflow() -> None:
+    readme = _artifact("README.md")
+    heading = "## Agentic engineering with Codex, Sol, and Ultra reasoning"
+
+    assert heading in readme
+    start = readme.index(heading)
+    next_heading = readme.find("\n## ", start + len(heading))
+    section = readme[start:] if next_heading == -1 else readme[start:next_heading]
+    lowered = section.lower()
+
+    for anchor in (
+        "Codex + Sol + Ultra",
+        "coordinator",
+        "task decomposition",
+        "scoped implementation agents",
+        "RED",
+        "GREEN",
+        "read-only independent review agents",
+        "Git worktrees",
+        "commit boundaries",
+        "pytest",
+        "Ruff",
+        "coverage",
+        "GitHub Actions",
+        "Playwright",
+        "human approval",
+        "`tests/test_project_contract.py`",
+        "`.github/workflows/ci.yml`",
+        "1 failed, 7 passed",
+        "2 failed, 8 deselected",
+        "2 passed, 8 deselected",
+        "[Agentic development](docs/agentic-development.md)",
+        "[AGENTS.md](AGENTS.md)",
+    ):
+        assert anchor in section
+
+    for failure_or_guardrail in (
+        "hallucinated changes",
+        "weak tests",
+        "drift between local, ci, and live",
+        "no secret output",
+        "no developer scoring",
+        "evidence, not ai claims",
+        "does not claim that every historical change or subagent",
+    ):
+        assert failure_or_guardrail in lowered

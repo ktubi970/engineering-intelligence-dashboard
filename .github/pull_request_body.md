@@ -22,7 +22,7 @@
 ```
 
 Observed local results on Python 3.13.9: Ruff lint passed, Ruff format reported 31 files
-already formatted, and pytest collected and passed 91 tests with 96.10% coverage (85% required).
+already formatted, and pytest collected and passed 96 tests with 96.10% coverage (85% required).
 These local Windows results cover the current branch changes.
 
 ## Public data provenance
@@ -43,7 +43,7 @@ and never a developer performance score.
 
 ## Screenshot
 
-![MergeLens dashboard overview](https://github.com/ktubi970/engineering-intelligence-dashboard/blob/codex/engineering-intelligence-dashboard/docs/images/dashboard.png?raw=true)
+![MergeLens dashboard overview](https://github.com/ktubi970/engineering-intelligence-dashboard/blob/ce303f2a4b5d81e98a478ec542542698e0f991b1/docs/images/dashboard.png?raw=true)
 
 The screenshot is a genuine 1440x1000 viewport capture from the local running application after
 restoring both repositories and the full date range.
