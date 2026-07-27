@@ -147,6 +147,41 @@ A named Playwright CLI session (`active-repositories`) verified:
 
 This is local evidence for `codex/add-active-repositories`, not deployment or CI evidence.
 
+### Active repository expansion final local quality gate
+
+The complete feature-branch gate ran locally on Windows with Python 3.12.10.
+
+```powershell
+.\.venv\Scripts\python.exe -m ruff check .
+```
+
+```text
+All checks passed!
+```
+
+```powershell
+.\.venv\Scripts\python.exe -m ruff format --check .
+```
+
+```text
+33 files already formatted
+```
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest --cov=engineering_intelligence --cov-report=term-missing --cov-fail-under=85
+```
+
+```text
+collected 93 items
+TOTAL  487 statements  19 missed  96%
+Required test coverage of 85% reached. Total coverage: 96.10%
+93 passed in 39.29s
+```
+
+The percentage shown as `96%` is pytest-cov's table display; `96.10%` is its reported precise
+total. `git diff --check` also completed without output. These are local Windows results for
+`codex/add-active-repositories`, not hosted CI or deployment evidence.
+
 ## Verified live deployment
 
 Public URL:
