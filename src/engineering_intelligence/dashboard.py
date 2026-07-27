@@ -50,7 +50,7 @@ def render_dashboard(data_dir: Path) -> None:
     st.sidebar.caption(f"Snapshot generated: {generated_at}")
 
     delivery_tab, bottlenecks_tab, forecast_tab = st.tabs(
-        ["Delivery pulse", "Bottlenecks", "Forecast & trust"]
+        ["Overview", "Drivers & retrospective patterns", "Forecast & trust"]
     )
     with delivery_tab:
         _render_delivery_pulse(filtered_pulls, filtered_workflows)

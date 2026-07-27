@@ -49,8 +49,8 @@ def test_dashboard_loads_snapshot_and_shows_exact_core_sections(
     assert not app.exception
     assert [title.value for title in app.title] == ["MergeLens"]
     assert [tab.label for tab in app.tabs] == [
-        "Delivery pulse",
-        "Bottlenecks",
+        "Overview",
+        "Drivers & retrospective patterns",
         "Forecast & trust",
     ]
     assert len(app.metric) == 4

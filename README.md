@@ -26,6 +26,20 @@ included. The forecast is evaluated chronologically; on this snapshot, the simpl
 - Forecast and trust: an opening-time-only random-forest forecast shown beside its train-median
   baseline, test-row count, feature importance, and explicit use warning.
 
+## Live demo
+
+[Open the verified public Streamlit dashboard](https://engineering-intelligence-dashboard-jq9xccatzgwy9y9hcrwmor.streamlit.app/).
+Anonymous verification on 2026-07-27 confirmed that the initial published revision `f987033`
+loaded the committed snapshot with 300 merged pull requests and no visible traceback.
+
+The initial GitHub Actions quality check [passed in 57s](https://github.com/ktubi970/engineering-intelligence-dashboard/actions/runs/30259194189/job/89954838617)
+on `f987033`. That hosted result is scoped to the initial published revision; the local test results
+below cover the documentation and tab-label changes in this evidence commit.
+
+![MergeLens dashboard overview](docs/images/dashboard.png)
+
+The screenshot is a genuine 1440x1000 capture from the locally running application.
+
 ## Metric definitions
 
 - **Merged pull requests:** rows with a positive duration from UTC creation to UTC merge time.
