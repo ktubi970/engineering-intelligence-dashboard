@@ -2,18 +2,19 @@
 
 ## Dataset summary and provenance
 
-The committed demo snapshot was generated on `2026-07-27T08:04:05.882089Z` through the project's
+The committed demo snapshot was generated on `2026-07-27T13:56:40.155501Z` through the project's
 authenticated public GitHub REST path. The token existed only in that refresh process and was not
 printed or persisted.
 
 | Item | Committed value |
 | --- | --- |
 | Source | GitHub public REST API |
-| Public repositories | `pandas-dev/pandas`, `streamlit/streamlit` |
-| Merged pull-request rows | 300 |
-| Completed workflow-run rows | 199 |
-| Pull creation to merge range | 2026-07-02 17:16:26 UTC to 2026-07-27 07:02:30 UTC |
-| Workflow observation range | 2026-07-26 17:41:16 UTC to 2026-07-27 07:57:42 UTC |
+| Public repositories | `pandas-dev/pandas`, `streamlit/streamlit`, `microsoft/vscode`, |
+| | `tensorflow/tensorflow`, `rust-lang/rust`, `ruby/ruby` |
+| Merged pull-request rows | 900 |
+| Completed workflow-run rows | 560 |
+| Pull creation to merge range | 2026-07-02 17:16:26 UTC to 2026-07-27 13:28:47 UTC |
+| Workflow observation range | 2026-07-27 02:48:29 UTC to 2026-07-27 13:49:26 UTC |
 | Schema version | 1 |
 
 The refresh bound was 150 pull requests and 150 workflow runs per repository. Only merged pull
@@ -69,7 +70,7 @@ snapshot files. Review diffs and rerun the complete quality gate before committi
 
 ## Limitations and bias
 
-- Two large Python open-source repositories are not representative of all teams, languages,
+- Six high-volume public open-source projects are not representative of all teams, languages,
   company sizes, or delivery practices.
 - Only merged pull requests are present. Abandoned, rejected, or still-open work is excluded,
   creating survivorship and selection bias.

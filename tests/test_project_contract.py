@@ -3,6 +3,7 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
+from engineering_intelligence.model import train_merge_time_model
 from engineering_intelligence.pipeline import load_snapshot
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -38,6 +39,8 @@ def test_ci_runs_the_binding_quality_gate_on_master_and_pull_requests() -> None:
 
 
 def test_recruiter_readme_and_supporting_documents_publish_the_core_contract() -> None:
+    pulls, workflows, _ = load_snapshot(PROJECT_ROOT / "data" / "snapshots")
+
     readme = _artifact("README.md")
     for anchor in (
         "# MergeLens",
@@ -65,7 +68,12 @@ def test_recruiter_readme_and_supporting_documents_publish_the_core_contract() -
 
     document_anchors = {
         "docs/architecture.md": ("GitHub public REST API", "pandas", "Streamlit", "failure"),
-        "docs/data-card.md": ("300", "199", "privacy", "## Limitations"),
+        "docs/data-card.md": (
+            str(len(pulls)),
+            str(len(workflows)),
+            "privacy",
+            "## Limitations",
+        ),
         "docs/model-card.md": (
             "opening-time",
             "chronological",
@@ -102,26 +110,49 @@ def test_agent_guardrails_allow_scoped_work_and_prohibit_unsafe_claims() -> None
 
 
 def test_published_portfolio_claims_match_verified_snapshot_and_evaluation() -> None:
+    pulls, workflows, _ = load_snapshot(PROJECT_ROOT / "data" / "snapshots")
+    result = train_merge_time_model(pulls)
+    model_mae = f"{result.mae_hours:.12f}"
+    baseline_mae = f"{result.baseline_mae_hours:.12f}"
+    difference = f"{abs(result.mae_hours - result.baseline_mae_hours):.12f}"
+
+    if result.mae_hours < result.baseline_mae_hours:
+        winner = "model"
+        result_sentence = "The model outperforms the baseline on this snapshot."
+        model_card_difference = f"model is {difference} hours better"
+    elif result.baseline_mae_hours < result.mae_hours:
+        winner = "baseline"
+        result_sentence = "The model underperforms the baseline on this snapshot."
+        model_card_difference = f"model is {difference} hours worse"
+    else:
+        winner = "tie"
+        result_sentence = "The model matches the baseline on this snapshot."
+        model_card_difference = "model and baseline are equal"
+
+    honest_result = "tie" if winner == "tie" else f"{winner} wins"
+
     readme = _artifact("README.md")
     for claim in (
-        "300 merged pull requests and 199 completed workflow runs",
-        "model and the newest 20% (60 rows) is held out for evaluation.",
-        "- Random-forest MAE: **26.624744394610 hours**",
-        "- Training-median baseline MAE: **21.071861111111 hours**",
-        "- Winner: **baseline**, by **5.552883283499 hours**",
-        "The model underperforms the baseline on this snapshot.",
+        f"{len(pulls)} merged pull requests and {len(workflows)} completed workflow runs",
+        f"model and the newest 20% ({result.test_rows} rows) is held out for evaluation.",
+        f"- Random-forest MAE: **{model_mae} hours**",
+        f"- Training-median baseline MAE: **{baseline_mae} hours**",
+        f"- Winner: **{winner}**, by **{difference} hours**",
+        result_sentence,
     ):
         assert claim in readme
 
     model_card = _artifact("docs/model-card.md")
+    training_rows = len(pulls) - result.test_rows
     for claim in (
-        "With 300 committed rows, that produces 240 training rows and 60\ntest rows.",
-        "| Test rows | 60 |",
-        "| Random-forest MAE | 26.624744394610 hours |",
-        "| Train-median baseline MAE | 21.071861111111 hours |",
-        "| Difference | model is 5.552883283499 hours worse |",
-        "| Honest result | baseline wins |",
-        "The model underperforms the baseline on the committed snapshot.",
+        f"With {len(pulls)} committed rows, that produces {training_rows} training rows and "
+        f"{result.test_rows}\ntest rows.",
+        f"| Test rows | {result.test_rows} |",
+        f"| Random-forest MAE | {model_mae} hours |",
+        f"| Train-median baseline MAE | {baseline_mae} hours |",
+        f"| Difference | {model_card_difference} |",
+        f"| Honest result | {honest_result} |",
+        result_sentence.replace("this snapshot", "the committed snapshot"),
     ):
         assert claim in model_card
 

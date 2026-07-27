@@ -27,19 +27,31 @@ These local Windows results cover the current branch changes.
 
 ## Public data provenance
 
-The committed snapshot contains 300 merged pull requests and 199 completed workflow runs from
-`pandas-dev/pandas` and `streamlit/streamlit`. It was produced from the GitHub public REST API and
-stores repository-scoped delivery fields rather than developer identities or credentials.
+The current committed snapshot contains 900 merged pull requests and 560 completed workflow runs
+from `pandas-dev/pandas`, `streamlit/streamlit`, `microsoft/vscode`, `tensorflow/tensorflow`,
+`rust-lang/rust`, and `ruby/ruby`. It was produced from the GitHub public REST API and stores
+repository-scoped delivery fields rather than developer identities or credentials.
 
 ## Honest model result
 
+- Random-forest MAE: 8.738738922687 hours
+- Training-median baseline MAE: 14.394064814815 hours
+- Chronological test rows: 180
+- Winner: model, by 5.655325892127 hours
+
+The model outperforms the baseline on this snapshot. The forecast is experimental, non-causal,
+and never a developer performance score.
+
+For historical context, this evidence belongs to the initial `f987033` committed snapshot, not
+the current six-repository snapshot:
+
+- 300 merged pull requests and 199 completed workflow runs
 - Random-forest MAE: 26.624744394610 hours
 - Training-median baseline MAE: 21.071861111111 hours
 - Chronological test rows: 60
-- Winner: baseline, by 5.552883283499 hours
 
-The model underperforms the baseline on this snapshot. The forecast is experimental, non-causal,
-and never a developer performance score.
+The model underperforms the baseline on this snapshot. This sentence describes the historical
+`f987033` result.
 
 ## Screenshot
 
@@ -55,7 +67,7 @@ restoring both repositories and the full date range.
 - The anonymous Streamlit shell logged account/API 403/404 responses while the application iframe
   loaded normally with no visible traceback and no horizontal iframe overflow.
 - Initial PR: https://github.com/ktubi970/engineering-intelligence-dashboard/pull/1
-- The recent point-in-time snapshot covers two public repositories and only merged pull requests,
+- The current point-in-time snapshot covers six public repositories and only merged pull requests,
   so it includes selection and survivorship bias.
 - Retrospective patterns and feature importance describe associations, not causes.
 - Future repository process or data changes can shift metrics and forecast error.

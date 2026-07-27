@@ -25,7 +25,7 @@ and score-like fields. This was the explicit human decision recorded as Option 1
 ## Training and evaluation
 
 Rows are stable-sorted by UTC creation time. The oldest 80% trains the pipeline and the newest 20%
-is the chronological test set. With 300 committed rows, that produces 240 training rows and 60
+is the chronological test set. With 900 committed rows, that produces 720 training rows and 180
 test rows. Evaluation never fits on test targets.
 
 The target is `merge_hours`. Training applies `log1p` to the target; prediction applies `expm1`
@@ -54,13 +54,13 @@ These values were computed through `load_snapshot(Path("data/snapshots"))` follo
 
 | Measure | Result |
 | --- | ---: |
-| Test rows | 60 |
-| Random-forest MAE | 26.624744394610 hours |
-| Train-median baseline MAE | 21.071861111111 hours |
-| Difference | model is 5.552883283499 hours worse |
-| Honest result | baseline wins |
+| Test rows | 180 |
+| Random-forest MAE | 8.738738922687 hours |
+| Train-median baseline MAE | 14.394064814815 hours |
+| Difference | model is 5.655325892127 hours better |
+| Honest result | model wins |
 
-The model underperforms the baseline on the committed snapshot. Synthetic tests prove mechanics,
+The model outperforms the baseline on the committed snapshot. Synthetic tests prove mechanics,
 not real-world superiority.
 
 ## Interpretation and limitations
@@ -69,7 +69,7 @@ not real-world superiority.
 - Pull-request number and calendar context may encode repository process changes but do not
   explain them. Global feature importance is non-causal.
 - Random forests do not extrapolate reliably outside observed feature ranges.
-- The two repositories, recent sample, and merged-only selection create substantial distribution,
+- The six repositories, recent sample, and merged-only selection create substantial distribution,
   survivorship, and repository bias.
 - The dashboard retrains on the selected local rows and disables evaluation below 80 rows. Filtered
   results can differ from this full-snapshot result.

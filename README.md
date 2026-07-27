@@ -14,8 +14,8 @@ model as better than a simple baseline when it is not.
 
 Open one local Streamlit app to compare repository delivery signals, explore recent merge-time
 patterns, and test an opening-time forecast. The committed demo works offline after installation:
-300 merged pull requests and 199 completed workflow runs from two public repositories are already
-included. The forecast is evaluated chronologically; on this snapshot, the simpler baseline wins.
+900 merged pull requests and 560 completed workflow runs from six public repositories are already
+included. The forecast is evaluated chronologically; on this snapshot, the model wins.
 
 ## Features
 
@@ -81,6 +81,9 @@ streamlit run streamlit_app.py
 Use the sidebar to filter repositories and an inclusive UTC date range. The forecast remains
 available only when at least 80 pull-request rows are selected.
 
+The committed snapshot contains `pandas-dev/pandas`, `streamlit/streamlit`, `microsoft/vscode`,
+`tensorflow/tensorflow`, `rust-lang/rust`, and `ruby/ruby`.
+
 ## Optional data refresh
 
 Refreshing is explicit and is the only normal path that calls GitHub. It accepts public
@@ -110,21 +113,21 @@ proof that GitHub Actions has passed.
 
 ## Model results
 
-The committed 300-row pull-request snapshot is sorted by `created_at`; the oldest 80% trains the
-model and the newest 20% (60 rows) is held out for evaluation.
+The committed 900-row pull-request snapshot is sorted by `created_at`; the oldest 80% trains the
+model and the newest 20% (180 rows) is held out for evaluation.
 
-- Random-forest MAE: **26.624744394610 hours**
-- Training-median baseline MAE: **21.071861111111 hours**
-- Winner: **baseline**, by **5.552883283499 hours**
+- Random-forest MAE: **8.738738922687 hours**
+- Training-median baseline MAE: **14.394064814815 hours**
+- Winner: **model**, by **5.655325892127 hours**
 
-The model underperforms the baseline on this snapshot. That result is not hidden or reframed.
+The model outperforms the baseline on this snapshot. That result is not hidden or reframed.
 Inputs are only repository, pull-request number, and UTC calendar features derived from creation
 time. This is an experimental, non-causal estimate and never a developer score. See the
 [Model card](docs/model-card.md).
 
 ## Limitations
 
-The snapshot is recent, point-in-time, and limited to two public open-source repositories. It
+The snapshot is recent, point-in-time, and limited to six large public open-source projects. It
 contains merged pull requests rather than every opened pull request, so it has selection and
 survivorship bias. Repository process changes and future data may shift results. Feature
 importance and the size/delay plot describe patterns; neither identifies causes.
