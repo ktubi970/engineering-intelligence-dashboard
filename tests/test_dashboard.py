@@ -1,0 +1,257 @@
+from __future__ import annotations
+
+import json
+from datetime import UTC, date, time
+from pathlib import Path
+
+import pandas as pd
+import pytest
+from streamlit.testing.v1 import AppTest
+
+from engineering_intelligence.dashboard import (
+    evaluation_summary,
+    opening_feature_frame,
+    resolve_data_dir,
+)
+from engineering_intelligence.transform import PULL_REQUEST_COLUMNS, WORKFLOW_COLUMNS
+
+WARNING = "Experimental forecast — not a causal measure and never a developer performance score."
+APP_PATH = Path(__file__).parents[1] / "streamlit_app.py"
+
+
+@pytest.fixture
+def snapshot_dir(tmp_path: Path) -> Path:
+    _write_snapshot(tmp_path, pull_request_rows=100)
+    return tmp_path
+
+
+@pytest.fixture
+def small_snapshot_dir(tmp_path: Path) -> Path:
+    _write_snapshot(tmp_path, pull_request_rows=12)
+    return tmp_path
+
+
+def test_dashboard_loads_snapshot_and_shows_exact_core_sections(
+    snapshot_dir: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("EID_DATA_DIR", str(snapshot_dir))
+
+    app = AppTest.from_file(APP_PATH)
+    app.run(timeout=20)
+
+    assert not app.exception
+    assert [title.value for title in app.title] == ["MergeLens"]
+    assert [tab.label for tab in app.tabs] == [
+        "Delivery pulse",
+        "Bottlenecks",
+        "Forecast & trust",
+    ]
+    assert len(app.metric) == 4
+    assert [subheader.value for subheader in app.subheader] == [
+        "Weekly trends",
+        "Retrospective bottlenecks",
+        "Model evaluation",
+        "What-if forecast",
+    ]
+    assert [warning.value for warning in app.warning] == [WARNING]
+
+
+def test_forecast_form_accepts_only_opening_time_features(
+    snapshot_dir: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("EID_DATA_DIR", str(snapshot_dir))
+
+    app = AppTest.from_file(APP_PATH)
+    app.run(timeout=20)
+
+    widget_labels = {
+        widget.label
+        for collection in (
+            app.selectbox,
+            app.number_input,
+            app.date_input,
+            app.time_input,
+            app.text_input,
+        )
+        for widget in collection
+    }
+    assert {
+        "Forecast repository",
+        "Pull request number",
+        "Opening date (UTC)",
+        "Opening time (UTC)",
+    }.issubset(widget_labels)
+    assert widget_labels.isdisjoint(
+        {
+            "Author association",
+            "Title length",
+            "Body length",
+            "Labels",
+            "Additions",
+            "Deletions",
+            "Change size",
+            "Changed files",
+            "Commits",
+            "Target",
+            "Merge time",
+        }
+    )
+
+
+def test_small_snapshot_has_readable_forecast_state_without_exception(
+    small_snapshot_dir: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("EID_DATA_DIR", str(small_snapshot_dir))
+
+    app = AppTest.from_file(APP_PATH)
+    app.run(timeout=20)
+
+    assert not app.exception
+    assert any("At least 80 pull requests are required" in info.value for info in app.info)
+    assert [warning.value for warning in app.warning] == [WARNING]
+
+
+def test_empty_repository_filter_has_readable_state_without_exception(
+    snapshot_dir: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("EID_DATA_DIR", str(snapshot_dir))
+    app = AppTest.from_file(APP_PATH)
+    app.run(timeout=20)
+
+    app.sidebar.multiselect[0].set_value([])
+    app.run(timeout=20)
+
+    assert not app.exception
+    assert any("No pull requests match the selected filters." in info.value for info in app.info)
+
+
+def test_data_dir_defaults_to_the_committed_snapshot(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.delenv("EID_DATA_DIR", raising=False)
+
+    assert resolve_data_dir() == APP_PATH.parent / "data" / "snapshots"
+
+
+def test_opening_feature_frame_contains_only_the_three_utc_model_inputs() -> None:
+    features = opening_feature_frame(
+        "alpha/api",
+        1_234,
+        date(2026, 7, 27),
+        time(14, 30),
+    )
+
+    assert features.columns.tolist() == ["repository", "number", "created_at"]
+    assert features.loc[0, "repository"] == "alpha/api"
+    assert features.loc[0, "number"] == 1_234
+    assert (
+        features.loc[0, "created_at"].to_pydatetime()
+        == pd.Timestamp("2026-07-27T14:30:00Z").to_pydatetime()
+    )
+    assert features.loc[0, "created_at"].tzinfo == UTC
+
+
+@pytest.mark.parametrize(
+    ("model_mae", "baseline_mae", "expected_level", "expected_winner"),
+    [
+        (8.0, 12.0, "success", "Model wins"),
+        (12.0, 8.0, "info", "Train-median baseline wins"),
+        (8.0, 8.0, "info", "Tie"),
+    ],
+)
+def test_evaluation_summary_names_the_actual_lower_mae(
+    model_mae: float,
+    baseline_mae: float,
+    expected_level: str,
+    expected_winner: str,
+) -> None:
+    level, message = evaluation_summary(model_mae, baseline_mae)
+
+    assert level == expected_level
+    assert message.startswith(expected_winner)
+    assert "8.0" in message
+
+
+def _write_snapshot(data_dir: Path, pull_request_rows: int) -> None:
+    row_number = pd.Series(range(pull_request_rows), dtype="int64")
+    created_at = pd.date_range(
+        "2025-01-01",
+        periods=pull_request_rows,
+        freq="6h",
+        tz="UTC",
+    )
+    merge_hours = pd.Series(
+        [12.0, 30.0, 48.0, 66.0] * ((pull_request_rows + 3) // 4),
+        dtype="float64",
+    ).head(pull_request_rows)
+    repositories = [
+        "alpha/api" if index % 2 == 0 else "beta/web" for index in range(pull_request_rows)
+    ]
+    pulls = pd.DataFrame(
+        {
+            "repository": repositories,
+            "number": 1_001 + row_number,
+            "created_at": created_at,
+            "merged_at": created_at + pd.to_timedelta(merge_hours, unit="h"),
+            "merge_hours": merge_hours,
+            "title_length": 20,
+            "body_length": 100,
+            "author_association": "CONTRIBUTOR",
+            "labels_count": 1,
+            "additions": 100 + row_number,
+            "deletions": 20,
+            "change_size": 120 + row_number,
+            "changed_files": 4,
+            "commits": 2,
+            "opened_weekday": created_at.weekday,
+            "opened_hour": created_at.hour,
+        },
+        columns=PULL_REQUEST_COLUMNS,
+    )
+    workflow_count = max(pull_request_rows, 1)
+    workflow_created_at = pd.date_range(
+        "2025-01-01",
+        periods=workflow_count,
+        freq="6h",
+        tz="UTC",
+    )
+    workflows = pd.DataFrame(
+        {
+            "repository": [
+                "alpha/api" if index % 2 == 0 else "beta/web" for index in range(workflow_count)
+            ],
+            "run_id": range(2_001, 2_001 + workflow_count),
+            "workflow_name": "CI",
+            "status": "completed",
+            "conclusion": [
+                "success" if index % 4 else "failure" for index in range(workflow_count)
+            ],
+            "created_at": workflow_created_at,
+            "updated_at": workflow_created_at + pd.Timedelta(minutes=10),
+            "duration_minutes": 10.0,
+        },
+        columns=WORKFLOW_COLUMNS,
+    )
+    pulls.to_csv(data_dir / "pull_requests.csv", index=False, date_format="%Y-%m-%dT%H:%M:%SZ")
+    workflows.to_csv(
+        data_dir / "workflow_runs.csv",
+        index=False,
+        date_format="%Y-%m-%dT%H:%M:%SZ",
+    )
+    (data_dir / "metadata.json").write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "generated_at_utc": "2026-07-26T00:00:00Z",
+                "source": "GitHub public REST API",
+                "repositories": ["alpha/api", "beta/web"],
+                "pull_request_rows": pull_request_rows,
+                "workflow_run_rows": workflow_count,
+            }
+        ),
+        encoding="utf-8",
+    )
