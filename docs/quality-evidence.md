@@ -192,7 +192,7 @@ This section records local Windows evidence for the resolved six-repository snap
 manifest, time-safe model evaluation, and record-aware canonical CSV hashing. No network collection
 ran during integration.
 
-### First integrated local quality gate
+### Post-fast-forward target local quality gate
 
 All commands used the required repository environment on Python 3.13.9.
 
@@ -209,7 +209,7 @@ C:\tmp\engineering-intelligence-dashboard\.venv\Scripts\python.exe -m ruff forma
 ```
 
 ```text
-34 files already formatted
+33 files already formatted
 ```
 
 ```powershell
@@ -220,13 +220,13 @@ C:\tmp\engineering-intelligence-dashboard\.venv\Scripts\python.exe -m pytest --c
 collected 172 items
 TOTAL  806 statements  44 missed  95%
 Required test coverage of 85% reached. Total coverage: 94.54%
-172 passed in 145.90s
+172 passed in 37.08s
 ```
 
-`git diff --check` completed without output. These are local integration results, not hosted CI or
-deployment evidence. The official GitHub Actions result on `82e86b2` remains **170 passed**; this
-separate local integration result is **172 passed** because it includes integration evidence-contract
-coverage.
+`git diff --check` completed without output. These are local post-fast-forward target results, not
+hosted CI or deployment evidence. The official GitHub Actions result on `82e86b2` remains
+**170 passed**; this separate local target result is **172 passed** because it includes integration
+evidence-contract coverage.
 
 ## Deployment publication check
 

@@ -22,8 +22,8 @@
 .venv\Scripts\python.exe -m pytest --cov=engineering_intelligence --cov-report=term-missing --cov-fail-under=85
 ```
 
-The record-aware integrated gate ran locally on Python 3.13.9. Ruff lint passed, Ruff format reported
-34 files already formatted, and pytest passed 172 tests with 94.54% coverage (85% required).
+The post-fast-forward target gate ran locally on Python 3.13.9. Ruff lint passed, Ruff format
+reported 33 files already formatted, and pytest passed 172 tests with 94.54% coverage (85% required).
 `git diff --check` also passed without output. This evidence covers the resolved six-repository,
 schema-2, time-safe integration and is local rather than hosted CI or deployment evidence.
 

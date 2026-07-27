@@ -72,9 +72,9 @@ GitHub Actions [passed the complete quality gate](https://github.com/ktubi970/en
 on commit `82e86b2fedc2526f6fc1eff6ce27941efbe0a00b`: **170 passed** with **94.54%**
 coverage. The job ran lint, format checking, and the test suite on Linux with Python 3.13.
 
-Separate local integration verification on Python 3.13.9 reported **172 passed** with **94.54%**
-coverage and **34 files already formatted**. That local count includes integration evidence-contract
-coverage and is distinct from the hosted CI result.
+Separate post-fast-forward target verification on Python 3.13.9 reported **172 passed** with
+**94.54%** coverage and **33 files already formatted**. That local count includes integration
+evidence-contract coverage and is distinct from the hosted CI result.
 
 ![MergeLens dashboard overview](docs/images/dashboard.png)
 
