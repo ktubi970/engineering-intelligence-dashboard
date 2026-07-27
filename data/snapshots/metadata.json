@@ -1,11 +1,38 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "generated_at_utc": "2026-07-27T08:04:05.882089Z",
-  "source": "GitHub public REST API",
+  "source": {
+    "provider": "github",
+    "visibility": "public",
+    "api": "rest",
+    "api_version": "2022-11-28"
+  },
   "repositories": [
     "pandas-dev/pandas",
     "streamlit/streamlit"
   ],
-  "pull_request_rows": 300,
-  "workflow_run_rows": 199
+  "row_counts": {
+    "pull_requests": 300,
+    "workflow_runs": 199
+  },
+  "collection": {
+    "pull_requests": {
+      "selection": "merged",
+      "limit_per_repository": 150,
+      "order": "api_default"
+    },
+    "workflow_runs": {
+      "selection": "completed",
+      "limit_per_repository": 150,
+      "order": "api_default"
+    }
+  },
+  "files": {
+    "pull_requests.csv": {
+      "sha256": "044f3b9cf23651224b07d4c683738b9edc64cf0856ff3e6303ce0d7ed84bc602"
+    },
+    "workflow_runs.csv": {
+      "sha256": "f255774e67f9b17caf401f7f59d53da9a38d1cc67b536691d45368829c023af0"
+    }
+  }
 }

@@ -1,3 +1,5 @@
+import csv
+import hashlib
 import json
 from pathlib import Path
 
@@ -7,6 +9,76 @@ from conftest import FakeGitHubClient
 from engineering_intelligence.domain import DataContractError, RepositoryRef
 from engineering_intelligence.pipeline import load_snapshot, refresh_snapshot
 from engineering_intelligence.transform import PULL_REQUEST_COLUMNS, WORKFLOW_COLUMNS
+
+
+def _manifest_for_snapshot(
+    data_dir: Path,
+    *,
+    repositories: list[str] | None = None,
+    pull_request_rows: int = 2,
+    workflow_run_rows: int = 2,
+    limit_per_repository: int = 2,
+) -> dict[str, object]:
+    return {
+        "schema_version": 2,
+        "generated_at_utc": "2026-07-27T08:04:05.882089Z",
+        "source": {
+            "provider": "github",
+            "visibility": "public",
+            "api": "rest",
+            "api_version": "2022-11-28",
+        },
+        "repositories": (repositories if repositories is not None else ["pandas-dev/pandas"]),
+        "row_counts": {
+            "pull_requests": pull_request_rows,
+            "workflow_runs": workflow_run_rows,
+        },
+        "collection": {
+            "pull_requests": {
+                "selection": "merged",
+                "limit_per_repository": limit_per_repository,
+                "order": "api_default",
+            },
+            "workflow_runs": {
+                "selection": "completed",
+                "limit_per_repository": limit_per_repository,
+                "order": "api_default",
+            },
+        },
+        "files": {
+            filename: {
+                "sha256": hashlib.sha256((data_dir / filename).read_bytes()).hexdigest(),
+            }
+            for filename in ("pull_requests.csv", "workflow_runs.csv")
+        },
+    }
+
+
+def _write_manifest(data_dir: Path, manifest: dict[str, object]) -> None:
+    (data_dir / "metadata.json").write_text(
+        json.dumps(manifest, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+
+def _replace_first_csv_value(
+    data_dir: Path,
+    filename: str,
+    column: str,
+    value: str,
+) -> None:
+    path = data_dir / filename
+    with path.open(encoding="utf-8", newline="") as handle:
+        reader = csv.DictReader(handle)
+        rows = list(reader)
+        fieldnames = reader.fieldnames
+    assert rows
+    assert fieldnames is not None
+    rows[0][column] = value
+    with path.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(rows)
 
 
 def test_refresh_snapshot_writes_privacy_safe_reproducible_files(
@@ -26,14 +98,9 @@ def test_refresh_snapshot_writes_privacy_safe_reproducible_files(
     assert pulls["change_size"].tolist() == [140, 40]
     assert list(pulls.columns) == list(PULL_REQUEST_COLUMNS)
     assert list(workflows.columns) == list(WORKFLOW_COLUMNS)
-    assert stored_metadata == {
-        "schema_version": 1,
-        "generated_at_utc": metadata.generated_at_utc,
-        "source": "GitHub public REST API",
-        "repositories": ["pandas-dev/pandas"],
-        "pull_request_rows": 2,
-        "workflow_run_rows": 2,
-    }
+    expected_metadata = _manifest_for_snapshot(tmp_path)
+    expected_metadata["generated_at_utc"] = metadata.generated_at_utc
+    assert stored_metadata == expected_metadata
     assert metadata.generated_at_utc.endswith("Z")
     assert {path.name for path in tmp_path.iterdir()} == {
         "pull_requests.csv",
@@ -137,8 +204,166 @@ def test_load_snapshot_rejects_tampered_schema(
     rows[0] += ",author_login"
     rows[1:] = [f"{row},private-login" for row in rows[1:]]
     pull_path.write_text("\n".join(rows) + "\n", encoding="utf-8")
+    _write_manifest(tmp_path, _manifest_for_snapshot(tmp_path))
 
     with pytest.raises(DataContractError, match="exact columns"):
+        load_snapshot(tmp_path)
+
+
+def test_load_snapshot_rejects_corrupt_content_hash(
+    tmp_path: Path,
+    fake_github_client: FakeGitHubClient,
+) -> None:
+    refresh_snapshot(
+        fake_github_client,
+        [RepositoryRef.parse("pandas-dev/pandas")],
+        tmp_path,
+        pr_limit=2,
+    )
+    manifest = _manifest_for_snapshot(tmp_path)
+    manifest["files"]["pull_requests.csv"]["sha256"] = "0" * 64
+    _write_manifest(tmp_path, manifest)
+
+    with pytest.raises(DataContractError, match="SHA-256"):
+        load_snapshot(tmp_path)
+
+
+@pytest.mark.parametrize(
+    ("case", "message"),
+    [
+        ("extra key", "exact keys"),
+        ("missing key", "exact keys"),
+        ("schema version", "schema_version"),
+        ("schema type", "schema_version"),
+        ("generated time", "generated_at_utc"),
+        ("source type", "source"),
+        ("source enum", "source.visibility"),
+        ("repositories", "repositories"),
+        ("row count", "row_counts.pull_requests"),
+        ("selection enum", "collection.pull_requests.selection"),
+        ("order enum", "collection.workflow_runs.order"),
+        ("limit range", "collection.workflow_runs.limit_per_repository"),
+    ],
+)
+def test_load_snapshot_rejects_invalid_manifest(
+    tmp_path: Path,
+    fake_github_client: FakeGitHubClient,
+    case: str,
+    message: str,
+) -> None:
+    refresh_snapshot(
+        fake_github_client,
+        [RepositoryRef.parse("pandas-dev/pandas")],
+        tmp_path,
+        pr_limit=2,
+    )
+    manifest = _manifest_for_snapshot(tmp_path)
+    if case == "extra key":
+        manifest["unexpected"] = True
+    elif case == "missing key":
+        manifest.pop("files")
+    elif case == "schema version":
+        manifest["schema_version"] = 1
+    elif case == "schema type":
+        manifest["schema_version"] = True
+    elif case == "generated time":
+        manifest["generated_at_utc"] = "2026-07-27T10:04:05+02:00"
+    elif case == "source type":
+        manifest["source"] = "GitHub public REST API"
+    elif case == "source enum":
+        manifest["source"] = {
+            "provider": "github",
+            "visibility": "private",
+            "api": "rest",
+            "api_version": "2022-11-28",
+        }
+    elif case == "repositories":
+        manifest["repositories"] = ["other/repository"]
+    elif case == "row count":
+        manifest["row_counts"] = {
+            "pull_requests": 3,
+            "workflow_runs": 2,
+        }
+    elif case == "selection enum":
+        manifest["collection"] = {
+            "pull_requests": {
+                "selection": "closed",
+                "limit_per_repository": 2,
+                "order": "api_default",
+            },
+            "workflow_runs": {
+                "selection": "completed",
+                "limit_per_repository": 2,
+                "order": "api_default",
+            },
+        }
+    elif case == "order enum":
+        manifest["collection"] = {
+            "pull_requests": {
+                "selection": "merged",
+                "limit_per_repository": 2,
+                "order": "api_default",
+            },
+            "workflow_runs": {
+                "selection": "completed",
+                "limit_per_repository": 2,
+                "order": "created_desc",
+            },
+        }
+    else:
+        assert case == "limit range"
+        manifest["collection"] = {
+            "pull_requests": {
+                "selection": "merged",
+                "limit_per_repository": 2,
+                "order": "api_default",
+            },
+            "workflow_runs": {
+                "selection": "completed",
+                "limit_per_repository": 0,
+                "order": "api_default",
+            },
+        }
+    _write_manifest(tmp_path, manifest)
+
+    with pytest.raises(DataContractError, match=message):
+        load_snapshot(tmp_path)
+
+
+@pytest.mark.parametrize(
+    ("filename", "column", "value", "message"),
+    [
+        ("pull_requests.csv", "merge_hours", "49.0", "merge_hours"),
+        (
+            "pull_requests.csv",
+            "merged_at",
+            "2025-12-31T10:00:00Z",
+            "merged_at",
+        ),
+        ("pull_requests.csv", "change_size", "141", "change_size"),
+        ("pull_requests.csv", "opened_hour", "24", "opened_hour"),
+        ("workflow_runs.csv", "duration_minutes", "13.0", "duration_minutes"),
+        ("workflow_runs.csv", "status", "queued", "status"),
+    ],
+)
+def test_load_snapshot_rejects_schema_correct_tampering(
+    tmp_path: Path,
+    fake_github_client: FakeGitHubClient,
+    filename: str,
+    column: str,
+    value: str,
+    message: str,
+) -> None:
+    refresh_snapshot(
+        fake_github_client,
+        [RepositoryRef.parse("pandas-dev/pandas")],
+        tmp_path,
+        pr_limit=2,
+    )
+    _replace_first_csv_value(tmp_path, filename, column, value)
+    _write_manifest(tmp_path, _manifest_for_snapshot(tmp_path))
+
+    with pytest.raises(DataContractError, match=message):
         load_snapshot(tmp_path)
 
 
@@ -159,8 +384,9 @@ def test_metadata_json_contains_only_documented_provenance_keys(
         "generated_at_utc",
         "source",
         "repositories",
-        "pull_request_rows",
-        "workflow_run_rows",
+        "row_counts",
+        "collection",
+        "files",
     ]
 
 
@@ -169,8 +395,10 @@ def test_committed_snapshot_meets_portfolio_contract() -> None:
     assert len(pulls) >= 300
     assert pulls["repository"].nunique() >= 2
     assert len(workflows) > 0
-    assert metadata["pull_request_rows"] == len(pulls)
-    assert metadata["workflow_run_rows"] == len(workflows)
+    assert metadata["row_counts"] == {
+        "pull_requests": len(pulls),
+        "workflow_runs": len(workflows),
+    }
     assert list(pulls.columns) == [
         "repository",
         "number",
@@ -199,3 +427,45 @@ def test_committed_snapshot_meets_portfolio_contract() -> None:
         "updated_at",
         "duration_minutes",
     ]
+
+
+def test_load_snapshot_compares_repository_sets_independent_of_row_order(
+    tmp_path: Path,
+    fake_github_client: FakeGitHubClient,
+) -> None:
+    repositories = [
+        RepositoryRef.parse("pandas-dev/pandas"),
+        RepositoryRef.parse("streamlit/streamlit"),
+    ]
+    refresh_snapshot(
+        fake_github_client,
+        repositories,
+        tmp_path,
+        pr_limit=2,
+    )
+
+    pull_path = tmp_path / "pull_requests.csv"
+    with pull_path.open(encoding="utf-8", newline="") as handle:
+        reader = csv.DictReader(handle)
+        rows = list(reader)
+        fieldnames = reader.fieldnames
+    assert fieldnames is not None
+    rows.reverse()
+    with pull_path.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(rows)
+    _write_manifest(
+        tmp_path,
+        _manifest_for_snapshot(
+            tmp_path,
+            repositories=["pandas-dev/pandas", "streamlit/streamlit"],
+            pull_request_rows=4,
+            workflow_run_rows=4,
+            limit_per_repository=2,
+        ),
+    )
+
+    pulls, workflows, metadata = load_snapshot(tmp_path)
+
+    assert len(pulls) == len(workflows) == 4

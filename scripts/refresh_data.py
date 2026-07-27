@@ -30,7 +30,7 @@ def _repository_ref(value: str) -> RepositoryRef:
 
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Refresh privacy-minimized public GitHub snapshot data.",
+        description="Refresh privacy-minimized public GitHub snapshot data and its manifest.",
     )
     parser.add_argument(
         "--repo",
@@ -43,7 +43,10 @@ def _parser() -> argparse.ArgumentParser:
         "--limit-per-repo",
         type=_positive_integer,
         default=150,
-        help="Maximum pull requests and workflow runs fetched per repository.",
+        help=(
+            "Requested maximum pull requests and workflow runs per repository; "
+            "the manifest records this value."
+        ),
     )
     parser.add_argument(
         "--output-dir",

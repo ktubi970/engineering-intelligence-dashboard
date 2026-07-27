@@ -277,3 +277,118 @@ def test_validators_reject_wrong_schema(
 
     with pytest.raises(DataContractError, match="exact columns"):
         validator(frame.assign(author_login="must-not-persist"))
+
+
+@pytest.mark.parametrize(
+    ("column", "value", "message"),
+    [
+        ("repository", "not-a-repository", "owner/repository"),
+        ("number", 0, "number.*positive integer"),
+        ("number", 1.5, "number.*integer"),
+        ("merge_hours", "fast", "merge_hours.*numeric"),
+        ("title_length", -1, "title_length.*non-negative"),
+        ("body_length", -1, "body_length.*non-negative"),
+        ("labels_count", -1, "labels_count.*non-negative"),
+        ("additions", -1, "additions.*non-negative"),
+        ("deletions", -1, "deletions.*non-negative"),
+        ("change_size", -1, "change_size.*non-negative"),
+        ("changed_files", -1, "changed_files.*non-negative"),
+        ("commits", 0, "commits.*positive integer"),
+        ("opened_weekday", 7, "opened_weekday.*0 and 6"),
+        ("opened_hour", 24, "opened_hour.*0 and 23"),
+        ("author_association", "ADMIN", "author_association"),
+    ],
+)
+def test_pull_validator_rejects_invalid_types_ranges_and_enums(
+    raw_pull_details: list[dict[str, object]],
+    column: str,
+    value: object,
+    message: str,
+) -> None:
+    frame = normalize_pull_requests(raw_pull_details, "pandas-dev/pandas")
+    frame[column] = value
+
+    with pytest.raises(DataContractError, match=message):
+        validate_pull_request_frame(frame)
+
+
+@pytest.mark.parametrize(
+    ("column", "value"),
+    [
+        ("merge_hours", 47.0),
+        ("change_size", 139),
+        ("opened_weekday", 4),
+        ("opened_hour", 11),
+    ],
+)
+def test_pull_validator_recomputes_derived_values(
+    raw_pull_details: list[dict[str, object]],
+    column: str,
+    value: object,
+) -> None:
+    frame = normalize_pull_requests(raw_pull_details, "pandas-dev/pandas")
+    frame[column] = value
+
+    with pytest.raises(DataContractError, match=column):
+        validate_pull_request_frame(frame)
+
+
+def test_pull_validator_rejects_merge_before_creation(
+    raw_pull_details: list[dict[str, object]],
+) -> None:
+    frame = normalize_pull_requests(raw_pull_details, "pandas-dev/pandas")
+    frame["merged_at"] = frame["created_at"]
+
+    with pytest.raises(DataContractError, match="merged_at.*after created_at"):
+        validate_pull_request_frame(frame)
+
+
+@pytest.mark.parametrize(
+    ("column", "value", "message"),
+    [
+        ("repository", "not-a-repository", "owner/repository"),
+        ("run_id", 0, "run_id.*positive integer"),
+        ("run_id", 1.5, "run_id.*integer"),
+        ("workflow_name", "", "workflow_name.*non-empty"),
+        ("status", "queued", "status.*completed"),
+        ("conclusion", "pending", "conclusion"),
+        ("duration_minutes", "slow", "duration_minutes.*numeric"),
+        ("duration_minutes", -1.0, "duration_minutes.*non-negative"),
+    ],
+)
+def test_workflow_validator_rejects_invalid_types_ranges_and_enums(
+    raw_workflow_runs: list[dict[str, object]],
+    column: str,
+    value: object,
+    message: str,
+) -> None:
+    frame = normalize_workflow_runs(raw_workflow_runs, "pandas-dev/pandas")
+    if column == "run_id":
+        if isinstance(value, float):
+            frame[column] = frame[column].astype(float)
+        frame.loc[0, column] = value
+    else:
+        frame[column] = value
+
+    with pytest.raises(DataContractError, match=message):
+        validate_workflow_frame(frame)
+
+
+def test_workflow_validator_recomputes_duration(
+    raw_workflow_runs: list[dict[str, object]],
+) -> None:
+    frame = normalize_workflow_runs(raw_workflow_runs, "pandas-dev/pandas")
+    frame["duration_minutes"] = 13.0
+
+    with pytest.raises(DataContractError, match="duration_minutes"):
+        validate_workflow_frame(frame)
+
+
+def test_workflow_validator_rejects_update_before_creation(
+    raw_workflow_runs: list[dict[str, object]],
+) -> None:
+    frame = normalize_workflow_runs(raw_workflow_runs, "pandas-dev/pandas")
+    frame["updated_at"] = frame["created_at"] - pd.Timedelta(seconds=1)
+
+    with pytest.raises(DataContractError, match="updated_at.*before created_at"):
+        validate_workflow_frame(frame)
