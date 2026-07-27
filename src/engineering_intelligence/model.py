@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from math import ceil, floor
 
 import numpy as np
 import pandas as pd
@@ -54,6 +55,7 @@ class ModelResult:
 def chronological_split(
     frame: pd.DataFrame,
     test_fraction: float = 0.2,
+    min_samples: int = 2,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Hold out the newest openings and keep only labels known at that cutoff."""
     if len(frame) < 2:
@@ -68,6 +70,16 @@ def chronological_split(
     available_labels = pd.to_datetime(train_candidates["merged_at"], utc=True) < cutoff
     train = train_candidates.loc[available_labels].copy()
 
+    minimum_train_rows = floor((1 - test_fraction) * min_samples)
+    minimum_test_rows = ceil(test_fraction * min_samples)
+    if len(train) < minimum_train_rows or len(test) < minimum_test_rows:
+        raise InsufficientTrainingDataError(
+            f"{len(frame)} selected rows exist but too few labels were known by the cutoff "
+            f"{cutoff.isoformat()}. {len(train)} time-safe training rows and "
+            f"{len(test)} test rows are available; at least {minimum_train_rows} "
+            f"training rows and {minimum_test_rows} test rows are required."
+        )
+
     max_train_merged_at = pd.to_datetime(train["merged_at"], utc=True).max()
     min_test_created_at = pd.to_datetime(test["created_at"], utc=True).min()
     assert max_train_merged_at < cutoff <= min_test_created_at
@@ -80,7 +92,7 @@ def train_merge_time_model(frame: pd.DataFrame, min_samples: int = 80) -> ModelR
             f"At least {min_samples} rows are required to train the merge-time model."
         )
 
-    train, test = chronological_split(frame)
+    train, test = chronological_split(frame, min_samples=min_samples)
     preprocessor = _build_preprocessor()
     regressor = RandomForestRegressor(
         n_estimators=200,

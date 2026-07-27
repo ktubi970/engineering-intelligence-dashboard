@@ -34,6 +34,12 @@ def small_snapshot_dir(tmp_path: Path) -> Path:
 
 
 @pytest.fixture
+def unavailable_labels_snapshot_dir(tmp_path: Path) -> Path:
+    _write_snapshot(tmp_path, pull_request_rows=80, defer_training_labels=True)
+    return tmp_path
+
+
+@pytest.fixture
 def filter_snapshot_dir(tmp_path: Path) -> Path:
     _write_filter_snapshot(tmp_path)
     return tmp_path
@@ -154,6 +160,23 @@ def test_small_snapshot_has_readable_forecast_state_without_exception(
     assert not app.exception
     assert any("At least 80 pull requests are required" in info.value for info in app.info)
     assert [warning.value for warning in app.warning] == [WARNING]
+
+
+def test_unavailable_training_labels_have_readable_forecast_state(
+    unavailable_labels_snapshot_dir: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("EID_DATA_DIR", str(unavailable_labels_snapshot_dir))
+
+    app = AppTest.from_file(APP_PATH)
+    app.run(timeout=20)
+
+    assert not app.exception
+    assert any(
+        "At least 80 pull requests are required for an honest chronological model evaluation"
+        in info.value
+        for info in app.info
+    )
 
 
 def test_empty_repository_filter_has_readable_state_without_exception(
@@ -317,7 +340,12 @@ def _write_filter_snapshot(data_dir: Path) -> None:
     metadata_path.write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
 
 
-def _write_snapshot(data_dir: Path, pull_request_rows: int) -> None:
+def _write_snapshot(
+    data_dir: Path,
+    pull_request_rows: int,
+    *,
+    defer_training_labels: bool = False,
+) -> None:
     row_number = pd.Series(range(pull_request_rows), dtype="int64")
     created_at = pd.date_range(
         "2025-01-01",
@@ -353,6 +381,14 @@ def _write_snapshot(data_dir: Path, pull_request_rows: int) -> None:
         },
         columns=PULL_REQUEST_COLUMNS,
     )
+    if defer_training_labels:
+        candidate_indexes = pulls.index[:64]
+        cutoff = created_at[64]
+        pulls.loc[candidate_indexes, "merged_at"] = cutoff + pd.Timedelta(hours=1)
+        pulls.loc[candidate_indexes, "merge_hours"] = (
+            pulls.loc[candidate_indexes, "merged_at"] - pulls.loc[candidate_indexes, "created_at"]
+        ).dt.total_seconds() / 3_600
+
     workflow_count = max(pull_request_rows, 1)
     workflow_created_at = pd.date_range(
         "2025-01-01",

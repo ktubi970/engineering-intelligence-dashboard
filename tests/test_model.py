@@ -133,6 +133,32 @@ def test_training_rejects_too_few_rows(model_frame: pd.DataFrame) -> None:
         train_merge_time_model(model_frame.head(79), min_samples=80)
 
 
+def test_training_requires_64_labels_known_by_cutoff_for_80_selected_rows(
+    model_frame: pd.DataFrame,
+) -> None:
+    frame = model_frame.head(80).copy()
+    candidate_indexes = frame.index[:64]
+    cutoff = frame.iloc[64]["created_at"]
+    frame.loc[candidate_indexes, "merged_at"] = frame.loc[
+        candidate_indexes, "created_at"
+    ] + pd.Timedelta(hours=1)
+    frame.loc[candidate_indexes, "merge_hours"] = 1.0
+    last_candidate = candidate_indexes[-1]
+    frame.loc[last_candidate, "merged_at"] = cutoff + pd.Timedelta(hours=1)
+    frame.loc[last_candidate, "merge_hours"] = 7.0
+
+    with pytest.raises(
+        InsufficientTrainingDataError,
+        match="80 selected rows exist but too few labels were known by the cutoff",
+    ) as captured:
+        train_merge_time_model(frame, min_samples=80)
+
+    assert (
+        "63 time-safe training rows and 16 test rows are available; "
+        "at least 64 training rows and 16 test rows are required"
+    ) in str(captured.value)
+
+
 def test_training_does_not_mutate_input(model_frame: pd.DataFrame) -> None:
     shuffled = model_frame.sample(frac=1.0, random_state=11)
     original = shuffled.copy(deep=True)
