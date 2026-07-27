@@ -170,4 +170,32 @@ def test_committed_snapshot_meets_portfolio_contract() -> None:
     assert pulls["repository"].nunique() >= 2
     assert len(workflows) > 0
     assert metadata["pull_request_rows"] == len(pulls)
-    assert not {"user", "author_login", "email", "avatar_url"} & set(pulls.columns)
+    assert metadata["workflow_run_rows"] == len(workflows)
+    assert list(pulls.columns) == [
+        "repository",
+        "number",
+        "created_at",
+        "merged_at",
+        "merge_hours",
+        "title_length",
+        "body_length",
+        "author_association",
+        "labels_count",
+        "additions",
+        "deletions",
+        "change_size",
+        "changed_files",
+        "commits",
+        "opened_weekday",
+        "opened_hour",
+    ]
+    assert list(workflows.columns) == [
+        "repository",
+        "run_id",
+        "workflow_name",
+        "status",
+        "conclusion",
+        "created_at",
+        "updated_at",
+        "duration_minutes",
+    ]
