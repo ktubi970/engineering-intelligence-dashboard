@@ -10,6 +10,16 @@ from engineering_intelligence.model import train_merge_time_model
 from engineering_intelligence.pipeline import load_snapshot
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
+EVIDENCE_COMMIT = "82e86b2fedc2526f6fc1eff6ce27941efbe0a00b"
+EVIDENCE_CI_URL = (
+    "https://github.com/ktubi970/engineering-intelligence-dashboard/"
+    "actions/runs/30282867104/job/90033339637"
+)
+EVIDENCE_TEST_RESULT = "170 passed"
+EVIDENCE_COVERAGE = "94.54%"
+LOCAL_INTEGRATION_TEST_RESULT = "172 passed"
+LOCAL_INTEGRATION_PYTHON = "Python 3.13.9"
+LOCAL_INTEGRATION_FORMAT_RESULT = "34 files already formatted"
 
 
 def _artifact_path(relative_path: str) -> Path:
@@ -224,37 +234,52 @@ def test_publication_artifacts_are_real_and_match_verified_remote_evidence() -> 
         r".venv\Scripts\python.exe -m ruff format --check .",
         r".venv\Scripts\python.exe -m pytest --cov=engineering_intelligence "
         "--cov-report=term-missing --cov-fail-under=85",
-        "300 merged pull requests and 199 completed workflow runs",
+        "900 merged pull requests and 560 completed workflow runs",
         "GitHub public REST API",
         "The random forest has lower MAE than the baseline on this fixed snapshot.",
         "estimated merge time among pull requests that eventually merge",
         "![MergeLens dashboard overview](https://github.com/ktubi970/engineering-intelligence-dashboard/blob/ce303f2a4b5d81e98a478ec542542698e0f991b1/docs/images/dashboard.png?raw=true)",
+        "restoring all six repositories",
         "## Limitations",
     ):
         assert anchor in pull_request_body
 
     quality_evidence = _artifact("docs/quality-evidence.md")
     live_url = "https://engineering-intelligence-dashboard-jq9xccatzgwy9y9hcrwmor.streamlit.app/"
-    ci_url = (
-        "https://github.com/ktubi970/engineering-intelligence-dashboard/"
-        "actions/runs/30259194189/job/89954838617"
-    )
     for document in (readme, quality_evidence, pull_request_body):
         assert live_url in document
-        assert ci_url in document
-        assert "f987033" in document
-        assert "passed in 57s" in document
+        assert EVIDENCE_CI_URL in document
+        assert EVIDENCE_COMMIT in document
+        assert EVIDENCE_TEST_RESULT in document
+        assert EVIDENCE_COVERAGE in document
+        assert LOCAL_INTEGRATION_TEST_RESULT in document
+        assert LOCAL_INTEGRATION_PYTHON in document
+        assert LOCAL_INTEGRATION_FORMAT_RESULT in document
         lowered = document.lower()
         assert "phase a" not in lowered
         assert "pending" not in lowered
+        assert "verified public streamlit dashboard" not in lowered
+
+    stale_claims = (
+        "30259194189",
+        "89954838617",
+        "f987033",
+        "passed in 57s",
+        "91 passed",
+        "96 tests",
+    )
+    for document in (readme, quality_evidence, pull_request_body):
+        for stale_claim in stale_claims:
+            assert stale_claim not in document
 
     assert "https://github.com/ktubi970/engineering-intelligence-dashboard/pull/1" in (
         quality_evidence
     )
     for remote_observation in (
-        "MergeLens \u00b7 Streamlit",
-        "`Delivery pulse`, `Bottlenecks`, and `Forecast & trust`",
-        "account/API 403/404",
+        "HTTP 303",
+        "share.streamlit.io/-/auth/app",
+        "auth-gated",
+        "reboots it in Streamlit Community Cloud.",
     ):
         assert remote_observation in quality_evidence
 

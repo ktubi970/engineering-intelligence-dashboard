@@ -12,9 +12,11 @@ Task 8 began with a focused project-contract test. Before the requested artifact
 3 failed in 0.22s
 ```
 
-The failures named the missing CI workflow, README, and AGENTS file. The committed-snapshot model
-evaluation also ran locally through `load_snapshot` and `train_merge_time_model`: model MAE
-`26.624744394610`, baseline MAE `21.071861111111`, 60 test rows, baseline winner.
+The failures named the missing CI workflow, README, and AGENTS file. The integrated, time-safe
+evaluation uses 223 training rows, 60 chronological test rows, and purges 17 labels unavailable
+at the cutoff. Its random-forest MAE is `17.499891193309` hours, versus
+`20.535763888889` hours for the training-median baseline; the random forest wins this fixed
+holdout by `3.035872695580` hours.
 
 ### Final local quality gate
 
@@ -41,22 +43,24 @@ All checks passed!
 ```
 
 ```text
-collected 89 items
-TOTAL  487 statements  19 missed  96%
-Required test coverage of 85% reached. Total coverage: 96.10%
-89 passed in 39.87s
+collected 170 items
+TOTAL  806 statements  44 missed  95%
+Required test coverage of 85% reached. Total coverage: 94.54%
+170 passed in 72.27s
 ```
 
-The percentage shown as `96%` is pytest-cov's table display; `96.10%` is its reported precise
-total. These are local Windows results, not hosted CI evidence.
+The percentage shown as `95%` is pytest-cov's rounded table display; `94.54%` is its precise
+total. These are target-commit local Windows results, distinct from the hosted CI evidence.
 
 ## GitHub Actions
 
-The initial GitHub Actions quality check passed in 57s on SHA `f987033`:
-https://github.com/ktubi970/engineering-intelligence-dashboard/actions/runs/30259194189/job/89954838617
+The complete GitHub Actions quality gate passed on commit
+`82e86b2fedc2526f6fc1eff6ce27941efbe0a00b`:
+https://github.com/ktubi970/engineering-intelligence-dashboard/actions/runs/30282867104/job/90033339637
 
-That hosted job ran the binding Ruff lint, Ruff format, and pytest/coverage workflow for the initial
-published revision. Pull request: https://github.com/ktubi970/engineering-intelligence-dashboard/pull/1
+The Linux job used Python 3.13.14: Ruff lint and format checks passed, then **170 passed** in
+12.25 seconds with **94.54%** coverage (85% required).
+Pull request: https://github.com/ktubi970/engineering-intelligence-dashboard/pull/1
 
 ## Task 9 local browser evidence
 
@@ -116,15 +120,15 @@ All checks passed!
 ```
 
 ```text
-collected 91 items
-TOTAL  487 statements  19 missed  96%
-Required test coverage of 85% reached. Total coverage: 96.10%
-91 passed in 51.38s
+collected 170 items
+TOTAL  806 statements  44 missed  95%
+Required test coverage of 85% reached. Total coverage: 94.54%
+170 passed in 72.27s
 ```
 
-The percentage shown as `96%` is pytest-cov's table display; `96.10%` is its reported precise
-total. These are local Windows results for the current branch and are distinct from the initial
-hosted `f987033` result above.
+The percentage shown as `95%` is pytest-cov's rounded table display; `94.54%` is its precise
+total. These target-branch local Windows results include the current contract, model, data-integrity,
+dashboard, and no-network tests.
 
 ## Active repository expansion local evidence
 
@@ -220,21 +224,19 @@ Required test coverage of 85% reached. Total coverage: 94.54%
 ```
 
 `git diff --check` completed without output. These are local integration results, not hosted CI or
-deployment evidence.
+deployment evidence. The official GitHub Actions result on `82e86b2` remains **170 passed**; this
+separate local integration result is **172 passed** because it includes integration evidence-contract
+coverage.
 
+## Deployment publication check
 
-Public URL:
+Deployment URL:
 https://engineering-intelligence-dashboard-jq9xccatzgwy9y9hcrwmor.streamlit.app/
 
-Anonymous Playwright verification of the initial deployed SHA `f987033` observed title
-`MergeLens · Streamlit`. Inside the application iframe, both repositories and the snapshot
-timestamp were visible with 300 merged pull requests, median merge time 17.4h, P90 merge time
-152.2h, and workflow success 62.8%.
-The deployed tabs were `Delivery pulse`, `Bottlenecks`, and `Forecast & trust`.
-No visible traceback appeared. The iframe client and scroll widths were both
-1280, confirming no horizontal iframe overflow.
+On 2026-07-27 at 16:04 UTC, a cookie-free anonymous HEAD request returned **HTTP 303** with a
+`Location` beginning `https://share.streamlit.io/-/auth/app`.
 
-The main anonymous Streamlit shell logged account/API 403/404 responses while the application
-iframe loaded normally. This remote evidence is scoped to `f987033`; the current local branch
-renames the first two tabs to `Overview` and `Drivers & retrospective patterns` and is covered by
-the local browser and full-gate evidence above.
+The deployment is therefore **auth-gated**, not yet a recruiter-accessible public showcase.
+The current `Overview`, `Drivers & retrospective patterns`, and `Forecast & trust` tabs are
+verified locally, but must be rechecked anonymously after the owner makes the app public and
+reboots it in Streamlit Community Cloud.
