@@ -3,6 +3,8 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
+from engineering_intelligence.pipeline import load_snapshot
+
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -171,3 +173,21 @@ def test_publication_artifacts_are_real_and_match_verified_remote_evidence() -> 
         "account/API 403/404",
     ):
         assert remote_observation in quality_evidence
+
+
+def test_committed_snapshot_covers_the_six_default_repositories() -> None:
+    expected_repositories = [
+        "pandas-dev/pandas",
+        "streamlit/streamlit",
+        "microsoft/vscode",
+        "tensorflow/tensorflow",
+        "rust-lang/rust",
+        "ruby/ruby",
+    ]
+
+    pulls, workflows, metadata = load_snapshot(PROJECT_ROOT / "data" / "snapshots")
+
+    assert metadata["repositories"] == expected_repositories
+    assert set(pulls["repository"]) == set(expected_repositories)
+    assert set(workflows["repository"]).issubset(expected_repositories)
+    assert len(pulls) == 150 * len(expected_repositories)
