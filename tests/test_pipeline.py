@@ -162,3 +162,12 @@ def test_metadata_json_contains_only_documented_provenance_keys(
         "pull_request_rows",
         "workflow_run_rows",
     ]
+
+
+def test_committed_snapshot_meets_portfolio_contract() -> None:
+    pulls, workflows, metadata = load_snapshot(Path("data/snapshots"))
+    assert len(pulls) >= 300
+    assert pulls["repository"].nunique() >= 2
+    assert len(workflows) > 0
+    assert metadata["pull_request_rows"] == len(pulls)
+    assert not {"user", "author_login", "email", "avatar_url"} & set(pulls.columns)

@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "generated_at_utc": "2026-07-27T08:04:05.882089Z",
+  "source": "GitHub public REST API",
+  "repositories": [
+    "pandas-dev/pandas",
+    "streamlit/streamlit"
+  ],
+  "pull_request_rows": 300,
+  "workflow_run_rows": 199
+}
