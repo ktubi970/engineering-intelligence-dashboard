@@ -94,18 +94,19 @@ def evaluation_summary(
     if model_mae < baseline_mae:
         return (
             "success",
-            "Model wins: its MAE is lower than the train-median baseline "
-            f"({model_mae:.1f} vs {baseline_mae:.1f} hours).",
+            "The model was more accurate on recent test data "
+            f"(average error: {model_mae:.1f} vs {baseline_mae:.1f} hours).",
         )
     if baseline_mae < model_mae:
         return (
             "info",
-            "Train-median baseline wins: its MAE is lower than the model "
-            f"({baseline_mae:.1f} vs {model_mae:.1f} hours).",
+            "The simple benchmark was more accurate on recent test data "
+            f"(average error: {baseline_mae:.1f} vs {model_mae:.1f} hours).",
         )
     return (
         "info",
-        f"Tie: model and train-median baseline MAE are equal at {model_mae:.1f} hours.",
+        "The model and simple benchmark were equally accurate on recent test data "
+        f"({model_mae:.1f} hours of average error).",
     )
 
 
@@ -195,13 +196,13 @@ def _render_bottlenecks(pulls: pd.DataFrame) -> None:
 
 def _render_forecast(pulls: pd.DataFrame) -> None:
     st.warning(FORECAST_WARNING)
-    st.subheader("Model evaluation")
+    st.subheader("How accurate is the estimate?")
     try:
         result = train_merge_time_model(pulls)
     except InsufficientTrainingDataError:
         st.info(
-            "At least 80 pull requests are required for an honest chronological "
-            "model evaluation. Forecasting is unavailable for this selection."
+            "Choose at least 80 pull requests to test this estimate honestly "
+            "against newer data. The estimate is unavailable for this selection."
         )
         return
 
@@ -214,15 +215,15 @@ def _render_forecast(pulls: pd.DataFrame) -> None:
     )
     st.plotly_chart(feature_importance_figure(importance), width="stretch")
 
-    st.subheader("What-if forecast")
+    st.subheader("Try an estimate")
     st.caption(
-        "Target: estimated merge time among pull requests that eventually merge. "
-        "Inputs are available when the pull request opens."
+        "Enter only what is known when a pull request opens. "
+        "The result estimates time to merge for pull requests that eventually merge."
     )
     repositories = sorted(pulls["repository"].unique())
     latest_opening = pulls["created_at"].max().to_pydatetime()
     with st.form("opening-time-forecast"):
-        repository = st.selectbox("Forecast repository", repositories)
+        repository = st.selectbox("Repository", repositories)
         pull_request_number = st.number_input(
             "Pull request number",
             min_value=1,
@@ -234,7 +235,7 @@ def _render_forecast(pulls: pd.DataFrame) -> None:
             "Opening time (UTC)",
             value=latest_opening.time().replace(tzinfo=None),
         )
-        submitted = st.form_submit_button("Forecast merge time")
+        submitted = st.form_submit_button("Estimate merge time")
 
     if submitted:
         features = opening_feature_frame(
@@ -245,36 +246,42 @@ def _render_forecast(pulls: pd.DataFrame) -> None:
         )
         model_prediction = float(result.model.predict_hours(features)[0])
         baseline_message = (
-            f"Train-median baseline estimate: {result.baseline_hours:.1f} hours\n\n"
-            f"Held-out MAE: {result.baseline_mae_hours:.1f} hours — "
-            "empirical error context, not a prediction interval."
+            f"Simple benchmark estimate: {result.baseline_hours:.1f} hours\n\n"
+            f"Average error on recent test data: {result.baseline_mae_hours:.1f} hours. "
+            "This is context, not a guaranteed range."
         )
         model_message = (
-            f"Experimental random-forest estimate: {model_prediction:.1f} hours\n\n"
-            f"Held-out MAE: {result.mae_hours:.1f} hours — "
-            "empirical error context, not a prediction interval."
+            f"Model estimate: {model_prediction:.1f} hours\n\n"
+            f"Average error on recent test data: {result.mae_hours:.1f} hours. "
+            "This is context, not a guaranteed range."
         )
         estimate_columns = st.columns(2)
         if (
             preferred_forecast(result.mae_hours, result.baseline_mae_hours)
             == "train-median baseline"
         ):
-            estimate_columns[0].success(f"Validated default — {baseline_message}")
+            estimate_columns[0].success(f"Recommended — {baseline_message}")
             estimate_columns[1].info(model_message)
         else:
             estimate_columns[0].info(baseline_message)
-            estimate_columns[1].success(f"Validated default — {model_message}")
+            estimate_columns[1].success(f"Recommended — {model_message}")
 
 
 def _render_evaluation(result: ModelResult) -> None:
     columns = st.columns(4)
-    columns[0].markdown(f"**Model MAE**\n\n{result.mae_hours:.1f} hours")
-    columns[1].markdown(f"**Train-median baseline MAE**\n\n{result.baseline_mae_hours:.1f} hours")
-    columns[2].markdown(f"**Time-safe training rows**\n\n{result.train_rows:,}")
-    columns[3].markdown(f"**Chronological test rows**\n\n{result.test_rows:,}")
+    columns[0].markdown(f"**Model: average error**\n\n{result.mae_hours:.1f} hours")
+    columns[1].markdown(
+        f"**Simple benchmark: average error**\n\n"
+        f"{result.baseline_mae_hours:.1f} hours"
+    )
+    columns[2].markdown(f"**Past examples used**\n\n{result.train_rows:,}")
+    columns[3].markdown(f"**Recent examples tested**\n\n{result.test_rows:,}")
     st.caption(
-        f"As-of cutoff: {result.cutoff.isoformat()} · "
-        f"Purged labels unavailable at cutoff: {result.purged_rows:,}."
+        "MAE is the average number of hours each estimate missed by on recent test data; "
+        "lower is better. "
+        f"Testing starts {result.cutoff.date().isoformat()}. "
+        f"{result.purged_rows:,} earlier PRs were left out because their outcomes "
+        "were not yet known."
     )
 
     level, message = evaluation_summary(result.mae_hours, result.baseline_mae_hours)

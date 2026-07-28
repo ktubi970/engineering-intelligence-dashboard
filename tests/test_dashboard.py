@@ -79,8 +79,8 @@ def test_dashboard_loads_snapshot_and_shows_exact_core_sections(
     assert [subheader.value for subheader in app.subheader] == [
         "Merge time by week",
         "Patterns worth exploring",
-        "Model evaluation",
-        "What-if forecast",
+        "How accurate is the estimate?",
+        "Try an estimate",
     ]
     assert [warning.value for warning in app.warning] == [WARNING]
 
@@ -133,7 +133,7 @@ def test_forecast_form_accepts_only_opening_time_features(
         for widget in collection
     }
     assert {
-        "Forecast repository",
+        "Repository",
         "Pull request number",
         "Opening date (UTC)",
         "Opening time (UTC)",
@@ -155,7 +155,7 @@ def test_forecast_form_accepts_only_opening_time_features(
     )
 
 
-def test_forecast_submission_shows_both_estimates_and_highlights_validated_winner(
+def test_forecast_submission_shows_both_estimates_and_highlights_recommended_winner(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     monkeypatch.setenv("EID_DATA_DIR", str(APP_PATH.parent / "data" / "snapshots"))
@@ -171,22 +171,21 @@ def test_forecast_submission_shows_both_estimates_and_highlights_validated_winne
     ]
     info_estimates = [message.value for message in app.info if "estimate" in message.value.lower()]
     assert len(success_estimates) == 1
-    assert "Validated default — Experimental random-forest estimate" in success_estimates[0]
-    assert any("Train-median baseline estimate" in value for value in info_estimates)
+    assert "Recommended — Model estimate" in success_estimates[0]
+    assert any("Simple benchmark" in value for value in info_estimates)
 
     estimate_cards = success_estimates + info_estimates
     assert len(estimate_cards) == 2
-    assert all("Held-out MAE" in value for value in estimate_cards)
-    assert all(
-        "empirical error context, not a prediction interval" in value for value in estimate_cards
-    )
+    assert all("Average error on recent test data" in value for value in estimate_cards)
+    assert all("not a guaranteed range" in value for value in estimate_cards)
 
     visible_text = "\n".join(
         element.value
         for collection in (app.caption, app.info, app.success, app.markdown)
         for element in collection
     )
-    assert "estimated merge time among pull requests that eventually merge" in visible_text
+    assert "pull requests that eventually merge" in visible_text
+    assert "MAE is the average number of hours" in visible_text
 
 
 def test_small_snapshot_has_readable_forecast_state_without_exception(
@@ -199,7 +198,7 @@ def test_small_snapshot_has_readable_forecast_state_without_exception(
     app.run(timeout=20)
 
     assert not app.exception
-    assert any("At least 80 pull requests are required" in info.value for info in app.info)
+    assert any("Choose at least 80 pull requests" in info.value for info in app.info)
     assert [warning.value for warning in app.warning] == [WARNING]
 
 
@@ -214,7 +213,7 @@ def test_unavailable_training_labels_have_readable_forecast_state(
 
     assert not app.exception
     assert any(
-        "At least 80 pull requests are required for an honest chronological model evaluation"
+        "Choose at least 80 pull requests"
         in info.value
         for info in app.info
     )
@@ -233,7 +232,7 @@ def test_empty_repository_filter_has_readable_state_without_exception(
 
     assert not app.exception
     assert any(
-        "No pull requests match these filters. Try a wider date range or another repository."
+        "No pull requests match these filters."
         in info.value
         for info in app.info
     )
@@ -326,9 +325,9 @@ def test_opening_feature_frame_contains_only_the_three_utc_model_inputs() -> Non
 @pytest.mark.parametrize(
     ("model_mae", "baseline_mae", "expected_level", "expected_winner"),
     [
-        (8.0, 12.0, "success", "Model wins"),
-        (12.0, 8.0, "info", "Train-median baseline wins"),
-        (8.0, 8.0, "info", "Tie"),
+        (8.0, 12.0, "success", "The model was more accurate"),
+        (12.0, 8.0, "info", "The simple benchmark was more accurate"),
+        (8.0, 8.0, "info", "The model and simple benchmark were equally accurate"),
     ],
 )
 def test_evaluation_summary_names_the_actual_lower_mae(
