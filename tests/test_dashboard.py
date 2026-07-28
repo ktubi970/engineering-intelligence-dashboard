@@ -66,6 +66,7 @@ def test_dashboard_loads_snapshot_and_shows_exact_core_sections(
         "Overview",
         "Drivers & retrospective patterns",
         "Forecast & trust",
+        "Technical stack",
     ]
     assert len(app.metric) == 4
     assert [subheader.value for subheader in app.subheader] == [
@@ -73,8 +74,36 @@ def test_dashboard_loads_snapshot_and_shows_exact_core_sections(
         "Retrospective bottlenecks",
         "Model evaluation",
         "What-if forecast",
+        "From GitHub snapshot to decision-ready signals",
     ]
     assert [warning.value for warning in app.warning] == [WARNING]
+
+
+def test_technical_stack_view_exposes_the_runtime_layers(
+    snapshot_dir: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("EID_DATA_DIR", str(snapshot_dir))
+
+    app = AppTest.from_file(APP_PATH)
+    app.run(timeout=20)
+
+    visible_text = "\n".join(
+        element.value
+        for collection in (app.subheader, app.markdown, app.caption)
+        for element in collection
+    )
+    assert "From GitHub snapshot to decision-ready signals" in visible_text
+    assert all(
+        technology in visible_text
+        for technology in (
+            "Streamlit",
+            "pandas",
+            "Plotly",
+            "scikit-learn",
+            "pytest",
+        )
+    )
 
 
 def test_forecast_form_accepts_only_opening_time_features(
