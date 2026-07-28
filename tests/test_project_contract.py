@@ -28,7 +28,6 @@ APPLICATION_TREE_SHA = "b6f9ae229650ad21bfafac5b9696e8e25374015d"
 PUBLICATION_MANIFEST_PATH = "docs/evidence/final-publication.json"
 DASHBOARD_SCREENSHOT_SHA256 = "c7a72236d3f6535607634edc6cb57d6a13fc5752235892c720d8ac5b67338c96"
 SNAPSHOT_METADATA_SHA256 = "0fe555b2a381433548d5e1a4b1860c403dec74521361d1410d7cd2a029d28826"
-README_LIVE_DEMO_SHA256 = "92a3286ae3d9ab2a004a31de273c593366013708fec3165bda1587579de7383b"
 PR_VERIFIED_SUMMARY_SHA256 = "8bf6dda33500797dabf0ec58bd1466e905e76ec5546634775578ae98ea8cf45e"
 PR_LOCAL_GATE_SHA256 = "6e0d1a63fe1f5b4f2a195d2e8865ffa57d9ce3386e1fd7ff3eaeb9777f81dc74"
 QUALITY_FINAL_LOCAL_GATE_SHA256 = "73025085e6131187d3de0afa2f19b66bb85c8cc66a0b70632fde512dded39c8a"
@@ -158,17 +157,13 @@ def test_recruiter_readme_and_supporting_documents_publish_the_core_contract() -
     for anchor in (
         "# MergeLens",
         "engineering-intelligence-dashboard",
-        "## 30-second value",
-        "## Features",
-        "## Metric definitions",
-        "## Architecture",
-        "## Installation",
-        "## Offline demo",
-        "## Optional data refresh",
-        "## Tests",
-        "## Model results",
-        "## Limitations",
-        "## Privacy",
+        "## See it in action",
+        "## What you can explore",
+        "## Run it locally",
+        "## Prediction model",
+        "## How it works",
+        "## Trust and limits",
+        "## Project details",
         "## License",
         "streamlit run streamlit_app.py",
         "python scripts/refresh_data.py",
@@ -178,6 +173,21 @@ def test_recruiter_readme_and_supporting_documents_publish_the_core_contract() -
         "--cov-report=term-missing --cov-fail-under=85",
     ):
         assert anchor in readme
+
+    assert len(readme.split()) < 1_000
+    for removed_heading in (
+        "## Agentic engineering with Codex, Sol, and Ultra reasoning",
+        "## Metric definitions",
+        "## Architecture",
+        "## Installation",
+        "## Offline demo",
+        "## Optional data refresh",
+        "## Tests",
+        "## Model results",
+        "## Limitations",
+        "## Privacy",
+    ):
+        assert removed_heading not in readme
 
     document_anchors = {
         "docs/architecture.md": ("GitHub public REST API", "pandas", "Streamlit", "failure"),
@@ -222,6 +232,35 @@ def test_agent_guardrails_allow_scoped_work_and_prohibit_unsafe_claims() -> None
         assert prohibition in agents
 
 
+def test_readme_defines_the_prediction_mathematically() -> None:
+    readme = _artifact("README.md")
+
+    for mathematical_anchor in (
+        r"Y_i =",
+        r"\mathrm{merged\_at}_i-\mathrm{created\_at}_i",
+        r"X_i =",
+        r"\mathrm{year}(t_i)",
+        r"\mathrm{weekday}(t_i)",
+        r"\widehat{Y}_i = f(X_i)",
+        r"\phi(X_i)",
+        r"\sum_{b=1}^{200}T_b",
+        r"\operatorname{MAE}",
+        r"\left|Y_i-\widehat{Y}_i\right|",
+    ):
+        assert mathematical_anchor in readme
+
+    for model_contract in (
+        "pull requests that eventually merge",
+        "No developer identity",
+        "200-tree random forest",
+        "maximum depth 8",
+        "at least 3 training samples per leaf",
+        "newest 20%",
+        "median merge time from the training set",
+    ):
+        assert model_contract in readme
+
+
 def test_published_portfolio_claims_match_verified_snapshot_and_evaluation() -> None:
     pulls, workflows, _ = load_snapshot(PROJECT_ROOT / "data" / "snapshots")
     result = train_merge_time_model(pulls)
@@ -243,21 +282,16 @@ def test_published_portfolio_claims_match_verified_snapshot_and_evaluation() -> 
     readme = _artifact("README.md")
     for claim in (
         "900 merged pull requests and 560 completed workflow runs",
-        "The newest 20% (180 rows) is a fixed chronological holdout.",
-        "Of the 720 earlier candidates, 622 have labels available before the cutoff; "
-        "98 are purged.",
-        "- As-of cutoff: **2026-07-24T08:38:56+00:00**",
-        f"- Random-forest MAE: **{model_mae_display} hours** (rounded)",
-        f"- Training-median baseline MAE: **{baseline_mae_display} hours** (rounded)",
-        f"- Winner: **random forest**, with about **{relative_reduction_display} lower MAE**",
-        "The random forest has lower MAE than the baseline on this fixed snapshot.",
-        "estimated merge time among pull requests that eventually merge",
-        f"{len(pulls)} merged pull requests and {len(workflows)} completed workflow runs",
-        f"- Time-safe training rows: **{result.train_rows}**",
-        f"- Chronological test rows: **{result.test_rows}**",
-        f"- Purged unavailable labels: **{result.purged_rows}**",
-        f"- Training-median estimate: **{result.baseline_hours:.12f} hours**",
-        f"The newest 20% ({result.test_rows} rows) is a fixed chronological holdout.",
+        "The newest 20% (180 rows) is the chronological test set.",
+        "622",
+        "180",
+        "98",
+        "2026-07-24T08:38:56+00:00",
+        f"{model_mae_display} hours",
+        f"{baseline_mae_display} hours",
+        f"about {relative_reduction_display} lower average error",
+        "estimates the number of hours",
+        "pull requests that eventually merge",
     ):
         assert claim in readme
 
@@ -295,10 +329,12 @@ def test_published_portfolio_claims_match_verified_snapshot_and_evaluation() -> 
     ):
         assert claim in pull_request_body
 
-    for document in (readme, model_card, pull_request_body):
+    for document in (model_card, pull_request_body):
         assert "rounded to one decimal" in document
         assert "execution environments" in document
         assert "does not isolate a single causal factor" in document
+
+    for document in (readme, model_card, pull_request_body):
         assert "9.734692264131" not in document
         assert "2.749469772906" not in document
 
@@ -460,7 +496,7 @@ def test_publication_artifacts_are_real_and_match_verified_remote_evidence() -> 
     ):
         assert stale_historical_present_tense not in normalized_quality_evidence
 
-    readme_live_demo = _markdown_section(readme, "## Live demo")
+    readme_live_demo = _markdown_section(readme, "## See it in action")
     pull_request_summary = _markdown_section(
         pull_request_body,
         "## Verified summary",
@@ -520,7 +556,6 @@ def test_publication_artifacts_are_real_and_match_verified_remote_evidence() -> 
         PREMERGE_FORMAT_RESULT,
     )
     evidence_section_contracts = (
-        (readme_live_demo, README_LIVE_DEMO_SHA256, public_summary_claims),
         (
             pull_request_summary,
             PR_VERIFIED_SUMMARY_SHA256,
@@ -540,6 +575,26 @@ def test_publication_artifacts_are_real_and_match_verified_remote_evidence() -> 
             expected_digest,
             required_claims,
         )
+
+    normalized_readme_live_demo = _normalized(readme_live_demo)
+    for claim in (
+        PUBLIC_DEPLOYMENT_URL,
+        "July 28, 2026",
+        "without sign-in",
+        "all six repositories",
+        "point-in-time check",
+        PUBLICATION_MANIFEST_PATH,
+        "docs/quality-evidence.md",
+    ):
+        assert claim in normalized_readme_live_demo
+
+    for internal_evidence_detail in (
+        EVIDENCE_COMMIT,
+        EVIDENCE_TEST_RESULT,
+        EVIDENCE_COVERAGE,
+        "Technical stack",
+    ):
+        assert internal_evidence_detail not in normalized_readme_live_demo
 
     _assert_final_public_browser_evidence(final_public)
     assert PUBLIC_DEPLOYMENT_URL in final_public
@@ -672,16 +727,22 @@ def test_publication_screenshot_contract_rejects_wrong_dimensions(
         _assert_dashboard_screenshot_contract(wrong_size_screenshot)
 
 
-def test_readme_uses_exact_current_public_tab_names() -> None:
+def test_readme_names_the_current_product_views() -> None:
     readme = _artifact("README.md")
 
-    for tab_name in (
-        "Overview",
+    for view_name in (
+        "Delivery overview",
+        "Where work slows down",
+        "Merge-time estimate",
+    ):
+        assert view_name in readme
+
+    for old_view_name in (
         "Drivers & retrospective patterns",
         "Forecast & trust",
         "Technical stack",
     ):
-        assert tab_name in readme
+        assert old_view_name not in readme
 
 
 def test_pr_body_pins_screenshot_to_an_immutable_commit_url() -> None:
@@ -700,52 +761,22 @@ def test_pr_body_pins_screenshot_to_an_immutable_commit_url() -> None:
     assert "codex/engineering-intelligence-dashboard" not in screenshot_url
 
 
-def test_readme_explains_the_codex_sol_ultra_engineering_workflow() -> None:
+def test_readme_links_to_deeper_engineering_records_without_repeating_them() -> None:
     readme = _artifact("README.md")
-    heading = "## Agentic engineering with Codex, Sol, and Ultra reasoning"
 
-    assert heading in readme
-    start = readme.index(heading)
-    next_heading = readme.find("\n## ", start + len(heading))
-    section = readme[start:] if next_heading == -1 else readme[start:next_heading]
-    lowered = section.lower()
-
-    for anchor in (
-        "Codex + Sol + Ultra",
-        "coordinator",
-        "task decomposition",
-        "scoped implementation agents",
-        "RED",
-        "GREEN",
-        "read-only independent review agents",
-        "Git worktrees",
-        "commit boundaries",
-        "pytest",
-        "Ruff",
-        "coverage",
-        "GitHub Actions",
-        "Playwright",
-        "human approval",
-        "`tests/test_project_contract.py`",
-        "`.github/workflows/ci.yml`",
-        "1 failed, 7 passed",
-        "2 failed, 8 deselected",
-        "2 passed, 8 deselected",
+    for link in (
+        "[Architecture](docs/architecture.md)",
+        "[Data card](docs/data-card.md)",
+        "[Model card](docs/model-card.md)",
+        "[Quality evidence](docs/quality-evidence.md)",
         "[Agentic development](docs/agentic-development.md)",
-        "[AGENTS.md](AGENTS.md)",
+        "[Repository guardrails](AGENTS.md)",
     ):
-        assert anchor in section
+        assert link in readme
 
-    for failure_or_guardrail in (
-        "hallucinated changes",
-        "weak tests",
-        "drift between local, ci, and live",
-        "no secret output",
-        "no developer scoring",
-        "evidence, not ai claims",
-        "does not claim that every historical change or subagent",
-    ):
-        assert failure_or_guardrail in lowered
+    assert "Codex + Sol + Ultra" not in readme
+    assert "read-only independent review agents" not in readme
+    assert "1 failed, 7 passed" not in readme
 
 
 def test_committed_snapshot_covers_the_six_default_repositories() -> None:
