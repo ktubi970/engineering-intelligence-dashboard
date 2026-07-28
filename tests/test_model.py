@@ -245,15 +245,15 @@ def test_training_is_deterministic_when_forbidden_probes_are_present(
 def test_mutating_labels_unavailable_at_cutoff_cannot_change_training_result() -> None:
     pulls, _, _ = load_snapshot(Path("data/snapshots"))
     ordered = pulls.sort_values("created_at", kind="mergesort")
-    cutoff = ordered.iloc[240]["created_at"]
-    unavailable = (pulls["created_at"] < cutoff) & (pulls["merged_at"] >= cutoff)
-    assert int(unavailable.sum()) == 17
-
     original = train_merge_time_model(pulls)
+    split_at = len(pulls) - original.test_rows
+    cutoff = ordered.iloc[split_at]["created_at"]
+    unavailable = (pulls["created_at"] < cutoff) & (pulls["merged_at"] >= cutoff)
+    assert int(unavailable.sum()) == original.purged_rows
     mutated = pulls.copy()
     mutated.loc[unavailable, "merge_hours"] += 1_000_000.0
     repeated = train_merge_time_model(mutated)
-    test = ordered.iloc[240:]
+    test = ordered.iloc[split_at:]
 
     np.testing.assert_allclose(
         repeated.model.predict_hours(test),

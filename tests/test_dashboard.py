@@ -66,6 +66,7 @@ def test_dashboard_loads_snapshot_and_shows_exact_core_sections(
         "Overview",
         "Drivers & retrospective patterns",
         "Forecast & trust",
+        "Technical stack",
     ]
     assert len(app.metric) == 4
     assert [subheader.value for subheader in app.subheader] == [
@@ -73,8 +74,36 @@ def test_dashboard_loads_snapshot_and_shows_exact_core_sections(
         "Retrospective bottlenecks",
         "Model evaluation",
         "What-if forecast",
+        "From GitHub snapshot to decision-ready signals",
     ]
     assert [warning.value for warning in app.warning] == [WARNING]
+
+
+def test_technical_stack_view_exposes_the_runtime_layers(
+    snapshot_dir: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("EID_DATA_DIR", str(snapshot_dir))
+
+    app = AppTest.from_file(APP_PATH)
+    app.run(timeout=20)
+
+    visible_text = "\n".join(
+        element.value
+        for collection in (app.subheader, app.markdown, app.caption)
+        for element in collection
+    )
+    assert "From GitHub snapshot to decision-ready signals" in visible_text
+    assert all(
+        technology in visible_text
+        for technology in (
+            "Streamlit",
+            "pandas",
+            "Plotly",
+            "scikit-learn",
+            "pytest",
+        )
+    )
 
 
 def test_forecast_form_accepts_only_opening_time_features(
@@ -245,6 +274,25 @@ def test_data_dir_defaults_to_the_committed_snapshot(
     monkeypatch.delenv("EID_DATA_DIR", raising=False)
 
     assert resolve_data_dir() == APP_PATH.parent / "data" / "snapshots"
+
+
+def test_committed_snapshot_exposes_all_six_repository_options(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.delenv("EID_DATA_DIR", raising=False)
+
+    app = AppTest.from_file(APP_PATH)
+    app.run(timeout=30)
+
+    assert not app.exception
+    assert app.sidebar.multiselect[0].options == [
+        "microsoft/vscode",
+        "pandas-dev/pandas",
+        "ruby/ruby",
+        "rust-lang/rust",
+        "streamlit/streamlit",
+        "tensorflow/tensorflow",
+    ]
 
 
 def test_opening_feature_frame_contains_only_the_three_utc_model_inputs() -> None:

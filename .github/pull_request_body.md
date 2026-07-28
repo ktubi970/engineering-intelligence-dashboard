@@ -22,38 +22,48 @@
 .venv\Scripts\python.exe -m pytest --cov=engineering_intelligence --cov-report=term-missing --cov-fail-under=85
 ```
 
-The integrated local gate on Python 3.13.9 recorded Ruff lint passing, 31 files already formatted,
-and **170 passed** in 72.27 seconds with **94.54%** coverage (85% required). It includes the
-time-safe model, snapshot-integrity, dashboard, project-contract, and no-network tests.
+The post-fast-forward target gate ran locally on Python 3.13.9. Ruff lint passed, Ruff format
+reported 33 files already formatted, and pytest passed 172 tests with 94.54% coverage (85% required).
+`git diff --check` also passed without output. This evidence covers the resolved six-repository,
+schema-2, time-safe integration and is local rather than hosted CI or deployment evidence.
+
+The official GitHub Actions evidence above remains **170 passed** on `82e86b2`; the separate local
+integration count is **172 passed** because the integrated tree adds evidence-contract coverage.
 
 ## Public data provenance
 
-The committed snapshot contains 300 merged pull requests and 199 completed workflow runs from
-`pandas-dev/pandas` and `streamlit/streamlit`. It was produced from the GitHub public REST API and
-stores repository-scoped delivery fields rather than developer identities or credentials.
+The current committed snapshot contains 900 merged pull requests and 560 completed workflow runs
+from `pandas-dev/pandas`, `streamlit/streamlit`, `microsoft/vscode`, `tensorflow/tensorflow`,
+`rust-lang/rust`, and `ruby/ruby`. It was produced from the GitHub public REST API and stores
+repository-scoped delivery fields rather than developer identities or credentials.
 
 ## Honest model result
 
-- As-of cutoff: 2026-07-20T18:48:28+00:00
-- Time-safe training rows: 223
-- Chronological test rows: 60
-- Purged unavailable labels: 17
-- Training-median estimate: 18.235 hours
-- Random-forest MAE: 17.499891193309 hours
-- Training-median baseline MAE: 20.535763888889 hours
-- Winner: random forest, by 3.035872695580 hours
+- As-of cutoff: 2026-07-24T08:38:56+00:00
+- Time-safe training rows: 622
+- Chronological test rows: 180
+- Purged unavailable labels: 98
+- Training-median estimate: 9.463611111111 hours
+- Random-forest MAE: 9.7 hours (rounded)
+- Training-median baseline MAE: 12.5 hours (rounded)
+- Winner: random forest, with about 22% lower MAE
 
 The random forest has lower MAE than the baseline on this fixed snapshot. Both estimates remain
 visible because one holdout does not establish future superiority. The displayed target is
 estimated merge time among pull requests that eventually merge. The forecast is experimental,
 non-causal, and never a developer performance score.
 
+Public model-quality values are rounded to one decimal because exact tree-ensemble results can
+vary slightly across execution environments even with the same direct dependency pins and a fixed
+seed. The observed Windows/Linux difference does not isolate a single causal factor. Exact
+environment-specific outputs remain in `docs/quality-evidence.md`.
+
 ## Screenshot
 
-![MergeLens dashboard overview](https://github.com/ktubi970/engineering-intelligence-dashboard/blob/ce303f2a4b5d81e98a478ec542542698e0f991b1/docs/images/dashboard.png?raw=true)
+![MergeLens dashboard overview](https://github.com/ktubi970/engineering-intelligence-dashboard/blob/b9e4db677d6d29d0354061d9b86fdc8033a490a9/docs/images/dashboard.png?raw=true)
 
-The screenshot is a genuine 1440x1000 viewport capture from the local running application after
-restoring both repositories and the full date range.
+The screenshot is a genuine 1440x1000 viewport capture (PNG, 91,844 bytes) from the local running
+application after restoring all six repositories and the full date range.
 
 ## Limitations
 
@@ -61,7 +71,7 @@ restoring both repositories and the full date range.
   repeat an anonymous check before describing it as a public live demo.
 - The screenshot and Playwright evidence prove the local UI, not the current remote deployment.
 - Initial PR: https://github.com/ktubi970/engineering-intelligence-dashboard/pull/1
-- The recent point-in-time snapshot covers two public repositories and only merged pull requests,
+- The current point-in-time snapshot covers six public repositories and only merged pull requests,
   so it includes selection and survivorship bias.
 - The fixed chronological holdout is one local evaluation; repository or time-window changes can
   change which estimate wins.

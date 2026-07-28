@@ -49,8 +49,13 @@ def render_dashboard(data_dir: Path) -> None:
     generated_at = metadata.get("generated_at_utc", "unknown")
     st.sidebar.caption(f"Snapshot generated: {generated_at}")
 
-    delivery_tab, bottlenecks_tab, forecast_tab = st.tabs(
-        ["Overview", "Drivers & retrospective patterns", "Forecast & trust"]
+    delivery_tab, bottlenecks_tab, forecast_tab, stack_tab = st.tabs(
+        [
+            "Overview",
+            "Drivers & retrospective patterns",
+            "Forecast & trust",
+            "Technical stack",
+        ]
     )
     with delivery_tab:
         _render_delivery_pulse(filtered_pulls, filtered_workflows)
@@ -58,6 +63,8 @@ def render_dashboard(data_dir: Path) -> None:
         _render_bottlenecks(filtered_pulls)
     with forecast_tab:
         _render_forecast(filtered_pulls)
+    with stack_tab:
+        _render_technical_stack()
 
 
 def opening_feature_frame(
@@ -149,6 +156,55 @@ def _render_filters(
             (filtered_workflows["created_at"] >= start) & (filtered_workflows["created_at"] < end)
         ].copy()
     return filtered_pulls, filtered_workflows
+
+
+def _render_technical_stack() -> None:
+    st.subheader("From GitHub snapshot to decision-ready signals")
+    st.caption(
+        "MergeLens uses a compact, local-first Python stack: collection is separated "
+        "from the offline dashboard, and every layer has one clear responsibility."
+    )
+
+    interface_column, intelligence_column = st.columns(2)
+    with interface_column:
+        st.markdown("#### Experience & visualization")
+        st.markdown(
+            "**Streamlit** renders the interactive dashboard, filters, and forecast form.  \n"
+            "**Plotly** turns delivery metrics into responsive trend and comparison charts."
+        )
+    with intelligence_column:
+        st.markdown("#### Data & intelligence")
+        st.markdown(
+            "**pandas** validates and transforms the local CSV/JSON snapshot.  \n"
+            "**scikit-learn** trains the time-safe random-forest forecast and evaluates it "
+            "against a train-median baseline."
+        )
+
+    st.markdown("#### Architecture flow")
+    st.markdown(
+        "1. **Collect** public delivery events through the GitHub REST API.  \n"
+        "2. **Snapshot** privacy-minimized records as validated local CSV and JSON.  \n"
+        "3. **Transform** records into metrics, retrospective patterns, and model features.  \n"
+        "4. **Present** results offline through Streamlit and Plotly."
+    )
+
+    st.markdown("#### Quality & operating model")
+    quality_column, runtime_column = st.columns(2)
+    with quality_column:
+        st.markdown(
+            "**pytest** protects contracts and user-visible behavior; **Ruff** enforces "
+            "consistent Python quality in the local and CI gates."
+        )
+    with runtime_column:
+        st.markdown(
+            "**Python 3.13** is the reference CI runtime. The committed snapshot keeps the "
+            "demo reproducible and available without a network connection."
+        )
+
+    st.info(
+        "Privacy by design: the app excludes developer identities and never produces "
+        "individual performance scores."
+    )
 
 
 def _render_delivery_pulse(pulls: pd.DataFrame, workflows: pd.DataFrame) -> None:

@@ -2,7 +2,7 @@
 
 ## Dataset summary and provenance
 
-The committed demo snapshot was generated on `2026-07-27T08:04:05.882089Z` through the project's
+The committed demo snapshot was generated on `2026-07-27T13:56:40.155501Z` through the project's
 authenticated public GitHub REST path. The token existed only in that refresh process and was not
 printed or persisted.
 
@@ -10,11 +10,11 @@ printed or persisted.
 | --- | --- |
 | Source | GitHub public REST API |
 | GitHub REST API version | `2022-11-28` |
-| Public repositories | `pandas-dev/pandas`, `streamlit/streamlit` |
-| Merged pull-request rows | 300 |
-| Completed workflow-run rows | 199 |
-| Pull creation to merge range | 2026-07-02 17:16:26 UTC to 2026-07-27 07:02:30 UTC |
-| Workflow observation range | 2026-07-26 17:41:16 UTC to 2026-07-27 07:57:42 UTC |
+| Public repositories | `pandas-dev/pandas`, `streamlit/streamlit`, `microsoft/vscode`, `tensorflow/tensorflow`, `rust-lang/rust`, `ruby/ruby` |
+| Merged pull-request rows | 900 |
+| Completed workflow-run rows | 560 |
+| Pull creation to merge range | 2026-07-02 17:16:26 UTC to 2026-07-27 13:28:47 UTC |
+| Workflow observation range | 2026-07-27 02:48:29 UTC to 2026-07-27 13:49:26 UTC |
 | Schema version | 2 |
 
 The refresh requested a limit of 150 pull requests and 150 workflow runs per repository. Pull
@@ -41,8 +41,8 @@ The committed digests are:
 
 | File | SHA-256 |
 | --- | --- |
-| `pull_requests.csv` | `69f8bac3e356f4dd0e93b232de14c707a318d36ab04ad9d66001cb936e984d96` |
-| `workflow_runs.csv` | `c88a5cc75968c342d47a68efdeb7c9a17798f31ebf0d2ca5901ffb23d3cc8462` |
+| `pull_requests.csv` | `84d9cae8a8536af79fa7591d812fdc8259f24e38f60827cbaaf87eabbf3a38f9` |
+| `workflow_runs.csv` | `01f67427f36a288c0d0c6c732b9fbab5996b21e642ef5d52d08987b9b4474373` |
 
 `.gitattributes` also pins `data/snapshots/*.csv` checkouts to LF for deterministic future
 checkouts; record-aware hash validation remains record-separator independent as defense in depth.
@@ -101,7 +101,7 @@ complete quality gate before committing refreshed data.
 
 ## Limitations and bias
 
-- Two large Python open-source repositories are not representative of all teams, languages,
+- Six high-volume public open-source projects are not representative of all teams, languages,
   company sizes, or delivery practices.
 - Only merged pull requests are present. Abandoned, rejected, or still-open work is excluded,
   creating survivorship and selection bias.

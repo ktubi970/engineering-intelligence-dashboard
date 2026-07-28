@@ -124,16 +124,18 @@ omitted.
 - **Human decision:** preserve the honest baseline-winning model result and label every claim by
   environment and revision rather than treating a deployment URL as proof.
 - **Files/outcome:** browser and quality evidence, exact public tab labels, a 1440x1000 PNG, and
-  the live-demo/CI references; commits `f987033` and `ce303f2`.
+  the original live-demo/CI references, including the then-current screenshot in `ce303f2`.
+  That initial remote evidence was later superseded by verified CI on `82e86b2` and the
+  evidence refresh in `7990089`.
 - **RED/GREEN:** local Playwright covered repository/date filters, empty states, Plotly hover,
   forecast safeguards, desktop/narrow overflow, and a zero-error application console. The final
   Task 9 gate passed 91 tests with 96.10% coverage; Ruff lint and format checks passed.
 - **Review/fix:** the later publication-evidence pass pinned the screenshot URL to immutable SHA
   `ce303f2a4b5d81e98a478ec542542698e0f991b1`, decoded and verified the real PNG, enforced exact
   1440x1000 dimensions, and added corrupt/wrong-size negative cases in commit `a439c9c`.
-- **Residual risk:** the live deployment evidence is scoped to initial SHA `f987033`, whose first
-  two tab labels differ from the current local labels. Local, CI, and live evidence are not
-  interchangeable.
+- **Residual risk:** the initial live observation predates the verified CI evidence on `82e86b2`
+  and the refresh in `7990089`; the current anonymous check is auth-gated. Local, CI, and live
+  evidence remain distinct and are not interchangeable.
 
 ## Reviewer-driven hardening - current passes
 

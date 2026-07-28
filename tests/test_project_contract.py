@@ -6,6 +6,9 @@ from pathlib import Path
 import pytest
 from PIL import Image, UnidentifiedImageError
 
+from engineering_intelligence.model import train_merge_time_model
+from engineering_intelligence.pipeline import load_snapshot
+
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 EVIDENCE_COMMIT = "82e86b2fedc2526f6fc1eff6ce27941efbe0a00b"
 EVIDENCE_CI_URL = (
@@ -14,6 +17,16 @@ EVIDENCE_CI_URL = (
 )
 EVIDENCE_TEST_RESULT = "170 passed"
 EVIDENCE_COVERAGE = "94.54%"
+LOCAL_INTEGRATION_TEST_RESULT = "172 passed"
+LOCAL_INTEGRATION_PYTHON = "Python 3.13.9"
+LOCAL_INTEGRATION_FORMAT_RESULT = "33 files already formatted"
+INTEGRATION_COMMIT = "b9e4db677d6d29d0354061d9b86fdc8033a490a9"
+INTEGRATION_SCREENSHOT_BYTES = 91_844
+INTEGRATION_SCREENSHOT_CAPTION = "restoring all six repositories"
+INTEGRATION_SCREENSHOT_URL = (
+    "https://github.com/ktubi970/engineering-intelligence-dashboard/blob/"
+    f"{INTEGRATION_COMMIT}/docs/images/dashboard.png?raw=true"
+)
 
 
 def _artifact_path(relative_path: str) -> Path:
@@ -60,6 +73,8 @@ def test_ci_runs_the_binding_quality_gate_on_master_and_pull_requests() -> None:
 
 
 def test_recruiter_readme_and_supporting_documents_publish_the_core_contract() -> None:
+    pulls, workflows, _ = load_snapshot(PROJECT_ROOT / "data" / "snapshots")
+
     readme = _artifact("README.md")
     for anchor in (
         "# MergeLens",
@@ -87,7 +102,12 @@ def test_recruiter_readme_and_supporting_documents_publish_the_core_contract() -
 
     document_anchors = {
         "docs/architecture.md": ("GitHub public REST API", "pandas", "Streamlit", "failure"),
-        "docs/data-card.md": ("300", "199", "privacy", "## Limitations"),
+        "docs/data-card.md": (
+            str(len(pulls)),
+            str(len(workflows)),
+            "privacy",
+            "## Limitations",
+        ),
         "docs/model-card.md": (
             "opening-time",
             "chronological",
@@ -124,43 +144,99 @@ def test_agent_guardrails_allow_scoped_work_and_prohibit_unsafe_claims() -> None
 
 
 def test_published_portfolio_claims_match_verified_snapshot_and_evaluation() -> None:
+    pulls, workflows, _ = load_snapshot(PROJECT_ROOT / "data" / "snapshots")
+    result = train_merge_time_model(pulls)
+    assert result.mae_hours == pytest.approx(9.73, abs=0.02)
+    assert result.baseline_mae_hours == pytest.approx(12.484162037037, abs=1e-12)
+    assert result.mae_hours < result.baseline_mae_hours
+
+    model_mae_display = f"{result.mae_hours:.1f}"
+    baseline_mae_display = f"{result.baseline_mae_hours:.1f}"
+    relative_reduction_display = (
+        f"{100 * (result.baseline_mae_hours - result.mae_hours) / result.baseline_mae_hours:.0f}%"
+    )
+    assert (model_mae_display, baseline_mae_display, relative_reduction_display) == (
+        "9.7",
+        "12.5",
+        "22%",
+    )
+
     readme = _artifact("README.md")
     for claim in (
-        "300 merged pull requests and 199 completed workflow runs",
-        "The newest 20% (60 rows) is a fixed chronological holdout.",
-        "Of the 240 earlier candidates, 223 have labels available before the cutoff; "
-        "17 are purged.",
-        "- As-of cutoff: **2026-07-20T18:48:28+00:00**",
-        "- Random-forest MAE: **17.499891193309 hours**",
-        "- Training-median baseline MAE: **20.535763888889 hours**",
-        "- Winner: **random forest**, by **3.035872695580 hours**",
+        "900 merged pull requests and 560 completed workflow runs",
+        "The newest 20% (180 rows) is a fixed chronological holdout.",
+        "Of the 720 earlier candidates, 622 have labels available before the cutoff; "
+        "98 are purged.",
+        "- As-of cutoff: **2026-07-24T08:38:56+00:00**",
+        f"- Random-forest MAE: **{model_mae_display} hours** (rounded)",
+        f"- Training-median baseline MAE: **{baseline_mae_display} hours** (rounded)",
+        f"- Winner: **random forest**, with about **{relative_reduction_display} lower MAE**",
         "The random forest has lower MAE than the baseline on this fixed snapshot.",
         "estimated merge time among pull requests that eventually merge",
+        f"{len(pulls)} merged pull requests and {len(workflows)} completed workflow runs",
+        f"- Time-safe training rows: **{result.train_rows}**",
+        f"- Chronological test rows: **{result.test_rows}**",
+        f"- Purged unavailable labels: **{result.purged_rows}**",
+        f"- Training-median estimate: **{result.baseline_hours:.12f} hours**",
+        f"The newest 20% ({result.test_rows} rows) is a fixed chronological holdout.",
     ):
         assert claim in readme
 
     model_card = _artifact("docs/model-card.md")
+    training_rows = result.train_rows
     for claim in (
-        "With 300 committed rows, that produces 240 earlier candidates and 60 chronological "
+        "With 900 committed rows, that produces 720 earlier candidates and 180 chronological "
         "test rows.",
-        "17 unavailable labels are purged, leaving 223 training rows.",
-        "| As-of cutoff | 2026-07-20T18:48:28+00:00 |",
-        "| Training rows | 223 |",
-        "| Test rows | 60 |",
-        "| Purged unavailable labels | 17 |",
-        "| Random-forest MAE | 17.499891193309 hours |",
-        "| Train-median baseline MAE | 20.535763888889 hours |",
-        "| Difference | model is 3.035872695580 hours better |",
+        "98 unavailable labels are purged, leaving 622 training rows.",
+        "| As-of cutoff | 2026-07-24T08:38:56+00:00 |",
+        "| Training rows | 622 |",
+        "| Test rows | 180 |",
+        "| Purged unavailable labels | 98 |",
+        f"| Random-forest MAE | {model_mae_display} hours (rounded) |",
+        f"| Train-median baseline MAE | {baseline_mae_display} hours (rounded) |",
+        f"| Relative MAE reduction | about {relative_reduction_display} |",
         "| Honest result | random forest wins |",
         "The random forest has lower MAE on this fixed committed-snapshot holdout.",
         "estimated merge time among pull requests that eventually merge",
+        f"With {len(pulls)} committed rows, that produces {len(pulls) - result.test_rows} earlier "
+        f"candidates and {result.test_rows} chronological test rows.",
+        f"| Test rows | {result.test_rows} |",
+        f"| As-of cutoff | {result.cutoff.isoformat()} |",
+        f"| Training rows | {training_rows} |",
+        f"| Purged unavailable labels | {result.purged_rows} |",
+        f"| Training-median estimate | {result.baseline_hours:.12f} hours |",
     ):
         assert claim in model_card
+
+    pull_request_body = _artifact(".github/pull_request_body.md")
+    for claim in (
+        f"- Random-forest MAE: {model_mae_display} hours (rounded)",
+        f"- Training-median baseline MAE: {baseline_mae_display} hours (rounded)",
+        f"- Winner: random forest, with about {relative_reduction_display} lower MAE",
+    ):
+        assert claim in pull_request_body
+
+    for document in (readme, model_card, pull_request_body):
+        assert "rounded to one decimal" in document
+        assert "execution environments" in document
+        assert "does not isolate a single causal factor" in document
+        assert "9.734692264131" not in document
+        assert "2.749469772906" not in document
+
+    quality_evidence = _artifact("docs/quality-evidence.md")
+    for exact_environment_evidence in (
+        "Windows 3.13.9: `9.734692264131` hours",
+        "Linux 3.13.14: `9.725297316958` hours",
+        "The train-median baseline remained `12.484162037037` hours",
+        "30342316589/job/90220463967",
+    ):
+        assert exact_environment_evidence in quality_evidence
 
 
 def test_publication_artifacts_are_real_and_match_verified_remote_evidence() -> None:
     screenshot_path = _artifact_path("docs/images/dashboard.png")
     _assert_dashboard_screenshot_contract(screenshot_path)
+    assert screenshot_path.stat().st_size == INTEGRATION_SCREENSHOT_BYTES
 
     requirements_dev = _artifact("requirements-dev.txt").splitlines()
     assert "pillow==12.3.0" in requirements_dev
@@ -175,11 +251,13 @@ def test_publication_artifacts_are_real_and_match_verified_remote_evidence() -> 
         r".venv\Scripts\python.exe -m ruff format --check .",
         r".venv\Scripts\python.exe -m pytest --cov=engineering_intelligence "
         "--cov-report=term-missing --cov-fail-under=85",
-        "300 merged pull requests and 199 completed workflow runs",
+        "900 merged pull requests and 560 completed workflow runs",
         "GitHub public REST API",
         "The random forest has lower MAE than the baseline on this fixed snapshot.",
         "estimated merge time among pull requests that eventually merge",
-        "![MergeLens dashboard overview](https://github.com/ktubi970/engineering-intelligence-dashboard/blob/ce303f2a4b5d81e98a478ec542542698e0f991b1/docs/images/dashboard.png?raw=true)",
+        f"![MergeLens dashboard overview]({INTEGRATION_SCREENSHOT_URL})",
+        INTEGRATION_SCREENSHOT_CAPTION,
+        f"PNG, {INTEGRATION_SCREENSHOT_BYTES:,} bytes",
         "## Limitations",
     ):
         assert anchor in pull_request_body
@@ -192,6 +270,9 @@ def test_publication_artifacts_are_real_and_match_verified_remote_evidence() -> 
         assert EVIDENCE_COMMIT in document
         assert EVIDENCE_TEST_RESULT in document
         assert EVIDENCE_COVERAGE in document
+        assert LOCAL_INTEGRATION_TEST_RESULT in document
+        assert LOCAL_INTEGRATION_PYTHON in document
+        assert LOCAL_INTEGRATION_FORMAT_RESULT in document
         lowered = document.lower()
         assert "phase a" not in lowered
         assert "pending" not in lowered
@@ -208,6 +289,16 @@ def test_publication_artifacts_are_real_and_match_verified_remote_evidence() -> 
     for document in (readme, quality_evidence, pull_request_body):
         for stale_claim in stale_claims:
             assert stale_claim not in document
+
+    tracked_markdown_paths = (
+        PROJECT_ROOT / "README.md",
+        PROJECT_ROOT / ".github" / "pull_request_body.md",
+        *sorted((PROJECT_ROOT / "docs").rglob("*.md")),
+    )
+    for markdown_path in tracked_markdown_paths:
+        assert stale_claims[2] not in markdown_path.read_text(encoding="utf-8"), (
+            f"Superseded evidence SHA remains in {markdown_path.relative_to(PROJECT_ROOT)}"
+        )
 
     assert "https://github.com/ktubi970/engineering-intelligence-dashboard/pull/1" in (
         quality_evidence
@@ -258,10 +349,7 @@ def test_readme_uses_exact_current_public_tab_names() -> None:
 
 def test_pr_body_pins_screenshot_to_an_immutable_commit_url() -> None:
     pull_request_body = _artifact(".github/pull_request_body.md")
-    expected_url = (
-        "https://github.com/ktubi970/engineering-intelligence-dashboard/blob/"
-        "ce303f2a4b5d81e98a478ec542542698e0f991b1/docs/images/dashboard.png?raw=true"
-    )
+    expected_url = INTEGRATION_SCREENSHOT_URL
     match = re.search(r"!\[MergeLens dashboard overview\]\(([^)]+)\)", pull_request_body)
     assert match is not None
     screenshot_url = match.group(1)
@@ -321,3 +409,21 @@ def test_readme_explains_the_codex_sol_ultra_engineering_workflow() -> None:
         "does not claim that every historical change or subagent",
     ):
         assert failure_or_guardrail in lowered
+
+
+def test_committed_snapshot_covers_the_six_default_repositories() -> None:
+    expected_repositories = [
+        "pandas-dev/pandas",
+        "streamlit/streamlit",
+        "microsoft/vscode",
+        "tensorflow/tensorflow",
+        "rust-lang/rust",
+        "ruby/ruby",
+    ]
+
+    pulls, workflows, metadata = load_snapshot(PROJECT_ROOT / "data" / "snapshots")
+
+    assert metadata["repositories"] == expected_repositories
+    assert set(pulls["repository"]) == set(expected_repositories)
+    assert set(workflows["repository"]).issubset(expected_repositories)
+    assert len(pulls) == 150 * len(expected_repositories)

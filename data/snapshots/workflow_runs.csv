@@ -1,200 +1,561 @@
 repository,run_id,workflow_name,status,conclusion,created_at,updated_at,duration_minutes
+pandas-dev/pandas,30254743994,Doc Build and Upload,completed,failure,2026-07-27T09:37:26Z,2026-07-27T09:49:39Z,12.216666666666667
+pandas-dev/pandas,30254743974,Wheel builder,completed,skipped,2026-07-27T09:37:26Z,2026-07-27T09:37:27Z,0.016666666666666666
+pandas-dev/pandas,30254743949,GitHub Actions Security Analysis with zizmor 🌈,completed,success,2026-07-27T09:37:26Z,2026-07-27T09:37:54Z,0.4666666666666667
+pandas-dev/pandas,30254743886,Code Checks,completed,success,2026-07-27T09:37:26Z,2026-07-27T10:11:45Z,34.31666666666667
+pandas-dev/pandas,30254743882,Unit Tests,completed,failure,2026-07-27T09:37:26Z,2026-07-27T10:23:49Z,46.38333333333333
+pandas-dev/pandas,30254743868,Package Checks,completed,skipped,2026-07-27T09:37:26Z,2026-07-27T09:37:37Z,0.18333333333333332
+pandas-dev/pandas,30249248345,Wheel builder,completed,cancelled,2026-07-27T08:16:14Z,2026-07-27T08:16:15Z,0.016666666666666666
+pandas-dev/pandas,30249248328,Package Checks,completed,skipped,2026-07-27T08:16:14Z,2026-07-27T08:16:14Z,0.0
+pandas-dev/pandas,30249248268,Wheel builder,completed,skipped,2026-07-27T08:16:13Z,2026-07-27T08:16:21Z,0.13333333333333333
+pandas-dev/pandas,30249248263,Package Checks,completed,skipped,2026-07-27T08:16:13Z,2026-07-27T08:16:14Z,0.016666666666666666
+pandas-dev/pandas,30249248086,Wheel builder,completed,cancelled,2026-07-27T08:16:13Z,2026-07-27T08:16:15Z,0.03333333333333333
+pandas-dev/pandas,30249247944,GitHub Actions Security Analysis with zizmor 🌈,completed,success,2026-07-27T08:16:13Z,2026-07-27T08:16:42Z,0.48333333333333334
+pandas-dev/pandas,30249247843,Doc Build and Upload,completed,success,2026-07-27T08:16:13Z,2026-07-27T08:28:47Z,12.566666666666666
+pandas-dev/pandas,30249247827,Wheel builder,completed,cancelled,2026-07-27T08:16:13Z,2026-07-27T08:16:14Z,0.016666666666666666
+pandas-dev/pandas,30249247796,Code Checks,completed,success,2026-07-27T08:16:13Z,2026-07-27T08:47:24Z,31.183333333333334
+pandas-dev/pandas,30249247763,Unit Tests,completed,success,2026-07-27T08:16:13Z,2026-07-27T09:03:20Z,47.11666666666667
+pandas-dev/pandas,30249247757,Package Checks,completed,skipped,2026-07-27T08:16:13Z,2026-07-27T08:16:14Z,0.016666666666666666
+pandas-dev/pandas,30249247751,Package Checks,completed,skipped,2026-07-27T08:16:13Z,2026-07-27T08:16:14Z,0.016666666666666666
+pandas-dev/pandas,30249247499,Wheel builder,completed,cancelled,2026-07-27T08:16:13Z,2026-07-27T08:16:20Z,0.11666666666666667
+pandas-dev/pandas,30249247313,Package Checks,completed,skipped,2026-07-27T08:16:13Z,2026-07-27T08:16:14Z,0.016666666666666666
+pandas-dev/pandas,30249244549,Wheel builder,completed,skipped,2026-07-27T08:16:10Z,2026-07-27T08:16:11Z,0.016666666666666666
+pandas-dev/pandas,30249238343,Wheel builder,completed,skipped,2026-07-27T08:16:05Z,2026-07-27T08:16:11Z,0.1
+pandas-dev/pandas,30249238247,Doc Build and Upload,completed,success,2026-07-27T08:16:04Z,2026-07-27T08:28:49Z,12.75
+pandas-dev/pandas,30249238095,Package Checks,completed,skipped,2026-07-27T08:16:04Z,2026-07-27T08:16:05Z,0.016666666666666666
+pandas-dev/pandas,30249237363,Package Checks,completed,skipped,2026-07-27T08:16:04Z,2026-07-27T08:16:13Z,0.15
+pandas-dev/pandas,30249237066,GitHub Actions Security Analysis with zizmor 🌈,completed,success,2026-07-27T08:16:03Z,2026-07-27T08:16:33Z,0.5
+pandas-dev/pandas,30249237048,Code Checks,completed,success,2026-07-27T08:16:03Z,2026-07-27T08:46:37Z,30.566666666666666
+pandas-dev/pandas,30249237043,Wheel builder,completed,cancelled,2026-07-27T08:16:03Z,2026-07-27T08:16:06Z,0.05
+pandas-dev/pandas,30249237002,Unit Tests,completed,success,2026-07-27T08:16:03Z,2026-07-27T09:13:13Z,57.166666666666664
+pandas-dev/pandas,30249236546,Wheel builder,completed,cancelled,2026-07-27T08:16:03Z,2026-07-27T08:16:11Z,0.13333333333333333
+pandas-dev/pandas,30249236196,Package Checks,completed,skipped,2026-07-27T08:16:03Z,2026-07-27T08:16:04Z,0.016666666666666666
+pandas-dev/pandas,30249235737,Package Checks,completed,skipped,2026-07-27T08:16:02Z,2026-07-27T08:16:03Z,0.016666666666666666
+pandas-dev/pandas,30249235159,Wheel builder,completed,skipped,2026-07-27T08:16:02Z,2026-07-27T08:16:04Z,0.03333333333333333
+pandas-dev/pandas,30249234907,Package Checks,completed,skipped,2026-07-27T08:16:02Z,2026-07-27T08:16:03Z,0.016666666666666666
+pandas-dev/pandas,30249234880,Wheel builder,completed,cancelled,2026-07-27T08:16:02Z,2026-07-27T08:16:03Z,0.016666666666666666
+pandas-dev/pandas,30249232833,Package Checks,completed,skipped,2026-07-27T08:16:00Z,2026-07-27T08:16:01Z,0.016666666666666666
+pandas-dev/pandas,30249232114,Wheel builder,completed,skipped,2026-07-27T08:15:59Z,2026-07-27T08:16:00Z,0.016666666666666666
+pandas-dev/pandas,30249231911,Wheel builder,completed,skipped,2026-07-27T08:15:59Z,2026-07-27T08:16:00Z,0.016666666666666666
+pandas-dev/pandas,30249231908,Package Checks,completed,skipped,2026-07-27T08:15:59Z,2026-07-27T08:16:01Z,0.03333333333333333
+pandas-dev/pandas,30249231279,Package Checks,completed,skipped,2026-07-27T08:15:58Z,2026-07-27T08:15:59Z,0.016666666666666666
+pandas-dev/pandas,30249231178,Wheel builder,completed,skipped,2026-07-27T08:15:58Z,2026-07-27T08:15:59Z,0.016666666666666666
+pandas-dev/pandas,30249230737,Package Checks,completed,skipped,2026-07-27T08:15:58Z,2026-07-27T08:15:59Z,0.016666666666666666
+pandas-dev/pandas,30249230731,GitHub Actions Security Analysis with zizmor 🌈,completed,success,2026-07-27T08:15:58Z,2026-07-27T08:16:19Z,0.35
+pandas-dev/pandas,30249230632,Doc Build and Upload,completed,success,2026-07-27T08:15:58Z,2026-07-27T08:28:25Z,12.45
+pandas-dev/pandas,30249230630,Unit Tests,completed,success,2026-07-27T08:15:58Z,2026-07-27T09:06:17Z,50.31666666666667
+pandas-dev/pandas,30249230621,Wheel builder,completed,cancelled,2026-07-27T08:15:58Z,2026-07-27T08:15:59Z,0.016666666666666666
+pandas-dev/pandas,30249230602,Wheel builder,completed,cancelled,2026-07-27T08:15:58Z,2026-07-27T08:15:59Z,0.016666666666666666
+pandas-dev/pandas,30249230561,Package Checks,completed,skipped,2026-07-27T08:15:57Z,2026-07-27T08:16:07Z,0.16666666666666666
+pandas-dev/pandas,30249230558,Wheel builder,completed,cancelled,2026-07-27T08:15:57Z,2026-07-27T08:15:59Z,0.03333333333333333
+pandas-dev/pandas,30249230537,Code Checks,completed,success,2026-07-27T08:15:57Z,2026-07-27T08:48:35Z,32.63333333333333
+pandas-dev/pandas,30249228996,Wheel builder,completed,skipped,2026-07-27T08:15:56Z,2026-07-27T08:16:05Z,0.15
+pandas-dev/pandas,30249221802,Package Checks,completed,skipped,2026-07-27T08:15:49Z,2026-07-27T08:15:50Z,0.016666666666666666
+pandas-dev/pandas,30249221759,Wheel builder,completed,cancelled,2026-07-27T08:15:49Z,2026-07-27T08:15:50Z,0.016666666666666666
+pandas-dev/pandas,30249221722,Package Checks,completed,skipped,2026-07-27T08:15:49Z,2026-07-27T08:15:50Z,0.016666666666666666
+pandas-dev/pandas,30249221721,GitHub Actions Security Analysis with zizmor 🌈,completed,success,2026-07-27T08:15:49Z,2026-07-27T08:16:21Z,0.5333333333333333
+pandas-dev/pandas,30249221665,Wheel builder,completed,skipped,2026-07-27T08:15:49Z,2026-07-27T08:15:51Z,0.03333333333333333
+pandas-dev/pandas,30249221454,Package Checks,completed,skipped,2026-07-27T08:15:49Z,2026-07-27T08:15:50Z,0.016666666666666666
+pandas-dev/pandas,30249221376,Wheel builder,completed,cancelled,2026-07-27T08:15:49Z,2026-07-27T08:15:51Z,0.03333333333333333
+pandas-dev/pandas,30249221128,Code Checks,completed,success,2026-07-27T08:15:49Z,2026-07-27T08:47:02Z,31.216666666666665
+pandas-dev/pandas,30249221100,Package Checks,completed,skipped,2026-07-27T08:15:49Z,2026-07-27T08:15:50Z,0.016666666666666666
+pandas-dev/pandas,30249221096,Doc Build and Upload,completed,success,2026-07-27T08:15:49Z,2026-07-27T08:28:57Z,13.133333333333333
+pandas-dev/pandas,30249221080,Wheel builder,completed,cancelled,2026-07-27T08:15:49Z,2026-07-27T08:15:50Z,0.016666666666666666
+pandas-dev/pandas,30249221071,Wheel builder,completed,cancelled,2026-07-27T08:15:49Z,2026-07-27T08:15:50Z,0.016666666666666666
+pandas-dev/pandas,30249221042,Unit Tests,completed,success,2026-07-27T08:15:49Z,2026-07-27T09:02:33Z,46.733333333333334
+pandas-dev/pandas,30249221009,Package Checks,completed,skipped,2026-07-27T08:15:49Z,2026-07-27T08:15:59Z,0.16666666666666666
+pandas-dev/pandas,30249218320,Wheel builder,completed,skipped,2026-07-27T08:15:46Z,2026-07-27T08:15:47Z,0.016666666666666666
+pandas-dev/pandas,30249211970,Package Checks,completed,skipped,2026-07-27T08:15:40Z,2026-07-27T08:15:42Z,0.03333333333333333
+pandas-dev/pandas,30249211932,Package Checks,completed,skipped,2026-07-27T08:15:40Z,2026-07-27T08:15:41Z,0.016666666666666666
+pandas-dev/pandas,30249211876,Wheel builder,completed,skipped,2026-07-27T08:15:40Z,2026-07-27T08:15:47Z,0.11666666666666667
+pandas-dev/pandas,30249211405,Code Checks,completed,success,2026-07-27T08:15:40Z,2026-07-27T08:46:34Z,30.9
+pandas-dev/pandas,30249211402,GitHub Actions Security Analysis with zizmor 🌈,completed,success,2026-07-27T08:15:40Z,2026-07-27T08:16:09Z,0.48333333333333334
+pandas-dev/pandas,30249211379,Wheel builder,completed,cancelled,2026-07-27T08:15:40Z,2026-07-27T08:15:42Z,0.03333333333333333
+pandas-dev/pandas,30249211298,Doc Build and Upload,completed,success,2026-07-27T08:15:40Z,2026-07-27T08:27:51Z,12.183333333333334
+pandas-dev/pandas,30249211252,Unit Tests,completed,success,2026-07-27T08:15:40Z,2026-07-27T09:05:22Z,49.7
+pandas-dev/pandas,30249210128,Package Checks,completed,skipped,2026-07-27T08:15:39Z,2026-07-27T08:15:40Z,0.016666666666666666
+pandas-dev/pandas,30249210126,Package Checks,completed,skipped,2026-07-27T08:15:39Z,2026-07-27T08:15:40Z,0.016666666666666666
+pandas-dev/pandas,30249210125,Wheel builder,completed,cancelled,2026-07-27T08:15:39Z,2026-07-27T08:15:42Z,0.05
+pandas-dev/pandas,30249210119,Wheel builder,completed,cancelled,2026-07-27T08:15:39Z,2026-07-27T08:15:40Z,0.016666666666666666
+pandas-dev/pandas,30249210007,Wheel builder,completed,cancelled,2026-07-27T08:15:39Z,2026-07-27T08:15:46Z,0.11666666666666667
+pandas-dev/pandas,30249209964,Package Checks,completed,skipped,2026-07-27T08:15:39Z,2026-07-27T08:15:40Z,0.016666666666666666
+pandas-dev/pandas,30249207586,Wheel builder,completed,skipped,2026-07-27T08:15:37Z,2026-07-27T08:15:38Z,0.016666666666666666
+pandas-dev/pandas,30249165209,github_actions in /. - Update #1485930679,completed,success,2026-07-27T08:15:01Z,2026-07-27T08:16:24Z,1.3833333333333333
+pandas-dev/pandas,30248788592,Comment Commands,completed,skipped,2026-07-27T08:09:21Z,2026-07-27T08:09:22Z,0.016666666666666666
+pandas-dev/pandas,30248658202,Package Checks,completed,skipped,2026-07-27T08:07:24Z,2026-07-27T08:07:35Z,0.18333333333333332
+pandas-dev/pandas,30248658200,Wheel builder,completed,skipped,2026-07-27T08:07:24Z,2026-07-27T08:07:25Z,0.016666666666666666
+pandas-dev/pandas,30248658137,GitHub Actions Security Analysis with zizmor 🌈,completed,success,2026-07-27T08:07:24Z,2026-07-27T08:07:49Z,0.4166666666666667
+pandas-dev/pandas,30248658114,Code Checks,completed,success,2026-07-27T08:07:24Z,2026-07-27T08:40:46Z,33.36666666666667
+pandas-dev/pandas,30248658091,Unit Tests,completed,success,2026-07-27T08:07:24Z,2026-07-27T08:54:25Z,47.016666666666666
+pandas-dev/pandas,30248658083,Doc Build and Upload,completed,success,2026-07-27T08:07:24Z,2026-07-27T08:20:16Z,12.866666666666667
 pandas-dev/pandas,30246433529,Comment Commands,completed,skipped,2026-07-27T07:31:03Z,2026-07-27T07:31:11Z,0.13333333333333333
 pandas-dev/pandas,30246094612,GitHub Actions Security Analysis with zizmor 🌈,completed,success,2026-07-27T07:25:21Z,2026-07-27T07:25:45Z,0.4
 pandas-dev/pandas,30246094596,Package Checks,completed,skipped,2026-07-27T07:25:21Z,2026-07-27T07:25:31Z,0.16666666666666666
 pandas-dev/pandas,30246093996,Code Checks,completed,success,2026-07-27T07:25:21Z,2026-07-27T07:57:42Z,32.35
 pandas-dev/pandas,30246093986,Doc Build and Upload,completed,success,2026-07-27T07:25:21Z,2026-07-27T07:35:22Z,10.016666666666667
+pandas-dev/pandas,30246093974,Unit Tests,completed,success,2026-07-27T07:25:21Z,2026-07-27T08:12:41Z,47.333333333333336
 pandas-dev/pandas,30246093963,Wheel builder,completed,skipped,2026-07-27T07:25:21Z,2026-07-27T07:25:22Z,0.016666666666666666
 pandas-dev/pandas,30243964239,Unit Tests,completed,success,2026-07-27T06:49:01Z,2026-07-27T07:37:05Z,48.06666666666667
 pandas-dev/pandas,30243964219,Doc Build and Upload,completed,success,2026-07-27T06:49:01Z,2026-07-27T06:59:49Z,10.8
 pandas-dev/pandas,30243964202,Wheel builder,completed,skipped,2026-07-27T06:49:01Z,2026-07-27T06:49:03Z,0.03333333333333333
 pandas-dev/pandas,30243964196,Code Checks,completed,success,2026-07-27T06:49:01Z,2026-07-27T07:23:20Z,34.31666666666667
-pandas-dev/pandas,30243964187,GitHub Actions Security Analysis with zizmor 🌈,completed,success,2026-07-27T06:49:01Z,2026-07-27T06:49:22Z,0.35
-pandas-dev/pandas,30243964180,Package Checks,completed,skipped,2026-07-27T06:49:01Z,2026-07-27T06:49:02Z,0.016666666666666666
-pandas-dev/pandas,30239825837,Clean closed branch caches,completed,success,2026-07-27T05:28:05Z,2026-07-27T05:28:14Z,0.15
-pandas-dev/pandas,30237693177,Wheel builder,completed,success,2026-07-27T04:39:26Z,2026-07-27T05:01:09Z,21.716666666666665
-pandas-dev/pandas,30228464807,CodeQL,completed,failure,2026-07-27T00:53:05Z,2026-07-27T00:53:41Z,0.6
-pandas-dev/pandas,30227407407,Stale PRs,completed,success,2026-07-27T00:25:25Z,2026-07-27T00:25:46Z,0.35
-pandas-dev/pandas,30220976878,Comment Commands,completed,skipped,2026-07-26T21:23:32Z,2026-07-26T21:23:39Z,0.11666666666666667
-pandas-dev/pandas,30220886010,Comment Commands,completed,failure,2026-07-26T21:20:58Z,2026-07-26T21:21:04Z,0.1
-pandas-dev/pandas,30220704321,Comment Commands,completed,failure,2026-07-26T21:15:40Z,2026-07-26T21:15:47Z,0.11666666666666667
-pandas-dev/pandas,30220476256,Package Checks,completed,skipped,2026-07-26T21:09:11Z,2026-07-26T21:09:19Z,0.13333333333333333
-pandas-dev/pandas,30220476250,Wheel builder,completed,skipped,2026-07-26T21:09:11Z,2026-07-26T21:09:12Z,0.016666666666666666
-pandas-dev/pandas,30220476227,Doc Build and Upload,completed,success,2026-07-26T21:09:11Z,2026-07-26T21:21:02Z,11.85
-pandas-dev/pandas,30220476221,GitHub Actions Security Analysis with zizmor 🌈,completed,success,2026-07-26T21:09:11Z,2026-07-26T21:09:41Z,0.5
-pandas-dev/pandas,30220476215,Code Checks,completed,success,2026-07-26T21:09:11Z,2026-07-26T21:36:21Z,27.166666666666668
-pandas-dev/pandas,30220476200,Unit Tests,completed,success,2026-07-26T21:09:11Z,2026-07-26T22:02:28Z,53.28333333333333
-pandas-dev/pandas,30218736353,Comment Commands,completed,skipped,2026-07-26T20:19:48Z,2026-07-26T20:19:49Z,0.016666666666666666
-pandas-dev/pandas,30218526036,Unit Tests,completed,success,2026-07-26T20:13:43Z,2026-07-26T21:11:12Z,57.483333333333334
-pandas-dev/pandas,30218526031,Wheel builder,completed,skipped,2026-07-26T20:13:43Z,2026-07-26T20:13:44Z,0.016666666666666666
-pandas-dev/pandas,30218526018,GitHub Actions Security Analysis with zizmor 🌈,completed,success,2026-07-26T20:13:43Z,2026-07-26T20:14:11Z,0.4666666666666667
-pandas-dev/pandas,30218526013,Code Checks,completed,success,2026-07-26T20:13:43Z,2026-07-26T20:40:39Z,26.933333333333334
-pandas-dev/pandas,30218526010,Doc Build and Upload,completed,success,2026-07-26T20:13:43Z,2026-07-26T20:26:17Z,12.566666666666666
-pandas-dev/pandas,30218526009,Package Checks,completed,skipped,2026-07-26T20:13:43Z,2026-07-26T20:13:44Z,0.016666666666666666
-pandas-dev/pandas,30218438547,Code Checks,completed,cancelled,2026-07-26T20:11:08Z,2026-07-26T20:14:01Z,2.8833333333333333
-pandas-dev/pandas,30218438543,Unit Tests,completed,failure,2026-07-26T20:11:08Z,2026-07-26T20:14:09Z,3.0166666666666666
-pandas-dev/pandas,30218438542,GitHub Actions Security Analysis with zizmor 🌈,completed,success,2026-07-26T20:11:08Z,2026-07-26T20:11:31Z,0.38333333333333336
-pandas-dev/pandas,30218438541,Package Checks,completed,skipped,2026-07-26T20:11:08Z,2026-07-26T20:11:09Z,0.016666666666666666
-pandas-dev/pandas,30218438539,Doc Build and Upload,completed,cancelled,2026-07-26T20:11:08Z,2026-07-26T20:13:59Z,2.85
-pandas-dev/pandas,30218438538,Wheel builder,completed,skipped,2026-07-26T20:11:08Z,2026-07-26T20:11:09Z,0.016666666666666666
-pandas-dev/pandas,30218422231,Comment Commands,completed,skipped,2026-07-26T20:10:41Z,2026-07-26T20:10:42Z,0.016666666666666666
-pandas-dev/pandas,30216747786,Wheel builder,completed,cancelled,2026-07-26T19:23:29Z,2026-07-26T19:23:30Z,0.016666666666666666
-pandas-dev/pandas,30216747769,Package Checks,completed,skipped,2026-07-26T19:23:29Z,2026-07-26T19:23:30Z,0.016666666666666666
-pandas-dev/pandas,30216747765,Wheel builder,completed,skipped,2026-07-26T19:23:29Z,2026-07-26T19:23:37Z,0.13333333333333333
-pandas-dev/pandas,30216747715,Package Checks,completed,skipped,2026-07-26T19:23:29Z,2026-07-26T19:23:30Z,0.016666666666666666
-pandas-dev/pandas,30216747696,Package Checks,completed,skipped,2026-07-26T19:23:29Z,2026-07-26T19:23:30Z,0.016666666666666666
-pandas-dev/pandas,30216747676,Wheel builder,completed,cancelled,2026-07-26T19:23:29Z,2026-07-26T19:23:36Z,0.11666666666666667
-pandas-dev/pandas,30216747431,Doc Build and Upload,completed,success,2026-07-26T19:23:28Z,2026-07-26T19:35:52Z,12.4
-pandas-dev/pandas,30216747421,GitHub Actions Security Analysis with zizmor 🌈,completed,success,2026-07-26T19:23:28Z,2026-07-26T19:23:51Z,0.38333333333333336
-pandas-dev/pandas,30216747419,Package Checks,completed,skipped,2026-07-26T19:23:28Z,2026-07-26T19:23:29Z,0.016666666666666666
-pandas-dev/pandas,30216747418,Unit Tests,completed,success,2026-07-26T19:23:28Z,2026-07-26T20:11:24Z,47.93333333333333
-pandas-dev/pandas,30216747415,Code Checks,completed,success,2026-07-26T19:23:28Z,2026-07-26T19:54:44Z,31.266666666666666
-pandas-dev/pandas,30216747400,Wheel builder,completed,skipped,2026-07-26T19:23:28Z,2026-07-26T19:23:30Z,0.03333333333333333
-pandas-dev/pandas,30216657827,Unit Tests,completed,success,2026-07-26T19:20:52Z,2026-07-26T20:19:13Z,58.35
-pandas-dev/pandas,30216657801,GitHub Actions Security Analysis with zizmor 🌈,completed,success,2026-07-26T19:20:52Z,2026-07-26T19:21:14Z,0.36666666666666664
-pandas-dev/pandas,30216657790,Doc Build and Upload,completed,success,2026-07-26T19:20:52Z,2026-07-26T19:33:10Z,12.3
-pandas-dev/pandas,30216657779,Package Checks,completed,skipped,2026-07-26T19:20:52Z,2026-07-26T19:20:53Z,0.016666666666666666
-pandas-dev/pandas,30216657774,Wheel builder,completed,skipped,2026-07-26T19:20:52Z,2026-07-26T19:20:53Z,0.016666666666666666
-pandas-dev/pandas,30216657772,Code Checks,completed,success,2026-07-26T19:20:52Z,2026-07-26T19:52:50Z,31.966666666666665
-pandas-dev/pandas,30216280791,Unit Tests,completed,success,2026-07-26T19:10:10Z,2026-07-26T19:59:15Z,49.083333333333336
-pandas-dev/pandas,30216280788,Package Checks,completed,skipped,2026-07-26T19:10:10Z,2026-07-26T19:10:11Z,0.016666666666666666
-pandas-dev/pandas,30216280783,GitHub Actions Security Analysis with zizmor 🌈,completed,success,2026-07-26T19:10:10Z,2026-07-26T19:10:39Z,0.48333333333333334
-pandas-dev/pandas,30216280782,Code Checks,completed,success,2026-07-26T19:10:10Z,2026-07-26T19:45:59Z,35.81666666666667
-pandas-dev/pandas,30216280777,Wheel builder,completed,skipped,2026-07-26T19:10:10Z,2026-07-26T19:10:11Z,0.016666666666666666
-pandas-dev/pandas,30216280771,Doc Build and Upload,completed,success,2026-07-26T19:10:10Z,2026-07-26T19:22:18Z,12.133333333333333
-pandas-dev/pandas,30216251981,Clean closed branch caches,completed,success,2026-07-26T19:09:19Z,2026-07-26T19:09:25Z,0.1
-pandas-dev/pandas,30216251971,Deprecations Bot,completed,success,2026-07-26T19:09:19Z,2026-07-26T19:09:26Z,0.11666666666666667
-pandas-dev/pandas,30216251970,Code Checks,completed,success,2026-07-26T19:09:19Z,2026-07-26T19:39:57Z,30.633333333333333
-pandas-dev/pandas,30216251964,Package Checks,completed,success,2026-07-26T19:09:19Z,2026-07-26T19:14:12Z,4.883333333333334
-pandas-dev/pandas,30216251962,Wheel builder,completed,skipped,2026-07-26T19:09:19Z,2026-07-26T19:09:21Z,0.03333333333333333
-pandas-dev/pandas,30216251956,GitHub Actions Security Analysis with zizmor 🌈,completed,success,2026-07-26T19:09:19Z,2026-07-26T19:09:48Z,0.48333333333333334
-pandas-dev/pandas,30216251951,Doc Build and Upload,completed,success,2026-07-26T19:09:19Z,2026-07-26T19:21:40Z,12.35
-pandas-dev/pandas,30216251949,Unit Tests,completed,success,2026-07-26T19:09:19Z,2026-07-26T19:58:50Z,49.516666666666666
-pandas-dev/pandas,30216212936,Clean closed branch caches,completed,success,2026-07-26T19:08:11Z,2026-07-26T19:08:17Z,0.1
-pandas-dev/pandas,30216212708,GitHub Actions Security Analysis with zizmor 🌈,completed,success,2026-07-26T19:08:10Z,2026-07-26T19:08:42Z,0.5333333333333333
-pandas-dev/pandas,30216212706,Doc Build and Upload,completed,success,2026-07-26T19:08:10Z,2026-07-26T19:21:13Z,13.05
-pandas-dev/pandas,30216212703,Package Checks,completed,success,2026-07-26T19:08:10Z,2026-07-26T19:13:12Z,5.033333333333333
-pandas-dev/pandas,30216212701,Code Checks,completed,success,2026-07-26T19:08:10Z,2026-07-26T19:34:22Z,26.2
-pandas-dev/pandas,30216212699,Wheel builder,completed,skipped,2026-07-26T19:08:10Z,2026-07-26T19:08:11Z,0.016666666666666666
-pandas-dev/pandas,30216212698,Deprecations Bot,completed,success,2026-07-26T19:08:10Z,2026-07-26T19:08:19Z,0.15
-pandas-dev/pandas,30216212693,Unit Tests,completed,success,2026-07-26T19:08:10Z,2026-07-26T20:00:44Z,52.56666666666667
-pandas-dev/pandas,30216094778,Wheel builder,completed,skipped,2026-07-26T19:04:48Z,2026-07-26T19:04:49Z,0.016666666666666666
-pandas-dev/pandas,30216094772,Code Checks,completed,success,2026-07-26T19:04:48Z,2026-07-26T19:31:44Z,26.933333333333334
-pandas-dev/pandas,30216094769,Doc Build and Upload,completed,success,2026-07-26T19:04:48Z,2026-07-26T19:16:42Z,11.9
-pandas-dev/pandas,30216094767,Unit Tests,completed,failure,2026-07-26T19:04:48Z,2026-07-26T19:55:41Z,50.88333333333333
-pandas-dev/pandas,30216094766,Package Checks,completed,skipped,2026-07-26T19:04:48Z,2026-07-26T19:04:57Z,0.15
-pandas-dev/pandas,30216094765,GitHub Actions Security Analysis with zizmor 🌈,completed,success,2026-07-26T19:04:48Z,2026-07-26T19:05:16Z,0.4666666666666667
-pandas-dev/pandas,30213448343,Unit Tests,completed,failure,2026-07-26T17:51:02Z,2026-07-26T18:32:29Z,41.45
-pandas-dev/pandas,30213448323,Code Checks,completed,success,2026-07-26T17:51:02Z,2026-07-26T18:21:49Z,30.783333333333335
-pandas-dev/pandas,30213448310,Wheel builder,completed,skipped,2026-07-26T17:51:02Z,2026-07-26T17:51:03Z,0.016666666666666666
-pandas-dev/pandas,30213448300,Package Checks,completed,skipped,2026-07-26T17:51:02Z,2026-07-26T17:51:03Z,0.016666666666666666
-pandas-dev/pandas,30213448293,Doc Build and Upload,completed,success,2026-07-26T17:51:02Z,2026-07-26T18:01:43Z,10.683333333333334
-pandas-dev/pandas,30213448290,GitHub Actions Security Analysis with zizmor 🌈,completed,success,2026-07-26T17:51:02Z,2026-07-26T17:51:26Z,0.4
-pandas-dev/pandas,30213103725,Comment Commands,completed,skipped,2026-07-26T17:41:24Z,2026-07-26T17:41:25Z,0.016666666666666666
-pandas-dev/pandas,30213098881,Clean closed branch caches,completed,success,2026-07-26T17:41:16Z,2026-07-26T17:41:21Z,0.08333333333333333
-pandas-dev/pandas,30213098777,Doc Build and Upload,completed,success,2026-07-26T17:41:16Z,2026-07-26T17:54:17Z,13.016666666666667
-pandas-dev/pandas,30213098757,Wheel builder,completed,skipped,2026-07-26T17:41:16Z,2026-07-26T17:41:17Z,0.016666666666666666
-pandas-dev/pandas,30213098754,GitHub Actions Security Analysis with zizmor 🌈,completed,success,2026-07-26T17:41:16Z,2026-07-26T17:41:37Z,0.35
-pandas-dev/pandas,30213098752,Code Checks,completed,success,2026-07-26T17:41:16Z,2026-07-26T18:12:08Z,30.866666666666667
-pandas-dev/pandas,30213098748,Unit Tests,completed,success,2026-07-26T17:41:16Z,2026-07-26T18:29:05Z,47.81666666666667
-pandas-dev/pandas,30213098746,Package Checks,completed,success,2026-07-26T17:41:16Z,2026-07-26T17:46:33Z,5.283333333333333
-streamlit/streamlit,30247197578,Stale PRs,completed,success,2026-07-27T07:43:47Z,2026-07-27T07:44:12Z,0.4166666666666667
-streamlit/streamlit,30245749200,Community Voting,completed,skipped,2026-07-27T07:19:44Z,2026-07-27T07:19:48Z,0.06666666666666667
-streamlit/streamlit,30245749118,AI Issue Triage,completed,success,2026-07-27T07:19:43Z,2026-07-27T07:23:07Z,3.4
-streamlit/streamlit,30244704695,Playwright E2E Tests,completed,success,2026-07-27T07:02:33Z,2026-07-27T07:20:56Z,18.383333333333333
-streamlit/streamlit,30244704689,Snapshot Hygiene Check,completed,success,2026-07-27T07:02:33Z,2026-07-27T07:04:08Z,1.5833333333333333
-streamlit/streamlit,30244704646,Python Unit Tests,completed,success,2026-07-27T07:02:33Z,2026-07-27T07:12:05Z,9.533333333333333
-streamlit/streamlit,30244704640,Ensure Relative Imports in Frontend,completed,success,2026-07-27T07:02:33Z,2026-07-27T07:04:45Z,2.2
-streamlit/streamlit,30244704638,PR Preview,completed,success,2026-07-27T07:02:33Z,2026-07-27T07:06:16Z,3.716666666666667
-streamlit/streamlit,30244704636,Load Testing,completed,success,2026-07-27T07:02:33Z,2026-07-27T07:07:30Z,4.95
-streamlit/streamlit,30244704626,Javascript Unit Tests,completed,success,2026-07-27T07:02:33Z,2026-07-27T07:15:03Z,12.5
-streamlit/streamlit,30244704611,CodeQL,completed,success,2026-07-27T07:02:33Z,2026-07-27T07:04:45Z,2.2
-streamlit/streamlit,30244704608,Enforce Pre-Commit Hooks,completed,success,2026-07-27T07:02:33Z,2026-07-27T07:03:55Z,1.3666666666666667
-streamlit/streamlit,30244704599,CLI Regression,completed,success,2026-07-27T07:02:33Z,2026-07-27T07:06:05Z,3.533333333333333
-streamlit/streamlit,30244704596,Performance Suite,completed,success,2026-07-27T07:02:33Z,2026-07-27T07:16:47Z,14.233333333333333
-streamlit/streamlit,30244704595,Playwright E2E Tests - Custom Components,completed,success,2026-07-27T07:02:33Z,2026-07-27T07:10:24Z,7.85
-streamlit/streamlit,30244704590,Python Bare Execution Tests,completed,success,2026-07-27T07:02:33Z,2026-07-27T07:05:09Z,2.6
-streamlit/streamlit,30244704056,Code Quality: Push on develop,completed,success,2026-07-27T07:02:33Z,2026-07-27T07:04:10Z,1.6166666666666667
-streamlit/streamlit,30243494719,CLI Regression,completed,success,2026-07-27T06:40:20Z,2026-07-27T06:44:40Z,4.333333333333333
-streamlit/streamlit,30243494701,Playwright E2E Tests,completed,success,2026-07-27T06:40:20Z,2026-07-27T06:58:45Z,18.416666666666668
-streamlit/streamlit,30243494696,Snapshot Hygiene Check,completed,success,2026-07-27T06:40:20Z,2026-07-27T06:41:37Z,1.2833333333333334
-streamlit/streamlit,30243494693,Ensure Relative Imports in Frontend,completed,success,2026-07-27T06:40:20Z,2026-07-27T06:42:21Z,2.0166666666666666
-streamlit/streamlit,30243494688,PR Preview,completed,success,2026-07-27T06:40:20Z,2026-07-27T06:44:41Z,4.35
-streamlit/streamlit,30243494682,Performance Suite,completed,success,2026-07-27T06:40:20Z,2026-07-27T06:55:07Z,14.783333333333333
-streamlit/streamlit,30243494675,Playwright E2E Tests - Custom Components,completed,success,2026-07-27T06:40:20Z,2026-07-27T06:47:11Z,6.85
-streamlit/streamlit,30243494648,Python Unit Tests,completed,success,2026-07-27T06:40:20Z,2026-07-27T06:50:34Z,10.233333333333333
-streamlit/streamlit,30243494645,Python Bare Execution Tests,completed,success,2026-07-27T06:40:20Z,2026-07-27T06:42:38Z,2.3
-streamlit/streamlit,30243494626,Javascript Unit Tests,completed,success,2026-07-27T06:40:19Z,2026-07-27T06:53:14Z,12.916666666666666
-streamlit/streamlit,30243494623,Load Testing,completed,success,2026-07-27T06:40:19Z,2026-07-27T06:45:49Z,5.5
-streamlit/streamlit,30243494622,Enforce Pre-Commit Hooks,completed,success,2026-07-27T06:40:19Z,2026-07-27T06:41:43Z,1.4
-streamlit/streamlit,30243494618,CodeQL,completed,success,2026-07-27T06:40:19Z,2026-07-27T06:42:58Z,2.65
-streamlit/streamlit,30243493914,Code Quality: Push on develop,completed,success,2026-07-27T06:40:19Z,2026-07-27T06:42:04Z,1.75
-streamlit/streamlit,30240651517,Nightly Build,completed,success,2026-07-27T05:45:20Z,2026-07-27T06:10:38Z,25.3
-streamlit/streamlit,30234003429,Community Voting,completed,success,2026-07-27T03:11:37Z,2026-07-27T03:11:49Z,0.2
-streamlit/streamlit,30234003402,AI Issue Triage,completed,skipped,2026-07-27T03:11:37Z,2026-07-27T03:11:46Z,0.15
-streamlit/streamlit,30234003391,Community Voting,completed,skipped,2026-07-27T03:11:37Z,2026-07-27T03:11:39Z,0.03333333333333333
-streamlit/streamlit,30234003348,AI Issue Triage,completed,skipped,2026-07-27T03:11:37Z,2026-07-27T03:11:38Z,0.016666666666666666
-streamlit/streamlit,30223809826,Flaky JS Unit Test Verification,completed,skipped,2026-07-26T22:46:20Z,2026-07-26T22:46:30Z,0.16666666666666666
-streamlit/streamlit,30223809789,Flaky Test Verification,completed,skipped,2026-07-26T22:46:20Z,2026-07-26T22:46:21Z,0.016666666666666666
-streamlit/streamlit,30223809744,Autofix,completed,skipped,2026-07-26T22:46:20Z,2026-07-26T22:46:22Z,0.03333333333333333
-streamlit/streamlit,30223809724,Load Testing,completed,skipped,2026-07-26T22:46:20Z,2026-07-26T22:46:21Z,0.016666666666666666
-streamlit/streamlit,30223809717,Performance Suite,completed,skipped,2026-07-26T22:46:20Z,2026-07-26T22:46:21Z,0.016666666666666666
-streamlit/streamlit,30223809715,Pull Request Labels,completed,success,2026-07-26T22:46:20Z,2026-07-26T22:46:29Z,0.15
-streamlit/streamlit,30223809707,AI QA Testing,completed,skipped,2026-07-26T22:46:20Z,2026-07-26T22:46:21Z,0.016666666666666666
-streamlit/streamlit,30223809704,Snapshot Autofix,completed,skipped,2026-07-26T22:46:20Z,2026-07-26T22:46:21Z,0.016666666666666666
-streamlit/streamlit,30223809699,AI PR Review,completed,success,2026-07-26T22:46:20Z,2026-07-26T22:52:22Z,6.033333333333333
-streamlit/streamlit,30223797115,Run Semgrep Checks,completed,startup_failure,2026-07-26T22:45:55Z,2026-07-26T22:45:55Z,0.0
-streamlit/streamlit,30223796865,Playwright E2E Tests - Changed Files,completed,success,2026-07-26T22:45:54Z,2026-07-26T22:46:35Z,0.6833333333333333
-streamlit/streamlit,30223796860,Ensure Relative Imports in Frontend,completed,success,2026-07-26T22:45:54Z,2026-07-26T22:48:30Z,2.6
-streamlit/streamlit,30223796855,Pull Request Labels,completed,success,2026-07-26T22:45:54Z,2026-07-26T22:46:02Z,0.13333333333333333
-streamlit/streamlit,30223796834,Javascript Unit Tests,completed,success,2026-07-26T22:45:54Z,2026-07-26T22:58:49Z,12.916666666666666
-streamlit/streamlit,30223796832,Enforce Pre-Commit Hooks,completed,success,2026-07-26T22:45:54Z,2026-07-26T22:47:33Z,1.65
-streamlit/streamlit,30223796830,Autofix,completed,skipped,2026-07-26T22:45:54Z,2026-07-26T22:45:55Z,0.016666666666666666
-streamlit/streamlit,30223796826,Playwright E2E Tests - Custom Components,completed,success,2026-07-26T22:45:54Z,2026-07-26T22:52:40Z,6.766666666666667
-streamlit/streamlit,30223796822,Python Bare Execution Tests,completed,success,2026-07-26T22:45:54Z,2026-07-26T22:48:39Z,2.75
-streamlit/streamlit,30223796820,Python Unit Tests,completed,success,2026-07-26T22:45:54Z,2026-07-26T22:54:58Z,9.066666666666666
-streamlit/streamlit,30223796819,CLI Regression,completed,success,2026-07-26T22:45:54Z,2026-07-26T22:50:14Z,4.333333333333333
-streamlit/streamlit,30223796814,PR Preview,completed,success,2026-07-26T22:45:54Z,2026-07-26T22:51:12Z,5.3
-streamlit/streamlit,30223796813,Snapshot Autofix,completed,skipped,2026-07-26T22:45:54Z,2026-07-26T22:45:55Z,0.016666666666666666
-streamlit/streamlit,30223796810,CodeQL,completed,success,2026-07-26T22:45:54Z,2026-07-26T22:48:35Z,2.683333333333333
-streamlit/streamlit,30223796807,Playwright E2E Tests,completed,success,2026-07-26T22:45:54Z,2026-07-26T23:02:56Z,17.033333333333335
-streamlit/streamlit,30223795748,Code Quality: PR #16166,completed,success,2026-07-26T22:45:52Z,2026-07-26T22:47:31Z,1.65
-streamlit/streamlit,30223155856,Flaky Test Verification,completed,skipped,2026-07-26T22:27:02Z,2026-07-26T22:27:03Z,0.016666666666666666
-streamlit/streamlit,30223155847,Flaky JS Unit Test Verification,completed,skipped,2026-07-26T22:27:02Z,2026-07-26T22:27:03Z,0.016666666666666666
-streamlit/streamlit,30223155784,Pull Request Labels,completed,success,2026-07-26T22:27:02Z,2026-07-26T22:27:09Z,0.11666666666666667
-streamlit/streamlit,30223155757,Performance Suite,completed,skipped,2026-07-26T22:27:02Z,2026-07-26T22:27:03Z,0.016666666666666666
-streamlit/streamlit,30223155748,Autofix,completed,skipped,2026-07-26T22:27:02Z,2026-07-26T22:27:03Z,0.016666666666666666
-streamlit/streamlit,30223155747,AI PR Review,completed,success,2026-07-26T22:27:02Z,2026-07-26T22:32:13Z,5.183333333333334
-streamlit/streamlit,30223155726,Snapshot Autofix,completed,skipped,2026-07-26T22:27:02Z,2026-07-26T22:27:03Z,0.016666666666666666
-streamlit/streamlit,30223155725,Load Testing,completed,skipped,2026-07-26T22:27:02Z,2026-07-26T22:27:03Z,0.016666666666666666
-streamlit/streamlit,30223155718,AI QA Testing,completed,skipped,2026-07-26T22:27:02Z,2026-07-26T22:27:03Z,0.016666666666666666
-streamlit/streamlit,30222511609,Run Semgrep Checks,completed,startup_failure,2026-07-26T22:07:51Z,2026-07-26T22:07:51Z,0.0
-streamlit/streamlit,30222511336,CLI Regression,completed,success,2026-07-26T22:07:50Z,2026-07-26T22:12:38Z,4.8
-streamlit/streamlit,30222511293,Playwright E2E Tests,completed,success,2026-07-26T22:07:50Z,2026-07-26T22:26:21Z,18.516666666666666
-streamlit/streamlit,30222511239,CodeQL,completed,success,2026-07-26T22:07:50Z,2026-07-26T22:10:33Z,2.716666666666667
-streamlit/streamlit,30222511223,Autofix,completed,skipped,2026-07-26T22:07:50Z,2026-07-26T22:07:52Z,0.03333333333333333
-streamlit/streamlit,30222511215,PR Preview,completed,success,2026-07-26T22:07:50Z,2026-07-26T22:12:26Z,4.6
-streamlit/streamlit,30222511208,Python Bare Execution Tests,completed,success,2026-07-26T22:07:50Z,2026-07-26T22:09:59Z,2.15
-streamlit/streamlit,30222511207,Pull Request Labels,completed,success,2026-07-26T22:07:50Z,2026-07-26T22:07:59Z,0.15
-streamlit/streamlit,30222511203,Python Unit Tests,completed,success,2026-07-26T22:07:50Z,2026-07-26T22:17:07Z,9.283333333333333
-streamlit/streamlit,30222511200,Ensure Relative Imports in Frontend,completed,success,2026-07-26T22:07:50Z,2026-07-26T22:10:12Z,2.3666666666666667
-streamlit/streamlit,30222511186,Playwright E2E Tests - Custom Components,completed,success,2026-07-26T22:07:50Z,2026-07-26T22:15:52Z,8.033333333333333
-streamlit/streamlit,30222511185,Enforce Pre-Commit Hooks,completed,success,2026-07-26T22:07:50Z,2026-07-26T22:09:21Z,1.5166666666666666
-streamlit/streamlit,30222511183,Javascript Unit Tests,completed,success,2026-07-26T22:07:50Z,2026-07-26T22:18:43Z,10.883333333333333
-streamlit/streamlit,30222511178,Playwright E2E Tests - Changed Files,completed,success,2026-07-26T22:07:50Z,2026-07-26T22:08:21Z,0.5166666666666667
-streamlit/streamlit,30222511173,Snapshot Autofix,completed,skipped,2026-07-26T22:07:50Z,2026-07-26T22:07:51Z,0.016666666666666666
-streamlit/streamlit,30222509696,Code Quality: PR #16164,completed,success,2026-07-26T22:07:48Z,2026-07-26T22:09:25Z,1.6166666666666667
-streamlit/streamlit,30220334189,Flaky JS Unit Test Verification,completed,skipped,2026-07-26T21:05:03Z,2026-07-26T21:05:11Z,0.13333333333333333
-streamlit/streamlit,30220334148,Flaky Test Verification,completed,skipped,2026-07-26T21:05:03Z,2026-07-26T21:05:04Z,0.016666666666666666
-streamlit/streamlit,30220334048,Performance Suite,completed,skipped,2026-07-26T21:05:03Z,2026-07-26T21:05:14Z,0.18333333333333332
-streamlit/streamlit,30220334033,Snapshot Autofix,completed,skipped,2026-07-26T21:05:03Z,2026-07-26T21:05:11Z,0.13333333333333333
-streamlit/streamlit,30220334028,Autofix,completed,skipped,2026-07-26T21:05:03Z,2026-07-26T21:05:04Z,0.016666666666666666
-streamlit/streamlit,30220334021,AI PR Review,completed,success,2026-07-26T21:05:03Z,2026-07-26T21:10:58Z,5.916666666666667
-streamlit/streamlit,30220334013,AI QA Testing,completed,skipped,2026-07-26T21:05:03Z,2026-07-26T21:05:04Z,0.016666666666666666
-streamlit/streamlit,30220334001,Load Testing,completed,skipped,2026-07-26T21:05:03Z,2026-07-26T21:05:14Z,0.18333333333333332
-streamlit/streamlit,30220333989,Pull Request Labels,completed,success,2026-07-26T21:05:03Z,2026-07-26T21:05:11Z,0.13333333333333333
-streamlit/streamlit,30220323106,Run Semgrep Checks,completed,startup_failure,2026-07-26T21:04:44Z,2026-07-26T21:04:44Z,0.0
-streamlit/streamlit,30220322711,Pull Request Labels,completed,success,2026-07-26T21:04:44Z,2026-07-26T21:04:53Z,0.15
-streamlit/streamlit,30220322643,Playwright E2E Tests - Changed Files,completed,success,2026-07-26T21:04:44Z,2026-07-26T21:05:14Z,0.5
-streamlit/streamlit,30220322640,Playwright E2E Tests,completed,success,2026-07-26T21:04:44Z,2026-07-26T21:20:05Z,15.35
-streamlit/streamlit,30220322633,Ensure Relative Imports in Frontend,completed,success,2026-07-26T21:04:44Z,2026-07-26T21:07:13Z,2.4833333333333334
+streamlit/streamlit,30257050906,Run Semgrep Checks,completed,startup_failure,2026-07-27T10:11:09Z,2026-07-27T10:11:09Z,0.0
+streamlit/streamlit,30257050029,Autofix,completed,action_required,2026-07-27T10:11:08Z,2026-07-27T10:11:08Z,0.0
+streamlit/streamlit,30257049580,Playwright E2E Tests - Custom Components,completed,action_required,2026-07-27T10:11:08Z,2026-07-27T10:11:08Z,0.0
+streamlit/streamlit,30257049465,Snapshot Autofix,completed,action_required,2026-07-27T10:11:08Z,2026-07-27T10:11:08Z,0.0
+streamlit/streamlit,30257048690,Python Unit Tests,completed,action_required,2026-07-27T10:11:07Z,2026-07-27T10:11:07Z,0.0
+streamlit/streamlit,30257048639,Ensure Relative Imports in Frontend,completed,action_required,2026-07-27T10:11:07Z,2026-07-27T10:11:07Z,0.0
+streamlit/streamlit,30257048634,Pull Request Labels,completed,action_required,2026-07-27T10:11:07Z,2026-07-27T10:11:07Z,0.0
+streamlit/streamlit,30257048553,Javascript Unit Tests,completed,action_required,2026-07-27T10:11:07Z,2026-07-27T10:11:07Z,0.0
+streamlit/streamlit,30257048519,CLI Regression,completed,action_required,2026-07-27T10:11:07Z,2026-07-27T10:11:07Z,0.0
+streamlit/streamlit,30257048486,PR Preview,completed,action_required,2026-07-27T10:11:07Z,2026-07-27T10:11:07Z,0.0
+streamlit/streamlit,30257048446,Enforce Pre-Commit Hooks,completed,action_required,2026-07-27T10:11:07Z,2026-07-27T10:11:07Z,0.0
+streamlit/streamlit,30257048430,Playwright E2E Tests,completed,action_required,2026-07-27T10:11:07Z,2026-07-27T10:11:07Z,0.0
+streamlit/streamlit,30257048428,Playwright E2E Tests - Changed Files,completed,action_required,2026-07-27T10:11:07Z,2026-07-27T10:11:07Z,0.0
+streamlit/streamlit,30257048424,Python Bare Execution Tests,completed,action_required,2026-07-27T10:11:07Z,2026-07-27T10:11:07Z,0.0
+streamlit/streamlit,30256947847,Flaky JS Unit Test Verification,completed,skipped,2026-07-27T10:09:44Z,2026-07-27T10:09:50Z,0.1
+streamlit/streamlit,30256947610,Flaky JS Unit Test Verification,completed,skipped,2026-07-27T10:09:44Z,2026-07-27T10:09:45Z,0.016666666666666666
+streamlit/streamlit,30256947494,Flaky Test Verification,completed,skipped,2026-07-27T10:09:44Z,2026-07-27T10:09:45Z,0.016666666666666666
+streamlit/streamlit,30256947454,Flaky Test Verification,completed,skipped,2026-07-27T10:09:44Z,2026-07-27T10:09:45Z,0.016666666666666666
+streamlit/streamlit,30256947424,AI PR Review,completed,skipped,2026-07-27T10:09:44Z,2026-07-27T10:09:45Z,0.016666666666666666
+streamlit/streamlit,30256947212,Flaky Test Verification,completed,skipped,2026-07-27T10:09:43Z,2026-07-27T10:09:45Z,0.03333333333333333
+streamlit/streamlit,30256947143,Run Semgrep Checks,completed,startup_failure,2026-07-27T10:09:43Z,2026-07-27T10:09:43Z,0.0
+streamlit/streamlit,30256947139,Performance Suite,completed,cancelled,2026-07-27T10:09:43Z,2026-07-27T10:09:45Z,0.03333333333333333
+streamlit/streamlit,30256947137,Load Testing,completed,skipped,2026-07-27T10:09:43Z,2026-07-27T10:09:51Z,0.13333333333333333
+streamlit/streamlit,30256947105,Pull Request Labels,completed,success,2026-07-27T10:09:43Z,2026-07-27T10:09:53Z,0.16666666666666666
+streamlit/streamlit,30256947093,Snapshot Autofix,completed,skipped,2026-07-27T10:09:43Z,2026-07-27T10:09:45Z,0.03333333333333333
+streamlit/streamlit,30256947091,Flaky Test Verification,completed,skipped,2026-07-27T10:09:43Z,2026-07-27T10:09:53Z,0.16666666666666666
+streamlit/streamlit,30256947041,AI QA Testing,completed,skipped,2026-07-27T10:09:43Z,2026-07-27T10:09:45Z,0.03333333333333333
+streamlit/streamlit,30256947039,Performance Suite,completed,skipped,2026-07-27T10:09:43Z,2026-07-27T10:09:45Z,0.03333333333333333
+streamlit/streamlit,30256947035,Autofix,completed,cancelled,2026-07-27T10:09:43Z,2026-07-27T10:09:45Z,0.03333333333333333
+streamlit/streamlit,30256947016,Flaky JS Unit Test Verification,completed,skipped,2026-07-27T10:09:43Z,2026-07-27T10:09:44Z,0.016666666666666666
+streamlit/streamlit,30256947002,Flaky Test Verification,completed,skipped,2026-07-27T10:09:43Z,2026-07-27T10:09:54Z,0.18333333333333332
+streamlit/streamlit,30256946992,AI QA Testing,completed,skipped,2026-07-27T10:09:43Z,2026-07-27T10:09:45Z,0.03333333333333333
+streamlit/streamlit,30256946975,Autofix,completed,success,2026-07-27T10:09:43Z,2026-07-27T10:13:33Z,3.8333333333333335
+streamlit/streamlit,30256946932,Pull Request Labels,completed,success,2026-07-27T10:09:43Z,2026-07-27T10:09:53Z,0.16666666666666666
+streamlit/streamlit,30256946928,Flaky JS Unit Test Verification,completed,skipped,2026-07-27T10:09:43Z,2026-07-27T10:09:51Z,0.13333333333333333
+streamlit/streamlit,30256946921,Flaky JS Unit Test Verification,completed,skipped,2026-07-27T10:09:43Z,2026-07-27T10:09:45Z,0.03333333333333333
+streamlit/streamlit,30256946909,Flaky JS Unit Test Verification,completed,skipped,2026-07-27T10:09:43Z,2026-07-27T10:09:54Z,0.18333333333333332
+streamlit/streamlit,30256946891,Flaky Test Verification,completed,skipped,2026-07-27T10:09:43Z,2026-07-27T10:09:53Z,0.16666666666666666
+streamlit/streamlit,30256946886,Snapshot Autofix,completed,skipped,2026-07-27T10:09:43Z,2026-07-27T10:09:44Z,0.016666666666666666
+streamlit/streamlit,30256946851,Performance Suite,completed,cancelled,2026-07-27T10:09:43Z,2026-07-27T10:09:44Z,0.016666666666666666
+streamlit/streamlit,30256946836,AI QA Testing,completed,skipped,2026-07-27T10:09:43Z,2026-07-27T10:09:44Z,0.016666666666666666
+streamlit/streamlit,30256946832,Pull Request Labels,completed,success,2026-07-27T10:09:43Z,2026-07-27T10:09:51Z,0.13333333333333333
+streamlit/streamlit,30256946830,Flaky JS Unit Test Verification,completed,skipped,2026-07-27T10:09:43Z,2026-07-27T10:09:44Z,0.016666666666666666
+streamlit/streamlit,30256946821,Load Testing,completed,cancelled,2026-07-27T10:09:43Z,2026-07-27T10:09:44Z,0.016666666666666666
+streamlit/streamlit,30256946806,Load Testing,completed,cancelled,2026-07-27T10:09:43Z,2026-07-27T10:09:45Z,0.03333333333333333
+streamlit/streamlit,30256946783,Pull Request Labels,completed,success,2026-07-27T10:09:43Z,2026-07-27T10:09:51Z,0.13333333333333333
+streamlit/streamlit,30256946781,Flaky Test Verification,completed,skipped,2026-07-27T10:09:43Z,2026-07-27T10:09:44Z,0.016666666666666666
+streamlit/streamlit,30256946780,Load Testing,completed,cancelled,2026-07-27T10:09:43Z,2026-07-27T10:09:51Z,0.13333333333333333
+streamlit/streamlit,30256946774,AI QA Testing,completed,skipped,2026-07-27T10:09:43Z,2026-07-27T10:09:44Z,0.016666666666666666
+streamlit/streamlit,30256946770,Autofix,completed,cancelled,2026-07-27T10:09:43Z,2026-07-27T10:09:45Z,0.03333333333333333
+streamlit/streamlit,30256946764,AI PR Review,completed,skipped,2026-07-27T10:09:43Z,2026-07-27T10:09:45Z,0.03333333333333333
+streamlit/streamlit,30256946741,AI PR Review,completed,skipped,2026-07-27T10:09:43Z,2026-07-27T10:09:45Z,0.03333333333333333
+streamlit/streamlit,30256946697,Load Testing,completed,cancelled,2026-07-27T10:09:43Z,2026-07-27T10:09:44Z,0.016666666666666666
+streamlit/streamlit,30256946694,Autofix,completed,cancelled,2026-07-27T10:09:43Z,2026-07-27T10:09:45Z,0.03333333333333333
+streamlit/streamlit,30256946684,AI QA Testing,completed,skipped,2026-07-27T10:09:43Z,2026-07-27T10:09:44Z,0.016666666666666666
+streamlit/streamlit,30256946682,AI PR Review,completed,skipped,2026-07-27T10:09:43Z,2026-07-27T10:09:45Z,0.03333333333333333
+streamlit/streamlit,30256946681,Snapshot Autofix,completed,skipped,2026-07-27T10:09:43Z,2026-07-27T10:09:44Z,0.016666666666666666
+streamlit/streamlit,30256946674,Autofix,completed,cancelled,2026-07-27T10:09:43Z,2026-07-27T10:09:45Z,0.03333333333333333
+streamlit/streamlit,30256946673,Snapshot Autofix,completed,skipped,2026-07-27T10:09:43Z,2026-07-27T10:09:44Z,0.016666666666666666
+streamlit/streamlit,30256946658,Snapshot Autofix,completed,skipped,2026-07-27T10:09:43Z,2026-07-27T10:09:44Z,0.016666666666666666
+streamlit/streamlit,30256946657,Performance Suite,completed,cancelled,2026-07-27T10:09:43Z,2026-07-27T10:09:45Z,0.03333333333333333
+streamlit/streamlit,30256946649,Pull Request Labels,completed,success,2026-07-27T10:09:43Z,2026-07-27T10:09:53Z,0.16666666666666666
+streamlit/streamlit,30256946646,Pull Request Labels,completed,success,2026-07-27T10:09:43Z,2026-07-27T10:09:54Z,0.18333333333333332
+streamlit/streamlit,30256946644,Flaky Test Verification,completed,skipped,2026-07-27T10:09:43Z,2026-07-27T10:09:44Z,0.016666666666666666
+streamlit/streamlit,30256946634,AI PR Review,completed,skipped,2026-07-27T10:09:43Z,2026-07-27T10:09:45Z,0.03333333333333333
+streamlit/streamlit,30256946612,Load Testing,completed,cancelled,2026-07-27T10:09:43Z,2026-07-27T10:09:44Z,0.016666666666666666
+streamlit/streamlit,30256946607,AI PR Review,completed,skipped,2026-07-27T10:09:43Z,2026-07-27T10:09:44Z,0.016666666666666666
+streamlit/streamlit,30256946600,Snapshot Autofix,completed,skipped,2026-07-27T10:09:43Z,2026-07-27T10:09:52Z,0.15
+streamlit/streamlit,30256946599,Performance Suite,completed,cancelled,2026-07-27T10:09:43Z,2026-07-27T10:09:44Z,0.016666666666666666
+streamlit/streamlit,30256946598,Flaky JS Unit Test Verification,completed,skipped,2026-07-27T10:09:43Z,2026-07-27T10:09:44Z,0.016666666666666666
+streamlit/streamlit,30256946597,Autofix,completed,cancelled,2026-07-27T10:09:43Z,2026-07-27T10:09:45Z,0.03333333333333333
+streamlit/streamlit,30256946583,Performance Suite,completed,cancelled,2026-07-27T10:09:43Z,2026-07-27T10:09:44Z,0.016666666666666666
+streamlit/streamlit,30256946571,Load Testing,completed,skipped,2026-07-27T10:09:43Z,2026-07-27T10:09:44Z,0.016666666666666666
+streamlit/streamlit,30256946534,AI QA Testing,completed,skipped,2026-07-27T10:09:43Z,2026-07-27T10:09:44Z,0.016666666666666666
+streamlit/streamlit,30256946525,Performance Suite,completed,cancelled,2026-07-27T10:09:43Z,2026-07-27T10:09:44Z,0.016666666666666666
+streamlit/streamlit,30256946516,Pull Request Labels,completed,success,2026-07-27T10:09:43Z,2026-07-27T10:09:53Z,0.16666666666666666
+streamlit/streamlit,30256946400,AI PR Review,completed,skipped,2026-07-27T10:09:43Z,2026-07-27T10:09:44Z,0.016666666666666666
+streamlit/streamlit,30256946384,Snapshot Autofix,completed,skipped,2026-07-27T10:09:43Z,2026-07-27T10:09:44Z,0.016666666666666666
+streamlit/streamlit,30256946351,AI QA Testing,completed,skipped,2026-07-27T10:09:43Z,2026-07-27T10:09:44Z,0.016666666666666666
+streamlit/streamlit,30256946343,Autofix,completed,cancelled,2026-07-27T10:09:43Z,2026-07-27T10:09:45Z,0.03333333333333333
+streamlit/streamlit,30256946318,Ensure Relative Imports in Frontend,completed,success,2026-07-27T10:09:43Z,2026-07-27T10:11:58Z,2.25
+streamlit/streamlit,30256946256,Python Bare Execution Tests,completed,success,2026-07-27T10:09:43Z,2026-07-27T10:12:51Z,3.1333333333333333
+streamlit/streamlit,30256946241,Performance Suite,completed,skipped,2026-07-27T10:09:43Z,2026-07-27T10:09:44Z,0.016666666666666666
+streamlit/streamlit,30256946233,Autofix,completed,cancelled,2026-07-27T10:09:43Z,2026-07-27T10:09:44Z,0.016666666666666666
+streamlit/streamlit,30256946225,Enforce Pre-Commit Hooks,completed,success,2026-07-27T10:09:43Z,2026-07-27T10:11:12Z,1.4833333333333334
+streamlit/streamlit,30256946199,Playwright E2E Tests - Custom Components,completed,success,2026-07-27T10:09:43Z,2026-07-27T10:16:47Z,7.066666666666666
+streamlit/streamlit,30256946179,Python Unit Tests,completed,success,2026-07-27T10:09:43Z,2026-07-27T10:20:12Z,10.483333333333333
+streamlit/streamlit,30256946164,Playwright E2E Tests - Changed Files,completed,success,2026-07-27T10:09:43Z,2026-07-27T10:10:20Z,0.6166666666666667
+streamlit/streamlit,30256946144,CodeQL,completed,success,2026-07-27T10:09:43Z,2026-07-27T10:12:05Z,2.3666666666666667
+streamlit/streamlit,30256946143,Pull Request Labels,completed,success,2026-07-27T10:09:43Z,2026-07-27T10:10:04Z,0.35
+streamlit/streamlit,30256946141,Playwright E2E Tests,completed,failure,2026-07-27T10:09:43Z,2026-07-27T10:30:51Z,21.133333333333333
+streamlit/streamlit,30256946137,CLI Regression,completed,success,2026-07-27T10:09:43Z,2026-07-27T10:13:42Z,3.9833333333333334
+streamlit/streamlit,30256946120,AI PR Review,completed,skipped,2026-07-27T10:09:43Z,2026-07-27T10:09:44Z,0.016666666666666666
+streamlit/streamlit,30256946103,Pull Request Labels,completed,success,2026-07-27T10:09:43Z,2026-07-27T10:09:50Z,0.11666666666666667
+streamlit/streamlit,30256946083,Javascript Unit Tests,completed,success,2026-07-27T10:09:43Z,2026-07-27T10:19:46Z,10.05
+streamlit/streamlit,30256946081,Snapshot Autofix,completed,skipped,2026-07-27T10:09:43Z,2026-07-27T10:09:43Z,0.0
+streamlit/streamlit,30256946066,PR Preview,completed,success,2026-07-27T10:09:43Z,2026-07-27T10:14:56Z,5.216666666666667
+streamlit/streamlit,30256946052,AI QA Testing,completed,skipped,2026-07-27T10:09:43Z,2026-07-27T10:09:44Z,0.016666666666666666
+streamlit/streamlit,30256945995,Load Testing,completed,skipped,2026-07-27T10:09:42Z,2026-07-27T10:09:44Z,0.03333333333333333
+streamlit/streamlit,30256945978,Snapshot Autofix,completed,skipped,2026-07-27T10:09:42Z,2026-07-27T10:09:43Z,0.016666666666666666
+microsoft/vscode,30271461734,Running Copilot Code Review,completed,success,2026-07-27T13:41:31Z,2026-07-27T13:45:55Z,4.4
+microsoft/vscode,30271454289,Telemetry,completed,success,2026-07-27T13:41:25Z,2026-07-27T13:42:20Z,0.9166666666666666
+microsoft/vscode,30271454204,chat-lib tests,completed,success,2026-07-27T13:41:25Z,2026-07-27T13:45:47Z,4.366666666666666
+microsoft/vscode,30271454135,Prevent engineering system changes in PRs,completed,success,2026-07-27T13:41:25Z,2026-07-27T13:41:58Z,0.55
+microsoft/vscode,30271240944,Running Copilot Code Review,completed,success,2026-07-27T13:38:41Z,2026-07-27T13:42:33Z,3.8666666666666667
+microsoft/vscode,30271206120,Telemetry,completed,success,2026-07-27T13:38:13Z,2026-07-27T13:39:00Z,0.7833333333333333
+microsoft/vscode,30271204551,chat-lib tests,completed,success,2026-07-27T13:38:12Z,2026-07-27T13:42:04Z,3.8666666666666667
+microsoft/vscode,30271204548,Prevent engineering system changes in PRs,completed,failure,2026-07-27T13:38:12Z,2026-07-27T13:38:29Z,0.2833333333333333
+microsoft/vscode,30271204408,Component Fixtures,completed,success,2026-07-27T13:38:12Z,2026-07-27T13:44:48Z,6.6
+microsoft/vscode,30271204311,Monaco Editor checks,completed,success,2026-07-27T13:38:12Z,2026-07-27T13:43:28Z,5.266666666666667
+microsoft/vscode,30270762437,Running Copilot Code Review,completed,success,2026-07-27T13:32:35Z,2026-07-27T13:35:39Z,3.066666666666667
+microsoft/vscode,30270752049,Code OSS,completed,cancelled,2026-07-27T13:32:27Z,2026-07-27T13:38:52Z,6.416666666666667
+microsoft/vscode,30270751906,Telemetry,completed,success,2026-07-27T13:32:27Z,2026-07-27T13:33:03Z,0.6
+microsoft/vscode,30270751877,chat-lib tests,completed,success,2026-07-27T13:32:27Z,2026-07-27T13:36:01Z,3.566666666666667
+microsoft/vscode,30270751819,Prevent engineering system changes in PRs,completed,failure,2026-07-27T13:32:27Z,2026-07-27T13:32:38Z,0.18333333333333332
+microsoft/vscode,30270751812,Component Fixtures,completed,success,2026-07-27T13:32:27Z,2026-07-27T13:38:09Z,5.7
+microsoft/vscode,30270751709,Monaco Editor checks,completed,success,2026-07-27T13:32:27Z,2026-07-27T13:37:09Z,4.7
+microsoft/vscode,30270209165,Code OSS,completed,success,2026-07-27T13:25:27Z,2026-07-27T13:41:40Z,16.216666666666665
+microsoft/vscode,30270206854,Component Fixtures,completed,success,2026-07-27T13:25:25Z,2026-07-27T13:32:39Z,7.233333333333333
+microsoft/vscode,30270206699,Prevent engineering system changes in PRs,completed,success,2026-07-27T13:25:25Z,2026-07-27T13:25:34Z,0.15
+microsoft/vscode,30270203880,Monaco Editor checks,completed,success,2026-07-27T13:25:23Z,2026-07-27T13:30:01Z,4.633333333333334
+microsoft/vscode,30270203749,chat-lib tests,completed,success,2026-07-27T13:25:23Z,2026-07-27T13:29:41Z,4.3
+microsoft/vscode,30270203386,Telemetry,completed,success,2026-07-27T13:25:22Z,2026-07-27T13:25:56Z,0.5666666666666667
+microsoft/vscode,30269103746,npm_and_yarn in /extensions/markdown-language-features for @vscode/markdown-editor - Update #1486777314,completed,success,2026-07-27T13:11:14Z,2026-07-27T13:12:09Z,0.9166666666666666
+microsoft/vscode,30268998726,Component Fixtures,completed,success,2026-07-27T13:09:54Z,2026-07-27T13:19:09Z,9.25
+microsoft/vscode,30268998671,Monaco Editor checks,completed,success,2026-07-27T13:09:54Z,2026-07-27T13:20:46Z,10.866666666666667
+microsoft/vscode,30268998589,Code OSS (node_modules),completed,success,2026-07-27T13:09:54Z,2026-07-27T13:24:19Z,14.416666666666666
+microsoft/vscode,30268984850,Code OSS (node_modules),completed,success,2026-07-27T13:09:43Z,2026-07-27T13:10:40Z,0.95
+microsoft/vscode,30268984633,Component Fixtures,completed,success,2026-07-27T13:09:43Z,2026-07-27T13:16:53Z,7.166666666666667
+microsoft/vscode,30268984631,Monaco Editor checks,completed,success,2026-07-27T13:09:43Z,2026-07-27T13:14:13Z,4.5
+microsoft/vscode,30268043864,Code OSS,completed,success,2026-07-27T12:56:52Z,2026-07-27T13:13:04Z,16.2
+microsoft/vscode,30268043681,chat-lib tests,completed,success,2026-07-27T12:56:51Z,2026-07-27T13:00:02Z,3.183333333333333
+microsoft/vscode,30268043617,Prevent engineering system changes in PRs,completed,success,2026-07-27T12:56:51Z,2026-07-27T12:57:12Z,0.35
+microsoft/vscode,30268043612,Component Fixtures,completed,success,2026-07-27T12:56:51Z,2026-07-27T13:04:18Z,7.45
+microsoft/vscode,30268043611,Telemetry,completed,success,2026-07-27T12:56:51Z,2026-07-27T12:57:36Z,0.75
+microsoft/vscode,30268043576,Monaco Editor checks,completed,success,2026-07-27T12:56:51Z,2026-07-27T13:01:29Z,4.633333333333334
+microsoft/vscode,30266719833,chat-lib tests,completed,action_required,2026-07-27T12:38:10Z,2026-07-27T12:38:10Z,0.0
+microsoft/vscode,30266719723,Code OSS,completed,action_required,2026-07-27T12:38:10Z,2026-07-27T12:38:10Z,0.0
+microsoft/vscode,30266719625,Monaco Editor checks,completed,action_required,2026-07-27T12:38:10Z,2026-07-27T12:38:10Z,0.0
+microsoft/vscode,30266719558,Prevent engineering system changes in PRs,completed,action_required,2026-07-27T12:38:10Z,2026-07-27T12:38:10Z,0.0
+microsoft/vscode,30266719547,Component Fixtures,completed,action_required,2026-07-27T12:38:10Z,2026-07-27T12:38:10Z,0.0
+microsoft/vscode,30266719546,Telemetry,completed,action_required,2026-07-27T12:38:10Z,2026-07-27T12:38:10Z,0.0
+microsoft/vscode,30266374015,Running Copilot Code Review,completed,success,2026-07-27T12:33:10Z,2026-07-27T12:35:52Z,2.7
+microsoft/vscode,30266366031,Code OSS,completed,success,2026-07-27T12:33:03Z,2026-07-27T12:50:24Z,17.35
+microsoft/vscode,30266366019,Telemetry,completed,success,2026-07-27T12:33:03Z,2026-07-27T12:33:45Z,0.7
+microsoft/vscode,30266365931,chat-lib tests,completed,success,2026-07-27T12:33:03Z,2026-07-27T12:36:23Z,3.3333333333333335
+microsoft/vscode,30266365884,Monaco Editor checks,completed,success,2026-07-27T12:33:03Z,2026-07-27T12:37:37Z,4.566666666666666
+microsoft/vscode,30266365872,Component Fixtures,completed,success,2026-07-27T12:33:03Z,2026-07-27T12:40:31Z,7.466666666666667
+microsoft/vscode,30266365865,Prevent engineering system changes in PRs,completed,success,2026-07-27T12:33:03Z,2026-07-27T12:33:20Z,0.2833333333333333
+microsoft/vscode,30264199014,Code OSS,completed,success,2026-07-27T12:01:32Z,2026-07-27T12:39:54Z,38.36666666666667
+microsoft/vscode,30264198766,Monaco Editor checks,completed,success,2026-07-27T12:01:32Z,2026-07-27T12:28:23Z,26.85
+microsoft/vscode,30264198699,Telemetry,completed,success,2026-07-27T12:01:32Z,2026-07-27T12:24:17Z,22.75
+microsoft/vscode,30264198694,Prevent engineering system changes in PRs,completed,failure,2026-07-27T12:01:32Z,2026-07-27T12:23:56Z,22.4
+microsoft/vscode,30264198690,Component Fixtures,completed,success,2026-07-27T12:01:32Z,2026-07-27T12:30:00Z,28.466666666666665
+microsoft/vscode,30264198681,chat-lib tests,completed,success,2026-07-27T12:01:32Z,2026-07-27T12:28:14Z,26.7
+microsoft/vscode,30263022793,Code OSS,completed,success,2026-07-27T11:43:33Z,2026-07-27T12:07:37Z,24.066666666666666
+microsoft/vscode,30263022687,chat-lib tests,completed,success,2026-07-27T11:43:33Z,2026-07-27T11:47:41Z,4.133333333333334
+microsoft/vscode,30263022685,Prevent engineering system changes in PRs,completed,success,2026-07-27T11:43:33Z,2026-07-27T11:44:00Z,0.45
+microsoft/vscode,30263022646,Component Fixtures,completed,success,2026-07-27T11:43:33Z,2026-07-27T11:52:23Z,8.833333333333334
+microsoft/vscode,30263022643,Telemetry,completed,success,2026-07-27T11:43:33Z,2026-07-27T11:44:22Z,0.8166666666666667
+microsoft/vscode,30263022639,Monaco Editor checks,completed,success,2026-07-27T11:43:33Z,2026-07-27T11:55:03Z,11.5
+microsoft/vscode,30262928049,npm_and_yarn in /extensions/markdown-language-features - Update #1486528955,completed,success,2026-07-27T11:42:07Z,2026-07-27T11:43:31Z,1.4
+microsoft/vscode,30261615693,Code OSS,completed,action_required,2026-07-27T11:21:23Z,2026-07-27T11:21:23Z,0.0
+microsoft/vscode,30261615660,Component Fixtures,completed,action_required,2026-07-27T11:21:23Z,2026-07-27T11:21:23Z,0.0
+microsoft/vscode,30261615450,chat-lib tests,completed,action_required,2026-07-27T11:21:23Z,2026-07-27T11:21:23Z,0.0
+microsoft/vscode,30261615427,Telemetry,completed,action_required,2026-07-27T11:21:23Z,2026-07-27T11:21:23Z,0.0
+microsoft/vscode,30261615408,Prevent engineering system changes in PRs,completed,action_required,2026-07-27T11:21:22Z,2026-07-27T11:21:22Z,0.0
+microsoft/vscode,30261615394,Monaco Editor checks,completed,action_required,2026-07-27T11:21:22Z,2026-07-27T11:21:22Z,0.0
+microsoft/vscode,30260066879,Code OSS,completed,success,2026-07-27T10:57:34Z,2026-07-27T11:22:42Z,25.133333333333333
+microsoft/vscode,30260066756,Component Fixtures,completed,success,2026-07-27T10:57:33Z,2026-07-27T11:06:52Z,9.316666666666666
+microsoft/vscode,30260066745,chat-lib tests,completed,success,2026-07-27T10:57:33Z,2026-07-27T11:01:44Z,4.183333333333334
+microsoft/vscode,30260066739,Monaco Editor checks,completed,success,2026-07-27T10:57:33Z,2026-07-27T11:08:55Z,11.366666666666667
+microsoft/vscode,30260066734,Telemetry,completed,success,2026-07-27T10:57:33Z,2026-07-27T10:58:21Z,0.8
+microsoft/vscode,30260066698,Prevent engineering system changes in PRs,completed,success,2026-07-27T10:57:33Z,2026-07-27T10:58:00Z,0.45
+microsoft/vscode,30259964069,Component Fixtures,completed,success,2026-07-27T10:55:56Z,2026-07-27T11:05:17Z,9.35
+microsoft/vscode,30259963999,Monaco Editor checks,completed,success,2026-07-27T10:55:56Z,2026-07-27T11:07:24Z,11.466666666666667
+microsoft/vscode,30259599704,Telemetry,completed,success,2026-07-27T10:50:18Z,2026-07-27T10:57:19Z,7.016666666666667
+microsoft/vscode,30259599696,Component Fixtures,completed,success,2026-07-27T10:50:18Z,2026-07-27T11:03:57Z,13.65
+microsoft/vscode,30259599679,Code OSS,completed,success,2026-07-27T10:50:18Z,2026-07-27T11:12:42Z,22.4
+microsoft/vscode,30259599563,chat-lib tests,completed,success,2026-07-27T10:50:18Z,2026-07-27T11:01:05Z,10.783333333333333
+microsoft/vscode,30259599530,Prevent engineering system changes in PRs,completed,success,2026-07-27T10:50:18Z,2026-07-27T10:56:54Z,6.6
+microsoft/vscode,30259599484,Monaco Editor checks,completed,success,2026-07-27T10:50:17Z,2026-07-27T11:01:18Z,11.016666666666667
+microsoft/vscode,30259069164,Running Copilot Code Review,completed,success,2026-07-27T10:42:02Z,2026-07-27T10:43:23Z,1.35
+microsoft/vscode,30259062020,Code OSS,completed,action_required,2026-07-27T10:41:56Z,2026-07-27T10:41:56Z,0.0
+microsoft/vscode,30259061875,Component Fixtures,completed,action_required,2026-07-27T10:41:55Z,2026-07-27T10:41:55Z,0.0
+microsoft/vscode,30259061868,Telemetry,completed,action_required,2026-07-27T10:41:55Z,2026-07-27T10:41:55Z,0.0
+microsoft/vscode,30259061836,chat-lib tests,completed,action_required,2026-07-27T10:41:55Z,2026-07-27T10:41:55Z,0.0
+microsoft/vscode,30259061827,Prevent engineering system changes in PRs,completed,action_required,2026-07-27T10:41:55Z,2026-07-27T10:41:55Z,0.0
+microsoft/vscode,30259061821,Monaco Editor checks,completed,action_required,2026-07-27T10:41:55Z,2026-07-27T10:41:55Z,0.0
+microsoft/vscode,30258878652,Running Copilot cloud agent,completed,success,2026-07-27T10:38:55Z,2026-07-27T10:59:07Z,20.2
+microsoft/vscode,30258402537,Running Copilot Code Review,completed,success,2026-07-27T10:31:29Z,2026-07-27T10:32:53Z,1.4
+microsoft/vscode,30258396817,Code OSS,completed,success,2026-07-27T10:31:23Z,2026-07-27T10:55:50Z,24.45
+microsoft/vscode,30258396166,Telemetry,completed,success,2026-07-27T10:31:23Z,2026-07-27T10:32:00Z,0.6166666666666667
+microsoft/vscode,30258396101,chat-lib tests,completed,success,2026-07-27T10:31:22Z,2026-07-27T10:35:20Z,3.966666666666667
+microsoft/vscode,30258395938,Monaco Editor checks,completed,success,2026-07-27T10:31:22Z,2026-07-27T10:43:01Z,11.65
+microsoft/vscode,30258395929,Prevent engineering system changes in PRs,completed,success,2026-07-27T10:31:22Z,2026-07-27T10:31:35Z,0.21666666666666667
+tensorflow/tensorflow,30272040895,License Check,completed,success,2026-07-27T13:48:51Z,2026-07-27T13:49:26Z,0.5833333333333334
+tensorflow/tensorflow,30271965071,License Check,completed,success,2026-07-27T13:47:53Z,2026-07-27T13:48:28Z,0.5833333333333334
+tensorflow/tensorflow,30271710437,GitHub Actions Scan,completed,success,2026-07-27T13:44:42Z,2026-07-27T13:46:37Z,1.9166666666666667
+tensorflow/tensorflow,30271709130,License Check,completed,success,2026-07-27T13:44:41Z,2026-07-27T13:45:15Z,0.5666666666666667
+tensorflow/tensorflow,30271706285,PR #124086,completed,success,2026-07-27T13:44:39Z,2026-07-27T13:49:20Z,4.683333333333334
+tensorflow/tensorflow,30271686941,License Check,completed,success,2026-07-27T13:44:24Z,2026-07-27T13:44:56Z,0.5333333333333333
+tensorflow/tensorflow,30271683562,GitHub Actions Scan,completed,success,2026-07-27T13:44:22Z,2026-07-27T13:46:15Z,1.8833333333333333
+tensorflow/tensorflow,30271681803,PR #124067,completed,success,2026-07-27T13:44:20Z,2026-07-27T13:49:06Z,4.766666666666667
+tensorflow/tensorflow,30271343691,License Check,completed,success,2026-07-27T13:40:01Z,2026-07-27T13:40:36Z,0.5833333333333334
+tensorflow/tensorflow,30271342836,GitHub Actions Scan,completed,success,2026-07-27T13:40:00Z,2026-07-27T13:41:58Z,1.9666666666666666
+tensorflow/tensorflow,30271340901,PR #123793,completed,success,2026-07-27T13:39:59Z,2026-07-27T13:44:49Z,4.833333333333333
+tensorflow/tensorflow,30271295033,License Check,completed,success,2026-07-27T13:39:24Z,2026-07-27T13:40:00Z,0.6
+tensorflow/tensorflow,30271290246,GitHub Actions Scan,completed,success,2026-07-27T13:39:20Z,2026-07-27T13:41:14Z,1.9
+tensorflow/tensorflow,30271287687,PR #124073,completed,success,2026-07-27T13:39:18Z,2026-07-27T13:43:54Z,4.6
+tensorflow/tensorflow,30270594159,License Check,completed,success,2026-07-27T13:30:27Z,2026-07-27T13:30:59Z,0.5333333333333333
+tensorflow/tensorflow,30270590000,GitHub Actions Scan,completed,success,2026-07-27T13:30:24Z,2026-07-27T13:32:16Z,1.8666666666666667
+tensorflow/tensorflow,30270584406,PR #124023,completed,success,2026-07-27T13:30:20Z,2026-07-27T13:35:11Z,4.85
+tensorflow/tensorflow,30270433889,License Check,completed,success,2026-07-27T13:28:24Z,2026-07-27T13:29:00Z,0.6
+tensorflow/tensorflow,30270433132,GitHub Actions Scan,completed,success,2026-07-27T13:28:23Z,2026-07-27T13:30:10Z,1.7833333333333334
+tensorflow/tensorflow,30270428989,PR #124084,completed,success,2026-07-27T13:28:20Z,2026-07-27T13:33:02Z,4.7
+tensorflow/tensorflow,30270387326,GitHub Actions Scan,completed,success,2026-07-27T13:27:47Z,2026-07-27T13:29:45Z,1.9666666666666666
+tensorflow/tensorflow,30270386912,License Check,completed,success,2026-07-27T13:27:47Z,2026-07-27T13:28:19Z,0.5333333333333333
+tensorflow/tensorflow,30270384411,PR #124083,completed,success,2026-07-27T13:27:45Z,2026-07-27T13:32:26Z,4.683333333333334
+tensorflow/tensorflow,30270298798,CI,completed,cancelled,2026-07-27T13:26:37Z,2026-07-27T13:49:08Z,22.516666666666666
+tensorflow/tensorflow,30270295669,License Check,completed,success,2026-07-27T13:26:35Z,2026-07-27T13:27:08Z,0.55
+tensorflow/tensorflow,30270293458,GitHub Actions Scan,completed,success,2026-07-27T13:26:33Z,2026-07-27T13:28:28Z,1.9166666666666667
+tensorflow/tensorflow,30270291814,PR #123744,completed,success,2026-07-27T13:26:32Z,2026-07-27T13:31:13Z,4.683333333333334
+tensorflow/tensorflow,30270072070,CI,completed,cancelled,2026-07-27T13:23:41Z,2026-07-27T13:40:29Z,16.8
+tensorflow/tensorflow,30270071831,License Check,completed,success,2026-07-27T13:23:41Z,2026-07-27T13:24:15Z,0.5666666666666667
+tensorflow/tensorflow,30270069472,GitHub Actions Scan,completed,success,2026-07-27T13:23:39Z,2026-07-27T13:25:34Z,1.9166666666666667
+tensorflow/tensorflow,30270066244,PR #123793,completed,success,2026-07-27T13:23:37Z,2026-07-27T13:28:19Z,4.7
+tensorflow/tensorflow,30269689954,GitHub Actions Scan,completed,success,2026-07-27T13:18:48Z,2026-07-27T13:20:43Z,1.9166666666666667
+tensorflow/tensorflow,30269689890,License Check,completed,success,2026-07-27T13:18:48Z,2026-07-27T13:19:18Z,0.5
+tensorflow/tensorflow,30269687109,PR #124082,completed,success,2026-07-27T13:18:46Z,2026-07-27T13:23:16Z,4.5
+tensorflow/tensorflow,30269666139,License Check,completed,success,2026-07-27T13:18:29Z,2026-07-27T13:19:01Z,0.5333333333333333
+tensorflow/tensorflow,30269665233,Scorecards supply-chain security,completed,success,2026-07-27T13:18:29Z,2026-07-27T13:20:11Z,1.7
+tensorflow/tensorflow,30269664892,Creates a GitHub Issue when a PR Rolled back via Commit to Master,completed,skipped,2026-07-27T13:18:28Z,2026-07-27T13:18:29Z,0.016666666666666666
+tensorflow/tensorflow,30269662631,Push on master,completed,success,2026-07-27T13:18:27Z,2026-07-27T13:29:10Z,10.716666666666667
+tensorflow/tensorflow,30269662566,GitHub Actions Scan,completed,success,2026-07-27T13:18:27Z,2026-07-27T13:22:58Z,4.516666666666667
+tensorflow/tensorflow,30269660511,PR #124065,completed,success,2026-07-27T13:18:25Z,2026-07-27T13:23:15Z,4.833333333333333
+tensorflow/tensorflow,30269529528,License Check,completed,success,2026-07-27T13:16:43Z,2026-07-27T13:17:16Z,0.55
+tensorflow/tensorflow,30269526456,GitHub Actions Scan,completed,success,2026-07-27T13:16:40Z,2026-07-27T13:18:30Z,1.8333333333333333
+tensorflow/tensorflow,30269524529,PR #123682,completed,success,2026-07-27T13:16:39Z,2026-07-27T13:21:22Z,4.716666666666667
+tensorflow/tensorflow,30269432756,License Check,completed,success,2026-07-27T13:15:28Z,2026-07-27T13:16:06Z,0.6333333333333333
+tensorflow/tensorflow,30269431853,GitHub Actions Scan,completed,success,2026-07-27T13:15:27Z,2026-07-27T13:17:23Z,1.9333333333333333
+tensorflow/tensorflow,30269427109,PR #124061,completed,success,2026-07-27T13:15:24Z,2026-07-27T13:20:07Z,4.716666666666667
+tensorflow/tensorflow,30269128231,License Check,completed,success,2026-07-27T13:11:33Z,2026-07-27T13:12:08Z,0.5833333333333334
+tensorflow/tensorflow,30269122241,GitHub Actions Scan,completed,success,2026-07-27T13:11:28Z,2026-07-27T13:13:25Z,1.95
+tensorflow/tensorflow,30269118536,PR #124022,completed,success,2026-07-27T13:11:25Z,2026-07-27T13:15:57Z,4.533333333333333
+tensorflow/tensorflow,30268992610,License Check,completed,success,2026-07-27T13:09:49Z,2026-07-27T13:10:20Z,0.5166666666666667
+tensorflow/tensorflow,30268990806,GitHub Actions Scan,completed,success,2026-07-27T13:09:48Z,2026-07-27T13:11:40Z,1.8666666666666667
+tensorflow/tensorflow,30268988652,PR #124075,completed,success,2026-07-27T13:09:46Z,2026-07-27T13:14:34Z,4.8
+tensorflow/tensorflow,30268931758,GitHub Actions Scan,completed,success,2026-07-27T13:09:02Z,2026-07-27T13:11:01Z,1.9833333333333334
+tensorflow/tensorflow,30268929636,License Check,completed,success,2026-07-27T13:09:00Z,2026-07-27T13:09:35Z,0.5833333333333334
+tensorflow/tensorflow,30268925997,PR #124081,completed,success,2026-07-27T13:08:57Z,2026-07-27T13:13:44Z,4.783333333333333
+tensorflow/tensorflow,30268858904,GitHub Actions Scan,completed,success,2026-07-27T13:08:03Z,2026-07-27T13:09:58Z,1.9166666666666667
+tensorflow/tensorflow,30268858499,License Check,completed,success,2026-07-27T13:08:02Z,2026-07-27T13:08:40Z,0.6333333333333333
+tensorflow/tensorflow,30268854066,PR #124079,completed,success,2026-07-27T13:07:59Z,2026-07-27T13:12:39Z,4.666666666666667
+tensorflow/tensorflow,30268843914,License Check,completed,success,2026-07-27T13:07:50Z,2026-07-27T13:08:30Z,0.6666666666666666
+tensorflow/tensorflow,30268843759,License Check,completed,success,2026-07-27T13:07:50Z,2026-07-27T13:08:30Z,0.6666666666666666
+tensorflow/tensorflow,30268842076,GitHub Actions Scan,completed,success,2026-07-27T13:07:49Z,2026-07-27T13:09:48Z,1.9833333333333334
+tensorflow/tensorflow,30268841087,GitHub Actions Scan,completed,success,2026-07-27T13:07:48Z,2026-07-27T13:09:40Z,1.8666666666666667
+tensorflow/tensorflow,30268840764,PR #122264,completed,success,2026-07-27T13:07:48Z,2026-07-27T13:12:28Z,4.666666666666667
+tensorflow/tensorflow,30268838394,PR #124078,completed,success,2026-07-27T13:07:46Z,2026-07-27T13:12:30Z,4.733333333333333
+tensorflow/tensorflow,30268804114,GitHub Actions Scan,completed,success,2026-07-27T13:07:18Z,2026-07-27T13:09:05Z,1.7833333333333334
+tensorflow/tensorflow,30268803118,Creates a GitHub Issue when a PR Rolled back via Commit to Master,completed,skipped,2026-07-27T13:07:17Z,2026-07-27T13:07:27Z,0.16666666666666666
+tensorflow/tensorflow,30268802965,Scorecards supply-chain security,completed,success,2026-07-27T13:07:17Z,2026-07-27T13:09:15Z,1.9666666666666666
+tensorflow/tensorflow,30268802398,PR #124058,completed,success,2026-07-27T13:07:16Z,2026-07-27T13:11:50Z,4.566666666666666
+tensorflow/tensorflow,30268802296,Push on master,completed,success,2026-07-27T13:07:16Z,2026-07-27T13:16:52Z,9.6
+tensorflow/tensorflow,30268697870,CI,completed,success,2026-07-27T13:05:51Z,2026-07-27T13:23:09Z,17.3
+tensorflow/tensorflow,30268697764,GitHub Actions Scan,completed,success,2026-07-27T13:05:51Z,2026-07-27T13:07:42Z,1.85
+tensorflow/tensorflow,30268697690,PyLint,completed,success,2026-07-27T13:05:51Z,2026-07-27T13:06:35Z,0.7333333333333333
+tensorflow/tensorflow,30268697671,License Check,completed,success,2026-07-27T13:05:51Z,2026-07-27T13:06:28Z,0.6166666666666667
+rust-lang/rust,30269569332,CI,completed,failure,2026-07-27T13:17:14Z,2026-07-27T13:22:55Z,5.683333333333334
+rust-lang/rust,30268607818,Post merge analysis,completed,success,2026-07-27T13:04:39Z,2026-07-27T13:08:17Z,3.6333333333333333
+rust-lang/rust,30266524943,CI,completed,failure,2026-07-27T12:35:20Z,2026-07-27T13:12:15Z,36.916666666666664
+rust-lang/rust,30265251024,CI,completed,success,2026-07-27T12:16:37Z,2026-07-27T13:45:47Z,89.16666666666667
+rust-lang/rust,30264721177,CI,completed,success,2026-07-27T12:09:00Z,2026-07-27T13:36:28Z,87.46666666666667
+rust-lang/rust,30264273552,CI,completed,success,2026-07-27T12:02:37Z,2026-07-27T13:29:29Z,86.86666666666666
+rust-lang/rust,30263587931,CI,completed,success,2026-07-27T11:52:21Z,2026-07-27T13:21:10Z,88.81666666666666
+rust-lang/rust,30262847098,CI,completed,success,2026-07-27T11:40:47Z,2026-07-27T13:06:36Z,85.81666666666666
+rust-lang/rust,30262361170,CI,completed,success,2026-07-27T11:33:06Z,2026-07-27T12:56:56Z,83.83333333333333
+rust-lang/rust,30262205287,CI,completed,success,2026-07-27T11:30:38Z,2026-07-27T12:52:59Z,82.35
+rust-lang/rust,30262071384,CI,completed,success,2026-07-27T11:28:33Z,2026-07-27T13:03:29Z,94.93333333333334
+rust-lang/rust,30261744657,CI,completed,success,2026-07-27T11:23:27Z,2026-07-27T12:50:45Z,87.3
+rust-lang/rust,30261342448,CI,completed,success,2026-07-27T11:16:57Z,2026-07-27T13:24:00Z,127.05
+rust-lang/rust,30261327745,CI,completed,failure,2026-07-27T11:16:43Z,2026-07-27T11:51:18Z,34.583333333333336
+rust-lang/rust,30260475623,CI,completed,cancelled,2026-07-27T11:03:51Z,2026-07-27T13:03:17Z,119.43333333333334
+rust-lang/rust,30260463662,CI,completed,success,2026-07-27T11:03:40Z,2026-07-27T12:26:04Z,82.4
+rust-lang/rust,30260455893,CI,completed,failure,2026-07-27T11:03:33Z,2026-07-27T11:09:43Z,6.166666666666667
+rust-lang/rust,30260057224,CI,completed,success,2026-07-27T10:57:24Z,2026-07-27T13:03:10Z,125.76666666666667
+rust-lang/rust,30258746098,CI,completed,failure,2026-07-27T10:36:46Z,2026-07-27T11:34:13Z,57.45
+rust-lang/rust,30258738121,CI,completed,success,2026-07-27T10:36:38Z,2026-07-27T11:53:44Z,77.1
+rust-lang/rust,30258553593,CI,completed,success,2026-07-27T10:33:48Z,2026-07-27T12:06:26Z,92.63333333333334
+rust-lang/rust,30258516887,CI,completed,cancelled,2026-07-27T10:33:15Z,2026-07-27T10:37:04Z,3.816666666666667
+rust-lang/rust,30258227672,CI,completed,success,2026-07-27T10:28:51Z,2026-07-27T11:53:54Z,85.05
+rust-lang/rust,30257600460,CI,completed,success,2026-07-27T10:19:21Z,2026-07-27T11:49:50Z,90.48333333333333
+rust-lang/rust,30256724387,CI,completed,success,2026-07-27T10:06:30Z,2026-07-27T11:34:07Z,87.61666666666666
+rust-lang/rust,30256508259,CI,completed,success,2026-07-27T10:03:25Z,2026-07-27T11:32:20Z,88.91666666666667
+rust-lang/rust,30256180418,CI,completed,success,2026-07-27T09:58:42Z,2026-07-27T13:12:09Z,193.45
+rust-lang/rust,30256154679,CI,completed,success,2026-07-27T09:58:19Z,2026-07-27T11:28:57Z,90.63333333333334
+rust-lang/rust,30256007856,CI,completed,success,2026-07-27T09:56:09Z,2026-07-27T11:27:48Z,91.65
+rust-lang/rust,30255868816,CI,completed,success,2026-07-27T09:54:11Z,2026-07-27T11:24:08Z,89.95
+rust-lang/rust,30255175316,CI,completed,cancelled,2026-07-27T09:43:53Z,2026-07-27T09:58:13Z,14.333333333333334
+rust-lang/rust,30255157007,CI,completed,failure,2026-07-27T09:43:37Z,2026-07-27T09:48:45Z,5.133333333333334
+rust-lang/rust,30255122602,CI,completed,success,2026-07-27T09:43:07Z,2026-07-27T11:14:21Z,91.23333333333333
+rust-lang/rust,30255110326,CI,completed,success,2026-07-27T09:42:57Z,2026-07-27T12:40:31Z,177.56666666666666
+rust-lang/rust,30254989405,CI,completed,failure,2026-07-27T09:41:08Z,2026-07-27T10:34:36Z,53.46666666666667
+rust-lang/rust,30254893849,CI,completed,success,2026-07-27T09:39:43Z,2026-07-27T11:02:55Z,83.2
+rust-lang/rust,30254839078,CI,completed,success,2026-07-27T09:38:52Z,2026-07-27T11:16:27Z,97.58333333333333
+rust-lang/rust,30254743300,CI,completed,success,2026-07-27T09:37:26Z,2026-07-27T11:00:10Z,82.73333333333333
+rust-lang/rust,30254725677,CI,completed,success,2026-07-27T09:37:10Z,2026-07-27T11:01:42Z,84.53333333333333
+rust-lang/rust,30254579268,CI,completed,success,2026-07-27T09:35:07Z,2026-07-27T13:04:28Z,209.35
+rust-lang/rust,30252680242,CI,completed,success,2026-07-27T09:08:46Z,2026-07-27T10:39:02Z,90.26666666666667
+rust-lang/rust,30252530568,CI,completed,success,2026-07-27T09:06:39Z,2026-07-27T10:31:19Z,84.66666666666667
+rust-lang/rust,30251680122,CI,completed,success,2026-07-27T08:54:10Z,2026-07-27T10:23:17Z,89.11666666666666
+rust-lang/rust,30251511367,CI,completed,cancelled,2026-07-27T08:51:33Z,2026-07-27T09:40:03Z,48.5
+rust-lang/rust,30251078468,CI,completed,success,2026-07-27T08:44:49Z,2026-07-27T10:08:28Z,83.65
+rust-lang/rust,30251062340,CI,completed,success,2026-07-27T08:44:34Z,2026-07-27T10:50:41Z,126.11666666666666
+rust-lang/rust,30250516034,CI,completed,success,2026-07-27T08:35:55Z,2026-07-27T09:51:42Z,75.78333333333333
+rust-lang/rust,30250379133,CI,completed,success,2026-07-27T08:33:50Z,2026-07-27T10:04:49Z,90.98333333333333
+rust-lang/rust,30250128257,CI,completed,success,2026-07-27T08:29:57Z,2026-07-27T10:25:50Z,115.88333333333334
+rust-lang/rust,30249349035,CI,completed,failure,2026-07-27T08:17:46Z,2026-07-27T08:53:02Z,35.266666666666666
+rust-lang/rust,30248987248,CI,completed,success,2026-07-27T08:12:19Z,2026-07-27T09:39:14Z,86.91666666666667
+rust-lang/rust,30248146134,CI,completed,success,2026-07-27T07:59:19Z,2026-07-27T09:21:00Z,81.68333333333334
+rust-lang/rust,30247771726,CI,completed,success,2026-07-27T07:53:14Z,2026-07-27T09:17:20Z,84.1
+rust-lang/rust,30246945343,CI,completed,success,2026-07-27T07:39:39Z,2026-07-27T09:46:26Z,126.78333333333333
+rust-lang/rust,30246903840,CI,completed,success,2026-07-27T07:38:58Z,2026-07-27T09:21:14Z,102.26666666666667
+rust-lang/rust,30246756606,CI,completed,success,2026-07-27T07:36:24Z,2026-07-27T09:15:54Z,99.5
+rust-lang/rust,30245962063,CI,completed,success,2026-07-27T07:23:14Z,2026-07-27T08:50:16Z,87.03333333333333
+rust-lang/rust,30245607677,CI,completed,success,2026-07-27T07:17:22Z,2026-07-27T08:39:30Z,82.13333333333334
+rust-lang/rust,30245192074,CI,completed,failure,2026-07-27T07:10:42Z,2026-07-27T09:34:51Z,144.15
+rust-lang/rust,30244988864,CI,completed,success,2026-07-27T07:07:21Z,2026-07-27T09:12:49Z,125.46666666666667
+rust-lang/rust,30244510323,CI,completed,success,2026-07-27T06:59:12Z,2026-07-27T08:29:31Z,90.31666666666666
+rust-lang/rust,30244345231,CI,completed,success,2026-07-27T06:56:06Z,2026-07-27T08:26:21Z,90.25
+rust-lang/rust,30242854302,CI,completed,success,2026-07-27T06:28:25Z,2026-07-27T08:09:55Z,101.5
+rust-lang/rust,30242810751,CI,completed,cancelled,2026-07-27T06:27:37Z,2026-07-27T06:28:30Z,0.8833333333333333
+rust-lang/rust,30242106790,CI,completed,failure,2026-07-27T06:14:45Z,2026-07-27T06:45:56Z,31.183333333333334
+rust-lang/rust,30242074396,CI,completed,failure,2026-07-27T06:14:07Z,2026-07-27T06:48:26Z,34.31666666666667
+rust-lang/rust,30241578266,CI,completed,success,2026-07-27T06:04:45Z,2026-07-27T07:37:47Z,93.03333333333333
+rust-lang/rust,30240571707,CI,completed,failure,2026-07-27T05:43:46Z,2026-07-27T05:50:36Z,6.833333333333333
+rust-lang/rust,30240472333,CI,completed,success,2026-07-27T05:41:47Z,2026-07-27T07:50:23Z,128.6
+rust-lang/rust,30240441256,CI,completed,success,2026-07-27T05:41:06Z,2026-07-27T07:04:40Z,83.56666666666666
+rust-lang/rust,30240093042,CI,completed,success,2026-07-27T05:33:44Z,2026-07-27T06:59:05Z,85.35
+rust-lang/rust,30239628181,CI,completed,success,2026-07-27T05:23:50Z,2026-07-27T06:56:05Z,92.25
+rust-lang/rust,30239060698,CI,completed,success,2026-07-27T05:11:36Z,2026-07-27T07:17:17Z,125.68333333333334
+rust-lang/rust,30238750085,CI,completed,failure,2026-07-27T05:04:41Z,2026-07-27T07:10:29Z,125.8
+rust-lang/rust,30238202615,CI,completed,success,2026-07-27T04:51:37Z,2026-07-27T06:18:30Z,86.88333333333334
+rust-lang/rust,30238169768,CI,completed,cancelled,2026-07-27T04:50:47Z,2026-07-27T04:51:44Z,0.95
+rust-lang/rust,30237631937,CI,completed,success,2026-07-27T04:37:55Z,2026-07-27T06:08:06Z,90.18333333333334
+rust-lang/rust,30237323589,CI,completed,failure,2026-07-27T04:31:06Z,2026-07-27T04:37:14Z,6.133333333333334
+rust-lang/rust,30234846257,CI,completed,success,2026-07-27T03:32:39Z,2026-07-27T05:06:29Z,93.83333333333333
+rust-lang/rust,30234613968,CI,completed,cancelled,2026-07-27T03:26:32Z,2026-07-27T03:32:57Z,6.416666666666667
+rust-lang/rust,30233565748,CI,completed,cancelled,2026-07-27T03:01:48Z,2026-07-27T03:05:34Z,3.7666666666666666
+rust-lang/rust,30233326718,CI,completed,failure,2026-07-27T02:55:36Z,2026-07-27T03:01:33Z,5.95
+rust-lang/rust,30233131791,CI,completed,success,2026-07-27T02:50:34Z,2026-07-27T04:55:06Z,124.53333333333333
+rust-lang/rust,30233120219,CI,completed,success,2026-07-27T02:50:15Z,2026-07-27T04:54:38Z,124.38333333333334
+rust-lang/rust,30233107687,CI,completed,success,2026-07-27T02:49:57Z,2026-07-27T04:53:50Z,123.88333333333334
+rust-lang/rust,30233096870,CI,completed,success,2026-07-27T02:49:39Z,2026-07-27T04:53:56Z,124.28333333333333
+rust-lang/rust,30233092017,CI,completed,failure,2026-07-27T02:49:31Z,2026-07-27T02:55:27Z,5.933333333333334
+rust-lang/rust,30233086013,CI,completed,success,2026-07-27T02:49:22Z,2026-07-27T04:52:33Z,123.18333333333334
+rust-lang/rust,30233074860,CI,completed,success,2026-07-27T02:49:04Z,2026-07-27T04:54:37Z,125.55
+rust-lang/rust,30233064709,CI,completed,success,2026-07-27T02:48:46Z,2026-07-27T04:53:54Z,125.13333333333334
+rust-lang/rust,30233054463,CI,completed,success,2026-07-27T02:48:29Z,2026-07-27T04:52:30Z,124.01666666666667
+ruby/ruby,30270926283,Post Playground link to PR,completed,skipped,2026-07-27T13:34:40Z,2026-07-27T13:34:41Z,0.016666666666666666
+ruby/ruby,30270923399,ModGC,completed,skipped,2026-07-27T13:34:38Z,2026-07-27T13:34:47Z,0.15
+ruby/ruby,30270922901,Compilations,completed,success,2026-07-27T13:34:37Z,2026-07-27T13:34:48Z,0.18333333333333332
+ruby/ruby,30270921162,tarball-test,completed,success,2026-07-27T13:34:36Z,2026-07-27T13:43:17Z,8.683333333333334
+ruby/ruby,30270921150,BASERUBY Check,completed,skipped,2026-07-27T13:34:36Z,2026-07-27T13:34:37Z,0.016666666666666666
+ruby/ruby,30270921068,Ubuntu on WSL,completed,skipped,2026-07-27T13:34:36Z,2026-07-27T13:34:37Z,0.016666666666666666
+ruby/ruby,30270920898,ZJIT Ubuntu,completed,success,2026-07-27T13:34:36Z,2026-07-27T13:34:43Z,0.11666666666666667
+ruby/ruby,30270920785,Dependabot auto-merge,completed,skipped,2026-07-27T13:34:36Z,2026-07-27T13:34:37Z,0.016666666666666666
+ruby/ruby,30270920763,Ubuntu,completed,success,2026-07-27T13:34:36Z,2026-07-27T13:34:46Z,0.16666666666666666
+ruby/ruby,30270920678,Misc,completed,success,2026-07-27T13:34:36Z,2026-07-27T13:37:05Z,2.4833333333333334
+ruby/ruby,30270920647,Windows,completed,success,2026-07-27T13:34:36Z,2026-07-27T13:34:46Z,0.16666666666666666
+ruby/ruby,30270920593,ZJIT macOS,completed,success,2026-07-27T13:34:35Z,2026-07-27T13:34:42Z,0.11666666666666667
+ruby/ruby,30270919205,parse.y,completed,skipped,2026-07-27T13:34:34Z,2026-07-27T13:34:41Z,0.11666666666666667
+ruby/ruby,30270919146,Check Dependencies,completed,success,2026-07-27T13:34:34Z,2026-07-27T13:35:04Z,0.5
+ruby/ruby,30270919113,Update default gems list,completed,success,2026-07-27T13:34:34Z,2026-07-27T13:34:45Z,0.18333333333333332
+ruby/ruby,30270919058,MinGW,completed,skipped,2026-07-27T13:34:34Z,2026-07-27T13:34:41Z,0.11666666666666667
+ruby/ruby,30270919046,macOS,completed,success,2026-07-27T13:34:34Z,2026-07-27T13:34:40Z,0.1
+ruby/ruby,30270919039,YJIT Ubuntu,completed,success,2026-07-27T13:34:34Z,2026-07-27T13:34:40Z,0.1
+ruby/ruby,30270919038,Check SAST tool,completed,success,2026-07-27T13:34:34Z,2026-07-27T13:35:11Z,0.6166666666666667
+ruby/ruby,30270919032,YJIT macOS,completed,success,2026-07-27T13:34:34Z,2026-07-27T13:34:40Z,0.1
+ruby/ruby,30270919031,WebAssembly,completed,skipped,2026-07-27T13:34:34Z,2026-07-27T13:34:36Z,0.03333333333333333
+ruby/ruby,30270919020,Cygwin,completed,skipped,2026-07-27T13:34:34Z,2026-07-27T13:34:45Z,0.18333333333333332
+ruby/ruby,30270919018,Annocheck,completed,skipped,2026-07-27T13:34:34Z,2026-07-27T13:34:35Z,0.016666666666666666
+ruby/ruby,30270919001,Cross compile,completed,skipped,2026-07-27T13:34:34Z,2026-07-27T13:34:35Z,0.016666666666666666
+ruby/ruby,30270918451,Pull Request Labeler,completed,success,2026-07-27T13:34:34Z,2026-07-27T13:34:41Z,0.11666666666666667
+ruby/ruby,30270475957,Post Playground link to PR,completed,skipped,2026-07-27T13:28:57Z,2026-07-27T13:28:59Z,0.03333333333333333
+ruby/ruby,30270467742,tarball-test,completed,success,2026-07-27T13:28:51Z,2026-07-27T13:37:20Z,8.483333333333333
+ruby/ruby,30270467186,MinGW,completed,skipped,2026-07-27T13:28:51Z,2026-07-27T13:28:58Z,0.11666666666666667
+ruby/ruby,30270467162,WebAssembly,completed,skipped,2026-07-27T13:28:51Z,2026-07-27T13:28:53Z,0.03333333333333333
+ruby/ruby,30270467121,ZJIT Ubuntu,completed,success,2026-07-27T13:28:51Z,2026-07-27T13:28:56Z,0.08333333333333333
+ruby/ruby,30270467109,Post-push,completed,success,2026-07-27T13:28:51Z,2026-07-27T13:29:23Z,0.5333333333333333
+ruby/ruby,30270467047,Ubuntu on WSL,completed,skipped,2026-07-27T13:28:51Z,2026-07-27T13:28:53Z,0.03333333333333333
+ruby/ruby,30270466954,BASERUBY Check,completed,skipped,2026-07-27T13:28:51Z,2026-07-27T13:28:53Z,0.03333333333333333
+ruby/ruby,30270466953,Check Dependencies,completed,success,2026-07-27T13:28:51Z,2026-07-27T13:29:21Z,0.5
+ruby/ruby,30270466936,Misc,completed,success,2026-07-27T13:28:51Z,2026-07-27T13:31:24Z,2.55
+ruby/ruby,30270466932,Cross compile,completed,skipped,2026-07-27T13:28:51Z,2026-07-27T13:28:53Z,0.03333333333333333
+ruby/ruby,30270466929,Check SAST tool,completed,success,2026-07-27T13:28:51Z,2026-07-27T13:29:28Z,0.6166666666666667
+ruby/ruby,30270466926,YJIT Ubuntu,completed,success,2026-07-27T13:28:51Z,2026-07-27T13:28:58Z,0.11666666666666667
+ruby/ruby,30270466922,Cygwin,completed,skipped,2026-07-27T13:28:51Z,2026-07-27T13:29:02Z,0.18333333333333332
+ruby/ruby,30270466913,ZJIT macOS,completed,success,2026-07-27T13:28:51Z,2026-07-27T13:28:59Z,0.13333333333333333
+ruby/ruby,30270466907,Compilations,completed,success,2026-07-27T13:28:51Z,2026-07-27T13:29:01Z,0.16666666666666666
+ruby/ruby,30270466891,Ubuntu,completed,success,2026-07-27T13:28:51Z,2026-07-27T13:28:57Z,0.1
+ruby/ruby,30270466890,ModGC,completed,skipped,2026-07-27T13:28:51Z,2026-07-27T13:28:58Z,0.11666666666666667
+ruby/ruby,30270466882,Update default gems list,completed,success,2026-07-27T13:28:51Z,2026-07-27T13:30:08Z,1.2833333333333334
+ruby/ruby,30270466876,parse.y,completed,skipped,2026-07-27T13:28:51Z,2026-07-27T13:28:53Z,0.03333333333333333
+ruby/ruby,30270466868,Annocheck,completed,skipped,2026-07-27T13:28:51Z,2026-07-27T13:29:01Z,0.16666666666666666
+ruby/ruby,30270466867,Windows,completed,success,2026-07-27T13:28:51Z,2026-07-27T13:28:57Z,0.1
+ruby/ruby,30270466851,YJIT macOS,completed,success,2026-07-27T13:28:50Z,2026-07-27T13:28:56Z,0.1
+ruby/ruby,30270466759,Code Quality: Push on master,completed,success,2026-07-27T13:28:50Z,2026-07-27T13:32:25Z,3.5833333333333335
+ruby/ruby,30270466753,macOS,completed,success,2026-07-27T13:28:50Z,2026-07-27T13:28:56Z,0.1
+ruby/ruby,30270180018,Post Playground link to PR,completed,skipped,2026-07-27T13:25:06Z,2026-07-27T13:25:06Z,0.0
+ruby/ruby,30270165369,tarball-test,completed,success,2026-07-27T13:24:55Z,2026-07-27T13:34:04Z,9.15
+ruby/ruby,30270164786,Cross compile,completed,skipped,2026-07-27T13:24:55Z,2026-07-27T13:25:01Z,0.1
+ruby/ruby,30270164704,Check SAST tool,completed,success,2026-07-27T13:24:55Z,2026-07-27T13:25:21Z,0.43333333333333335
+ruby/ruby,30270164676,YJIT macOS,completed,success,2026-07-27T13:24:55Z,2026-07-27T13:25:01Z,0.1
+ruby/ruby,30270164619,Annocheck,completed,skipped,2026-07-27T13:24:55Z,2026-07-27T13:24:56Z,0.016666666666666666
+ruby/ruby,30270164609,Compilations,completed,success,2026-07-27T13:24:55Z,2026-07-27T13:25:03Z,0.13333333333333333
+ruby/ruby,30270164606,WebAssembly,completed,skipped,2026-07-27T13:24:55Z,2026-07-27T13:25:03Z,0.13333333333333333
+ruby/ruby,30270164594,Windows,completed,success,2026-07-27T13:24:55Z,2026-07-27T13:25:03Z,0.13333333333333333
+ruby/ruby,30270164584,Post-push,completed,success,2026-07-27T13:24:55Z,2026-07-27T13:25:25Z,0.5
+ruby/ruby,30270164578,Check Dependencies,completed,success,2026-07-27T13:24:55Z,2026-07-27T13:25:28Z,0.55
+ruby/ruby,30270164577,MinGW,completed,skipped,2026-07-27T13:24:55Z,2026-07-27T13:24:56Z,0.016666666666666666
+ruby/ruby,30270164569,ModGC,completed,skipped,2026-07-27T13:24:55Z,2026-07-27T13:24:56Z,0.016666666666666666
+ruby/ruby,30270164565,Ubuntu on WSL,completed,skipped,2026-07-27T13:24:55Z,2026-07-27T13:24:55Z,0.0
+ruby/ruby,30270164533,parse.y,completed,skipped,2026-07-27T13:24:55Z,2026-07-27T13:24:56Z,0.016666666666666666
+ruby/ruby,30270164527,Ubuntu,completed,success,2026-07-27T13:24:55Z,2026-07-27T13:25:00Z,0.08333333333333333
+ruby/ruby,30270164517,Update default gems list,completed,success,2026-07-27T13:24:55Z,2026-07-27T13:25:58Z,1.05
+ruby/ruby,30270164513,YJIT Ubuntu,completed,success,2026-07-27T13:24:55Z,2026-07-27T13:25:02Z,0.11666666666666667
+ruby/ruby,30270164506,macOS,completed,success,2026-07-27T13:24:55Z,2026-07-27T13:25:00Z,0.08333333333333333
+ruby/ruby,30270164504,BASERUBY Check,completed,skipped,2026-07-27T13:24:55Z,2026-07-27T13:24:56Z,0.016666666666666666
+ruby/ruby,30270164484,ZJIT Ubuntu,completed,success,2026-07-27T13:24:55Z,2026-07-27T13:25:00Z,0.08333333333333333
+ruby/ruby,30270164483,ZJIT macOS,completed,success,2026-07-27T13:24:55Z,2026-07-27T13:25:01Z,0.1
+ruby/ruby,30270164474,Misc,completed,success,2026-07-27T13:24:55Z,2026-07-27T13:27:13Z,2.3
+ruby/ruby,30270164414,Cygwin,completed,skipped,2026-07-27T13:24:55Z,2026-07-27T13:25:01Z,0.1
+ruby/ruby,30270163840,Code Quality: Push on master,completed,success,2026-07-27T13:24:54Z,2026-07-27T13:28:27Z,3.55
+ruby/ruby,30269824547,Post Playground link to PR,completed,skipped,2026-07-27T13:20:30Z,2026-07-27T13:20:31Z,0.016666666666666666
+ruby/ruby,30269818627,Check SAST tool,completed,success,2026-07-27T13:20:26Z,2026-07-27T13:20:52Z,0.43333333333333335
+ruby/ruby,30269818512,WebAssembly,completed,skipped,2026-07-27T13:20:26Z,2026-07-27T13:20:27Z,0.016666666666666666
+ruby/ruby,30269818472,ZJIT macOS,completed,success,2026-07-27T13:20:25Z,2026-07-27T13:20:33Z,0.13333333333333333
+ruby/ruby,30269818447,BASERUBY Check,completed,skipped,2026-07-27T13:20:25Z,2026-07-27T13:20:27Z,0.03333333333333333
+ruby/ruby,30269818443,Compilations,completed,success,2026-07-27T13:20:25Z,2026-07-27T13:20:34Z,0.15
+ruby/ruby,30269818308,Windows,completed,success,2026-07-27T13:20:25Z,2026-07-27T13:20:33Z,0.13333333333333333
+ruby/ruby,30269818260,ModGC,completed,skipped,2026-07-27T13:20:25Z,2026-07-27T13:20:27Z,0.03333333333333333
+ruby/ruby,30269817284,tarball-test,completed,success,2026-07-27T13:20:25Z,2026-07-27T13:28:50Z,8.416666666666666
+ruby/ruby,30269816936,ZJIT Ubuntu,completed,success,2026-07-27T13:20:24Z,2026-07-27T13:20:31Z,0.11666666666666667
+ruby/ruby,30269816874,YJIT macOS,completed,success,2026-07-27T13:20:24Z,2026-07-27T13:20:31Z,0.11666666666666667
+ruby/ruby,30269816744,Ubuntu,completed,success,2026-07-27T13:20:24Z,2026-07-27T13:20:30Z,0.1
+ruby/ruby,30269816651,macOS,completed,success,2026-07-27T13:20:24Z,2026-07-27T13:20:30Z,0.1
+ruby/ruby,30269816647,parse.y,completed,skipped,2026-07-27T13:20:24Z,2026-07-27T13:20:25Z,0.016666666666666666
+ruby/ruby,30269816640,Post-push,completed,success,2026-07-27T13:20:24Z,2026-07-27T13:20:59Z,0.5833333333333334
+ruby/ruby,30269816596,Ubuntu on WSL,completed,skipped,2026-07-27T13:20:24Z,2026-07-27T13:20:25Z,0.016666666666666666
+ruby/ruby,30269816582,Misc,completed,success,2026-07-27T13:20:24Z,2026-07-27T13:22:49Z,2.4166666666666665
+ruby/ruby,30269816570,Annocheck,completed,skipped,2026-07-27T13:20:24Z,2026-07-27T13:20:31Z,0.11666666666666667
+ruby/ruby,30269816564,YJIT Ubuntu,completed,success,2026-07-27T13:20:24Z,2026-07-27T13:20:30Z,0.1
+ruby/ruby,30269816432,MinGW,completed,skipped,2026-07-27T13:20:24Z,2026-07-27T13:20:34Z,0.16666666666666666
+ruby/ruby,30269816410,Cross compile,completed,skipped,2026-07-27T13:20:24Z,2026-07-27T13:20:34Z,0.16666666666666666
+ruby/ruby,30269816395,Update default gems list,completed,success,2026-07-27T13:20:24Z,2026-07-27T13:21:31Z,1.1166666666666667
+ruby/ruby,30269816390,Check Dependencies,completed,success,2026-07-27T13:20:24Z,2026-07-27T13:20:50Z,0.43333333333333335
+ruby/ruby,30269816282,Cygwin,completed,skipped,2026-07-27T13:20:24Z,2026-07-27T13:20:25Z,0.016666666666666666
+ruby/ruby,30269815560,Code Quality: Push on master,completed,success,2026-07-27T13:20:23Z,2026-07-27T13:24:00Z,3.6166666666666667

@@ -50,7 +50,7 @@ Required test coverage of 85% reached. Total coverage: 94.54%
 ```
 
 The percentage shown as `95%` is pytest-cov's rounded table display; `94.54%` is its precise
-total. These are integrated local Windows results, distinct from hosted CI evidence.
+total. These are target-commit local Windows results, distinct from the hosted CI evidence.
 
 ## GitHub Actions
 
@@ -127,8 +127,128 @@ Required test coverage of 85% reached. Total coverage: 94.54%
 ```
 
 The percentage shown as `95%` is pytest-cov's rounded table display; `94.54%` is its precise
-total. These integrated local Windows results include the current contract, model, data-integrity,
+total. These target-branch local Windows results include the current contract, model, data-integrity,
 dashboard, and no-network tests.
+
+## Active repository expansion local evidence
+
+This section records local Windows browser evidence collected on 2026-07-27 for
+`codex/add-active-repositories`. The committed snapshot contains 900 pull-request rows and 560
+workflow-run rows and was generated at `2026-07-27T13:56:40.155501Z`.
+
+A named Playwright CLI session (`active-repositories`) verified:
+
+- the `Repository` multiselect exposed exactly the sorted choices `microsoft/vscode`,
+  `pandas-dev/pandas`, `ruby/ruby`, `rust-lang/rust`, `streamlit/streamlit`, and
+  `tensorflow/tensorflow`;
+- all six repositories produced the expected 900 merged pull requests, while selecting only
+  `microsoft/vscode` produced 150 merged pull requests without an application exception;
+- `Overview`, `Drivers & retrospective patterns`, and `Forecast & trust` all rendered
+  successfully;
+- the browser console contained 0 errors; and
+- the restored 1440x1000 Overview was captured as `docs/images/dashboard.png` (PNG, 91,844
+  bytes).
+
+This is local evidence for `codex/add-active-repositories`, not deployment or CI evidence.
+
+### Active repository expansion final local quality gate
+
+The complete feature-branch gate ran locally on Windows with Python 3.12.10.
+
+```powershell
+.\.venv\Scripts\python.exe -m ruff check .
+```
+
+```text
+All checks passed!
+```
+
+```powershell
+.\.venv\Scripts\python.exe -m ruff format --check .
+```
+
+```text
+33 files already formatted
+```
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest --cov=engineering_intelligence --cov-report=term-missing --cov-fail-under=85
+```
+
+```text
+collected 93 items
+TOTAL  487 statements  19 missed  96%
+Required test coverage of 85% reached. Total coverage: 96.10%
+93 passed in 39.29s
+```
+
+The percentage shown as `96%` is pytest-cov's table display; `96.10%` is its reported precise
+total. `git diff --check` also completed without output. These are local Windows results for
+`codex/add-active-repositories`, not hosted CI or deployment evidence.
+
+## Integrated six-repository merge local evidence
+
+This section records local Windows evidence for the resolved six-repository snapshot, schema-2
+manifest, time-safe model evaluation, and record-aware canonical CSV hashing. No network collection
+ran during integration.
+
+### Post-fast-forward target local quality gate
+
+All commands used the required repository environment on Python 3.13.9.
+
+```powershell
+C:\tmp\engineering-intelligence-dashboard\.venv\Scripts\python.exe -m ruff check .
+```
+
+```text
+All checks passed!
+```
+
+```powershell
+C:\tmp\engineering-intelligence-dashboard\.venv\Scripts\python.exe -m ruff format --check .
+```
+
+```text
+33 files already formatted
+```
+
+```powershell
+C:\tmp\engineering-intelligence-dashboard\.venv\Scripts\python.exe -m pytest --cov=engineering_intelligence --cov-report=term-missing --cov-fail-under=85
+```
+
+```text
+collected 172 items
+TOTAL  806 statements  44 missed  95%
+Required test coverage of 85% reached. Total coverage: 94.54%
+172 passed in 37.08s
+```
+
+`git diff --check` completed without output. These are local post-fast-forward target results, not
+hosted CI or deployment evidence. The official GitHub Actions result on `82e86b2` remains
+**170 passed**; this separate local target result is **172 passed** because it includes integration
+evidence-contract coverage.
+
+## Cross-platform model-metric precision
+
+The candidate tree at commit `d09504f1c9eb470ff2669e62b114e34a90dd5bcd` used the same committed
+snapshot, `random_state=42`, and direct pandas/scikit-learn pins in both execution environments.
+The exact random-forest MAE differed slightly:
+
+- Windows 3.13.9: `9.734692264131` hours
+- Linux 3.13.14: `9.725297316958` hours
+
+The train-median baseline remained `12.484162037037` hours and the random forest remained the
+winner in both environments. The observations differ in operating system, Python patch version,
+and execution context, so they do not isolate a single causal factor. The difference does not
+change the one-decimal dashboard result or the model-selection conclusion.
+
+The Linux observation comes from the failed GitHub Actions contract check:
+https://github.com/ktubi970/engineering-intelligence-dashboard/actions/runs/30342316589/job/90220463967
+
+The job passed Ruff lint and format checks, then reported 172 passed and one documentation-contract
+failure because the README required the Windows result to twelve decimal places. Public
+model-quality values are therefore rounded to one decimal, while exact environment-specific
+outputs stay in this technical evidence record.
 
 ## Deployment publication check
 
