@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "recorded_date": "2026-07-28",
+  "source_provenance": {
+    "deployment_branch": "codex/engineering-intelligence-dashboard",
+    "premerge_commit": "abaebd6115685e049dcad37599709a67f9ec2647",
+    "premerge_tree": "b6f9ae229650ad21bfafac5b9696e8e25374015d",
+    "master_merge_commit": "a051ffe5198506a79f9be66112320cac47d0de3f",
+    "master_merge_tree": "b6f9ae229650ad21bfafac5b9696e8e25374015d",
+    "identical_application_tree": true
+  },
+  "local_gate": {
+    "commit": "abaebd6115685e049dcad37599709a67f9ec2647",
+    "platform": "Windows",
+    "python": "3.13.9",
+    "ruff_lint": "passed",
+    "formatted_files": 33,
+    "tests_passed": 173,
+    "coverage_percent": 94.68,
+    "diff_check": "passed"
+  },
+  "github_actions": {
+    "run_id": 30346530403,
+    "job_id": 90233932955,
+    "url": "https://github.com/ktubi970/engineering-intelligence-dashboard/actions/runs/30346530403",
+    "commit": "a051ffe5198506a79f9be66112320cac47d0de3f",
+    "conclusion": "success",
+    "platform": "Ubuntu 24.04",
+    "python": "3.13.14",
+    "ruff_lint": "passed",
+    "formatted_files": 33,
+    "tests_passed": 173,
+    "coverage_percent": 94.68
+  },
+  "public_deployment": {
+    "url": "https://engineering-intelligence-dashboard-jq9xccatzgwy9y9hcrwmor.streamlit.app/",
+    "anonymous_access": true,
+    "merged_pull_requests": 900,
+    "repositories": [
+      "microsoft/vscode",
+      "pandas-dev/pandas",
+      "ruby/ruby",
+      "rust-lang/rust",
+      "streamlit/streamlit",
+      "tensorflow/tensorflow"
+    ],
+    "tabs": [
+      "Overview",
+      "Drivers & retrospective patterns",
+      "Forecast & trust",
+      "Technical stack"
+    ],
+    "model_mae_hours": 9.7,
+    "baseline_mae_hours": 12.5,
+    "default_model_estimate_hours": 1.5,
+    "default_baseline_estimate_hours": 9.5,
+    "application_traceback": false,
+    "desktop_viewport_width": 1280,
+    "desktop_horizontal_overflow": false,
+    "narrow_viewport_width": 390,
+    "narrow_horizontal_overflow": false,
+    "platform_console_errors": 5,
+    "platform_error_endpoint": "/api/v2/user/details",
+    "platform_error_status": 404
+  },
+  "artifacts": {
+    "local_dashboard_png": {
+      "path": "docs/images/dashboard.png",
+      "scope": "local",
+      "sha256": "c7a72236d3f6535607634edc6cb57d6a13fc5752235892c720d8ac5b67338c96",
+      "bytes": 91844,
+      "width": 1440,
+      "height": 1000
+    },
+    "snapshot_metadata": {
+      "path": "data/snapshots/metadata.json",
+      "sha256": "0fe555b2a381433548d5e1a4b1860c403dec74521361d1410d7cd2a029d28826"
+    }
+  }
+}

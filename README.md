@@ -12,11 +12,11 @@ model as better than a simple baseline when it is not.
 
 ## 30-second value
 
-Open one local Streamlit app to compare repository delivery signals, explore recent merge-time
-patterns, and test an opening-time forecast. The committed demo works offline after installation:
-900 merged pull requests and 560 completed workflow runs from six public repositories are already
-included. The fixed holdout is evaluated with only labels available at its cutoff; on this
-snapshot, the random forest has lower MAE than the baseline.
+Open the public Streamlit app—or run it locally—to compare repository delivery signals, explore
+recent merge-time patterns, and test an opening-time forecast. The committed demo works offline
+after installation: 900 merged pull requests and 560 completed workflow runs from six public
+repositories are already included. The fixed holdout is evaluated with only labels available at
+its cutoff; on this snapshot, the random forest has lower MAE than the baseline.
 
 ## Agentic engineering with Codex, Sol, and Ultra reasoning
 
@@ -59,22 +59,31 @@ See [Agentic development](docs/agentic-development.md) for the vertical-slice re
 - **Forecast & trust:** an opening-time-only random-forest forecast shown beside its train-median
   baseline, each held-out MAE, time-safe training/test/purged counts, feature importance, and an
   explicit non-causal-use warning.
+- **Technical stack:** a recruiter-ready walkthrough of the local-first Python stack, data flow,
+  privacy boundaries, and automated quality controls.
 
 ## Live demo
 
 [Open the Streamlit deployment](https://engineering-intelligence-dashboard-jq9xccatzgwy9y9hcrwmor.streamlit.app/).
 
-On 2026-07-27, an anonymous HTTP check returned **HTTP 303** and redirected to
-`share.streamlit.io/-/auth/app`. The deployment is currently **auth-gated**, so it is not yet a
-recruiter-accessible public showcase. The app owner must make it public and reboot it in Streamlit.
+On 2026-07-28, a fresh anonymous browser session opened the public deployment without sign-in. It
+loaded 900 merged pull requests from all six repositories and exposed the four tabs `Overview`,
+`Drivers & retrospective patterns`, `Forecast & trust`, and `Technical stack`. The interactive
+forecast returned a visible estimate, and the model panel showed a random-forest MAE of 9.7 hours
+versus 12.5 hours for the baseline. There was no application traceback or horizontal overflow at
+the tested 1280-pixel desktop and 390-pixel narrow viewports.
 
-GitHub Actions [passed the complete quality gate](https://github.com/ktubi970/engineering-intelligence-dashboard/actions/runs/30282867104/job/90033339637)
-on commit `82e86b2fedc2526f6fc1eff6ce27941efbe0a00b`: **170 passed** with **94.54%**
-coverage. The job ran lint, format checking, and the test suite on Linux with Python 3.13.
+GitHub Actions [passed the merged-master quality gate](https://github.com/ktubi970/engineering-intelligence-dashboard/actions/runs/30346530403)
+on commit `a051ffe5198506a79f9be66112320cac47d0de3f`: Ruff lint and format checks
+passed, **173 passed**, and coverage reached **94.68%** against the required 85%.
 
-Separate post-fast-forward target verification on Python 3.13.9 reported **172 passed** with
-**94.54%** coverage and **33 files already formatted**. That local count includes integration
-evidence-contract coverage and is distinct from the hosted CI result.
+At verification time, Streamlit was configured to
+`codex/engineering-intelligence-dashboard` at `abaebd6115685e049dcad37599709a67f9ec2647`;
+that application tree is the one merged into `master` by the commit above. This is a dated
+deployment check, not an uptime guarantee.
+
+The structured source for these values is the
+[machine-readable publication evidence manifest](docs/evidence/final-publication.json).
 
 ![MergeLens dashboard overview](docs/images/dashboard.png)
 
