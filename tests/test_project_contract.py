@@ -244,7 +244,7 @@ def test_readme_defines_the_prediction_mathematically() -> None:
         r"\widehat{Y}_i = f(X_i)",
         r"\phi(X_i)",
         r"\sum_{b=1}^{200}T_b",
-        r"\operatorname{MAE}",
+        r"\mathrm{MAE}",
         r"\left|Y_i-\widehat{Y}_i\right|",
     ):
         assert mathematical_anchor in readme
