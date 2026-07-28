@@ -57,14 +57,14 @@ The refresh command accepts repeated `--repo owner/repository` values and an opt
 
 MergeLens estimates the number of hours from opening to merge for pull requests that eventually merge.
 
-For pull request $i$, the target is:
+For pull request $i$, the target is simply its merge time, measured in hours:
 
 $$
-Y_i =
-\frac{\mathrm{merged\_at}_i-\mathrm{created\_at}_i}
-     {1\ \mathrm{hour}},
+Y_i = \text{time from opening to merge for pull request } i,
 \qquad Y_i \ge 0.
 $$
+
+For example, if a pull request merges 9 hours and 30 minutes after it opens, then $Y_i = 9.5$.
 
 At opening time, the model knows the repository $r_i$, pull-request number $n_i$, and UTC
 opening time $t_i$. It derives:
