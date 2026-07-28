@@ -232,7 +232,11 @@ def test_empty_repository_filter_has_readable_state_without_exception(
     app.run(timeout=20)
 
     assert not app.exception
-    assert any("No pull requests match the selected filters." in info.value for info in app.info)
+    assert any(
+        "No pull requests match these filters. Try a wider date range or another repository."
+        in info.value
+        for info in app.info
+    )
 
 
 def test_repository_filter_includes_and_handles_workflow_only_repository(
