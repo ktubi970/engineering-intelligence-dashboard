@@ -57,7 +57,7 @@ The refresh command accepts repeated `--repo owner/repository` values and an opt
 
 MergeLens estimates the number of hours from opening to merge for pull requests that eventually merge.
 
-For pull request \(i\), the target is:
+For pull request $i$, the target is:
 
 $$
 Y_i =
@@ -66,8 +66,8 @@ Y_i =
 \qquad Y_i \ge 0.
 $$
 
-At opening time, the model knows the repository \(r_i\), pull-request number \(n_i\), and UTC
-opening time \(t_i\). It derives:
+At opening time, the model knows the repository $r_i$, pull-request number $n_i$, and UTC
+opening time $t_i$. It derives:
 
 $$
 X_i =
@@ -78,10 +78,10 @@ r_i,\ n_i,\ \mathrm{year}(t_i),\ \mathrm{month}(t_i),\ \mathrm{day}(t_i),\
 $$
 
 No developer identity, pull-request content, change size, merge outcome, or other future
-information appears in \(X_i\).
+information appears in $X_i$.
 
-Let \(\phi(X_i)\) represent one-hot encoding for the repository plus missing-value imputation. The
-model is a 200-tree random forest trained on \(\log(1+Y_i)\):
+Let $\phi(X_i)$ represent one-hot encoding for the repository plus missing-value imputation. The
+model is a 200-tree random forest trained on $\log(1+Y_i)$:
 
 $$
 \widehat{Y}_i = f(X_i) =
@@ -92,7 +92,7 @@ $$
 \right).
 $$
 
-Each \(T_b\) is one regression tree. Trees use maximum depth 8 and at least 3 training samples per leaf.
+Each $T_b$ is one regression tree. Trees use maximum depth 8 and at least 3 training samples per leaf.
 
 The newest 20% (180 rows) is the chronological test set. An older row can train the model only if
 its merge result was already known before the first test pull request opened; otherwise it is
