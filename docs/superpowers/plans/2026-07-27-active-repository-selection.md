@@ -420,8 +420,9 @@ In `README.md`:
   exact Step 3 values;
 - change the limitation from two Python repositories to six large public projects while retaining
   the point-in-time, merged-only, public-project, and non-causal limitations;
-- preserve the initial deployment observation as superseded historical context; current claims
-  use the verified CI evidence from `82e86b2` and the evidence refresh in `7990089`.
+- At this plan stage on 2026-07-27, the intended current claims used the verified CI evidence from
+  `82e86b2` and the evidence refresh in `7990089`. Final publication status is recorded in
+  `docs/quality-evidence.md`.
 
 - [ ] **Step 5: Update the data card, model card, and pull-request evidence**
 
@@ -432,9 +433,9 @@ Use the same Step 3 values:
   projects;
 - `docs/model-card.md`: exact total/training/test rows, both MAEs, difference wording, winner, and
   honest comparison sentence;
-- `.github/pull_request_body.md`: current committed-snapshot counts and model result, while retaining
-  the initial deployment observation as superseded historical context and using `82e86b2`/`7990089`
-  for the current verified evidence.
+- `.github/pull_request_body.md`: current committed-snapshot counts and model result. At this plan
+  stage on 2026-07-27, the intended verified evidence used `82e86b2`/`7990089`; final publication
+  status is recorded in `docs/quality-evidence.md`.
 
 Do not alter metric definitions, model parameters, or the interpretation that the forecast is
 experimental and non-causal.
@@ -534,8 +535,9 @@ Append a dated `Active repository expansion local evidence` section to
 - that this is local evidence for `codex/add-active-repositories`, not deployment or CI evidence.
 
 This original instruction was later superseded: retain the initial deployment observation only as
-historical context, without its obsolete identifier. Current claims use verified CI evidence from
-`82e86b2`, the evidence refresh in `7990089`, and the current auth-gated deployment observation.
+historical context, without its obsolete identifier. At that time, current claims used CI evidence
+from `82e86b2`, the evidence refresh in `7990089`, and the then-current auth-gated deployment
+observation. Final publication status is recorded in `docs/quality-evidence.md`.
 
 - [ ] **Step 5: Verify the visual artifact and dashboard contracts**
 

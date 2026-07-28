@@ -12,13 +12,14 @@ Task 8 began with a focused project-contract test. Before the requested artifact
 3 failed in 0.22s
 ```
 
-The failures named the missing CI workflow, README, and AGENTS file. The integrated, time-safe
-evaluation uses 223 training rows, 60 chronological test rows, and purges 17 labels unavailable
+The failures named the missing CI workflow, README, and AGENTS file. At that Task 8 revision, the
+integrated, time-safe evaluation used 223 training rows, 60 chronological test rows, and purged 17
+labels unavailable
 at the cutoff. Its random-forest MAE is `17.499891193309` hours, versus
 `20.535763888889` hours for the training-median baseline; the random forest wins this fixed
 holdout by `3.035872695580` hours.
 
-### Final local quality gate
+### Historical Task 8 local quality gate
 
 All final-gate commands used the verified repository virtual environment on Python 3.13.9.
 
@@ -52,7 +53,7 @@ Required test coverage of 85% reached. Total coverage: 94.54%
 The percentage shown as `95%` is pytest-cov's rounded table display; `94.54%` is its precise
 total. These are target-commit local Windows results, distinct from the hosted CI evidence.
 
-## GitHub Actions
+## Historical GitHub Actions evidence
 
 The complete GitHub Actions quality gate passed on commit
 `82e86b2fedc2526f6fc1eff6ce27941efbe0a00b`:
@@ -64,7 +65,8 @@ Pull request: https://github.com/ktubi970/engineering-intelligence-dashboard/pul
 
 ## Task 9 local browser evidence
 
-This section records local Windows evidence collected on 2026-07-27 for the current branch.
+This section records local Windows evidence collected on 2026-07-27 for the then-current Task 9
+branch.
 
 The app ran from the committed snapshot with the repository virtual environment:
 
@@ -95,7 +97,7 @@ The health endpoint returned `ok`. A named Playwright CLI session (`task-9`) the
 The restored 1440x1000 Overview was captured directly from that browser session as
 `docs/images/dashboard.png` (PNG, 80,350 bytes). This is local browser evidence only.
 
-### Task 9 final local quality gate
+### Historical Task 9 local quality gate
 
 All commands used the verified repository virtual environment on Python 3.13.9.
 
@@ -127,8 +129,8 @@ Required test coverage of 85% reached. Total coverage: 94.54%
 ```
 
 The percentage shown as `95%` is pytest-cov's rounded table display; `94.54%` is its precise
-total. These target-branch local Windows results include the current contract, model, data-integrity,
-dashboard, and no-network tests.
+total. These target-branch local Windows results include the then-current contract, model,
+data-integrity, dashboard, and no-network tests.
 
 ## Active repository expansion local evidence
 
@@ -224,9 +226,9 @@ Required test coverage of 85% reached. Total coverage: 94.54%
 ```
 
 `git diff --check` completed without output. These are local post-fast-forward target results, not
-hosted CI or deployment evidence. The official GitHub Actions result on `82e86b2` remains
-**170 passed**; this separate local target result is **172 passed** because it includes integration
-evidence-contract coverage.
+hosted CI or deployment evidence. At that point, the official GitHub Actions result on `82e86b2`
+was **170 passed**, while this separate local target result was **172 passed** because it included
+the then-new integration evidence-contract coverage.
 
 ## Cross-platform model-metric precision
 
@@ -250,7 +252,7 @@ failure because the README required the Windows result to twelve decimal places.
 model-quality values are therefore rounded to one decimal, while exact environment-specific
 outputs stay in this technical evidence record.
 
-## Deployment publication check
+## Historical deployment publication check
 
 Deployment URL:
 https://engineering-intelligence-dashboard-jq9xccatzgwy9y9hcrwmor.streamlit.app/
@@ -258,7 +260,59 @@ https://engineering-intelligence-dashboard-jq9xccatzgwy9y9hcrwmor.streamlit.app/
 On 2026-07-27 at 16:04 UTC, a cookie-free anonymous HEAD request returned **HTTP 303** with a
 `Location` beginning `https://share.streamlit.io/-/auth/app`.
 
-The deployment is therefore **auth-gated**, not yet a recruiter-accessible public showcase.
-The current `Overview`, `Drivers & retrospective patterns`, and `Forecast & trust` tabs are
-verified locally, but must be rechecked anonymously after the owner makes the app public and
-reboots it in Streamlit Community Cloud.
+That dated observation showed that the deployment was **auth-gated** and not yet a
+recruiter-accessible public showcase. It is superseded by the final anonymous verification below.
+
+## Final pre-merge local quality gate
+
+The final application tree was verified locally on Windows with Python 3.13.9 at commit
+`abaebd6115685e049dcad37599709a67f9ec2647`:
+
+```text
+Ruff lint: All checks passed!
+Ruff format: 33 files already formatted
+pytest: 173 passed in 203.22s
+coverage: 94.68% (85% required)
+git diff --check: no output
+```
+
+This is local evidence for the application tree later merged into `master`; it is separate from
+the hosted CI and live-browser evidence below.
+
+## Final merged-master GitHub Actions evidence
+
+On 2026-07-28, GitHub Actions run
+https://github.com/ktubi970/engineering-intelligence-dashboard/actions/runs/30346530403
+passed on `master` commit `a051ffe5198506a79f9be66112320cac47d0de3f`. The `quality` job ran on
+Ubuntu 24.04 with Python 3.13.14. Ruff lint passed, Ruff format reported 33 files already
+formatted, **173 passed** in 22.61 seconds, and coverage reached **94.68%** against the required
+85%.
+
+## Final public deployment verification
+
+Machine-readable source: [`docs/evidence/final-publication.json`](evidence/final-publication.json).
+
+On 2026-07-28, a fresh anonymous browser session opened
+https://engineering-intelligence-dashboard-jq9xccatzgwy9y9hcrwmor.streamlit.app/
+without sign-in and verified:
+
+- 900 merged pull requests and all six repositories: `microsoft/vscode`, `pandas-dev/pandas`,
+  `ruby/ruby`, `rust-lang/rust`, `streamlit/streamlit`, and `tensorflow/tensorflow`;
+- the exact tabs `Overview`, `Drivers & retrospective patterns`, `Forecast & trust`, and
+  `Technical stack`;
+- an interactive forecast whose default input returned a visible 1.5-hour random-forest estimate
+  alongside the 9.5-hour train-median estimate;
+- the visible model evaluation of 9.7 hours MAE versus 12.5 hours for the baseline;
+- no application traceback; and
+- no horizontal overflow at the tested 1280-pixel desktop and 390-pixel narrow viewports.
+
+The browser console's five errors were anonymous-platform requests to
+`/api/v2/user/details` returning HTTP 404. They were not application exceptions and did not
+prevent any tested interaction.
+
+Streamlit's public metadata showed that the deployment was configured to
+`codex/engineering-intelligence-dashboard`; GitHub showed that branch at
+`abaebd6115685e049dcad37599709a67f9ec2647`. The visible four-tab, 900-row state matched that
+application tree, which was merged into `master` as
+`a051ffe5198506a79f9be66112320cac47d0de3f`. This point-in-time verification is not an uptime
+guarantee.

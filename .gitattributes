@@ -1,1 +1,2 @@
 data/snapshots/*.csv text eol=lf
+data/snapshots/*.json text eol=lf

@@ -25,7 +25,8 @@ from engineering_intelligence.pipeline import load_snapshot
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_DATA_DIR = PROJECT_ROOT / "data" / "snapshots"
 FORECAST_WARNING = (
-    "Experimental forecast — not a causal measure and never a developer performance score."
+    "Experimental estimate — not a delivery promise or an explanation of cause. "
+    "Never use it to score developers."
 )
 
 
@@ -36,25 +37,30 @@ def resolve_data_dir() -> Path:
 def render_dashboard(data_dir: Path) -> None:
     st.set_page_config(page_title="MergeLens", page_icon="◈", layout="wide")
     st.title("MergeLens")
-    st.caption("Repository delivery signals from a local, privacy-safe snapshot.")
+    st.caption(
+        "Explore how pull requests move through public repositories—"
+        "without tracking individual developers."
+    )
 
     try:
         pulls, workflows, metadata = load_snapshot(data_dir)
     except (DataContractError, OSError, ValueError) as error:
-        st.error(f"Local snapshot unavailable: {error}")
+        st.error(
+            "MergeLens couldn't load its local data. "
+            f"Check the snapshot files and try again. Details: {error}"
+        )
         return
 
-    st.sidebar.header("Filters")
+    st.sidebar.header("Filter the view")
     filtered_pulls, filtered_workflows = _render_filters(pulls, workflows)
     generated_at = metadata.get("generated_at_utc", "unknown")
-    st.sidebar.caption(f"Snapshot generated: {generated_at}")
+    st.sidebar.caption(f"Snapshot updated: {generated_at}")
 
-    delivery_tab, bottlenecks_tab, forecast_tab, stack_tab = st.tabs(
+    delivery_tab, bottlenecks_tab, forecast_tab = st.tabs(
         [
-            "Overview",
-            "Drivers & retrospective patterns",
-            "Forecast & trust",
-            "Technical stack",
+            "Delivery overview",
+            "Where work slows down",
+            "Merge-time estimate",
         ]
     )
     with delivery_tab:
@@ -63,8 +69,6 @@ def render_dashboard(data_dir: Path) -> None:
         _render_bottlenecks(filtered_pulls)
     with forecast_tab:
         _render_forecast(filtered_pulls)
-    with stack_tab:
-        _render_technical_stack()
 
 
 def opening_feature_frame(
@@ -90,18 +94,19 @@ def evaluation_summary(
     if model_mae < baseline_mae:
         return (
             "success",
-            "Model wins: its MAE is lower than the train-median baseline "
-            f"({model_mae:.1f} vs {baseline_mae:.1f} hours).",
+            "The model was more accurate on recent test data "
+            f"(average error: {model_mae:.1f} vs {baseline_mae:.1f} hours).",
         )
     if baseline_mae < model_mae:
         return (
             "info",
-            "Train-median baseline wins: its MAE is lower than the model "
-            f"({baseline_mae:.1f} vs {model_mae:.1f} hours).",
+            "The simple benchmark was more accurate on recent test data "
+            f"(average error: {baseline_mae:.1f} vs {model_mae:.1f} hours).",
         )
     return (
         "info",
-        f"Tie: model and train-median baseline MAE are equal at {model_mae:.1f} hours.",
+        "The model and simple benchmark were equally accurate on recent test data "
+        f"({model_mae:.1f} hours of average error).",
     )
 
 
@@ -116,7 +121,7 @@ def _render_filters(
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     repositories = sorted(set(pulls["repository"]) | set(workflows["repository"]))
     selected_repositories = st.sidebar.multiselect(
-        "Repository",
+        "Repositories",
         repositories,
         default=repositories,
     )
@@ -134,13 +139,13 @@ def _render_filters(
     ]
     populated_bounds = [bounds for bounds in timestamp_bounds if bounds is not None]
     if not populated_bounds:
-        st.sidebar.caption("Date range unavailable: the snapshot has no delivery records.")
+        st.sidebar.caption("No delivery records are available for this snapshot.")
         return filtered_pulls, filtered_workflows
 
     minimum_date = min(bounds[0] for bounds in populated_bounds).date()
     maximum_date = max(bounds[1] for bounds in populated_bounds).date()
     selected_dates = st.sidebar.date_input(
-        "Merge date range",
+        "Merged between",
         value=(minimum_date, maximum_date),
         min_value=minimum_date,
         max_value=maximum_date,
@@ -158,73 +163,30 @@ def _render_filters(
     return filtered_pulls, filtered_workflows
 
 
-def _render_technical_stack() -> None:
-    st.subheader("From GitHub snapshot to decision-ready signals")
-    st.caption(
-        "MergeLens uses a compact, local-first Python stack: collection is separated "
-        "from the offline dashboard, and every layer has one clear responsibility."
-    )
-
-    interface_column, intelligence_column = st.columns(2)
-    with interface_column:
-        st.markdown("#### Experience & visualization")
-        st.markdown(
-            "**Streamlit** renders the interactive dashboard, filters, and forecast form.  \n"
-            "**Plotly** turns delivery metrics into responsive trend and comparison charts."
-        )
-    with intelligence_column:
-        st.markdown("#### Data & intelligence")
-        st.markdown(
-            "**pandas** validates and transforms the local CSV/JSON snapshot.  \n"
-            "**scikit-learn** trains the time-safe random-forest forecast and evaluates it "
-            "against a train-median baseline."
-        )
-
-    st.markdown("#### Architecture flow")
-    st.markdown(
-        "1. **Collect** public delivery events through the GitHub REST API.  \n"
-        "2. **Snapshot** privacy-minimized records as validated local CSV and JSON.  \n"
-        "3. **Transform** records into metrics, retrospective patterns, and model features.  \n"
-        "4. **Present** results offline through Streamlit and Plotly."
-    )
-
-    st.markdown("#### Quality & operating model")
-    quality_column, runtime_column = st.columns(2)
-    with quality_column:
-        st.markdown(
-            "**pytest** protects contracts and user-visible behavior; **Ruff** enforces "
-            "consistent Python quality in the local and CI gates."
-        )
-    with runtime_column:
-        st.markdown(
-            "**Python 3.13** is the reference CI runtime. The committed snapshot keeps the "
-            "demo reproducible and available without a network connection."
-        )
-
-    st.info(
-        "Privacy by design: the app excludes developer identities and never produces "
-        "individual performance scores."
-    )
-
-
 def _render_delivery_pulse(pulls: pd.DataFrame, workflows: pd.DataFrame) -> None:
     metrics = calculate_delivery_metrics(pulls, workflows)
     columns = st.columns(4)
-    columns[0].metric("Merged pull requests", f"{metrics.merged_pull_requests:,}")
-    columns[1].metric("Median merge time", _format_hours(metrics.median_merge_hours))
-    columns[2].metric("P90 merge time", _format_hours(metrics.p90_merge_hours))
-    columns[3].metric("Workflow success", _format_rate(metrics.workflow_success_rate))
+    columns[0].metric("PRs merged", f"{metrics.merged_pull_requests:,}")
+    columns[1].metric("Typical merge time", _format_hours(metrics.median_merge_hours))
+    columns[2].metric("90% merged within", _format_hours(metrics.p90_merge_hours))
+    columns[3].metric("Successful workflows", _format_rate(metrics.workflow_success_rate))
+    st.caption(
+        "Typical is the median. “90% merged within” is the P90: "
+        "nine out of ten PRs merged in that time or less."
+    )
 
     if pulls.empty:
-        st.info("No pull requests match the selected filters.")
-    st.subheader("Weekly trends")
+        st.info(
+            "No pull requests match these filters. Try a wider date range or another repository."
+        )
+    st.subheader("Merge time by week")
     st.plotly_chart(merge_time_trend_figure(pulls), width="stretch")
 
 
 def _render_bottlenecks(pulls: pd.DataFrame) -> None:
-    st.subheader("Retrospective bottlenecks")
+    st.subheader("Patterns worth exploring")
     st.caption(
-        "Descriptive, retrospective association only — not a forecast input or a causal effect."
+        "These charts show patterns in past data. They do not prove why a pull request took longer."
     )
     st.plotly_chart(size_delay_figure(pulls), width="stretch")
     st.plotly_chart(repository_comparison_figure(pulls), width="stretch")
@@ -232,13 +194,13 @@ def _render_bottlenecks(pulls: pd.DataFrame) -> None:
 
 def _render_forecast(pulls: pd.DataFrame) -> None:
     st.warning(FORECAST_WARNING)
-    st.subheader("Model evaluation")
+    st.subheader("How accurate is the estimate?")
     try:
         result = train_merge_time_model(pulls)
     except InsufficientTrainingDataError:
         st.info(
-            "At least 80 pull requests are required for an honest chronological "
-            "model evaluation. Forecasting is unavailable for this selection."
+            "Choose at least 80 pull requests to test this estimate honestly "
+            "against newer data. The estimate is unavailable for this selection."
         )
         return
 
@@ -251,15 +213,15 @@ def _render_forecast(pulls: pd.DataFrame) -> None:
     )
     st.plotly_chart(feature_importance_figure(importance), width="stretch")
 
-    st.subheader("What-if forecast")
+    st.subheader("Try an estimate")
     st.caption(
-        "Target: estimated merge time among pull requests that eventually merge. "
-        "Inputs are available when the pull request opens."
+        "Enter only what is known when a pull request opens. "
+        "The result estimates time to merge for pull requests that eventually merge."
     )
     repositories = sorted(pulls["repository"].unique())
     latest_opening = pulls["created_at"].max().to_pydatetime()
     with st.form("opening-time-forecast"):
-        repository = st.selectbox("Forecast repository", repositories)
+        repository = st.selectbox("Repository", repositories)
         pull_request_number = st.number_input(
             "Pull request number",
             min_value=1,
@@ -271,7 +233,7 @@ def _render_forecast(pulls: pd.DataFrame) -> None:
             "Opening time (UTC)",
             value=latest_opening.time().replace(tzinfo=None),
         )
-        submitted = st.form_submit_button("Forecast merge time")
+        submitted = st.form_submit_button("Estimate merge time")
 
     if submitted:
         features = opening_feature_frame(
@@ -282,36 +244,41 @@ def _render_forecast(pulls: pd.DataFrame) -> None:
         )
         model_prediction = float(result.model.predict_hours(features)[0])
         baseline_message = (
-            f"Train-median baseline estimate: {result.baseline_hours:.1f} hours\n\n"
-            f"Held-out MAE: {result.baseline_mae_hours:.1f} hours — "
-            "empirical error context, not a prediction interval."
+            f"Simple benchmark estimate: {result.baseline_hours:.1f} hours\n\n"
+            f"Average error on recent test data: {result.baseline_mae_hours:.1f} hours. "
+            "This is context, not a guaranteed range."
         )
         model_message = (
-            f"Experimental random-forest estimate: {model_prediction:.1f} hours\n\n"
-            f"Held-out MAE: {result.mae_hours:.1f} hours — "
-            "empirical error context, not a prediction interval."
+            f"Model estimate: {model_prediction:.1f} hours\n\n"
+            f"Average error on recent test data: {result.mae_hours:.1f} hours. "
+            "This is context, not a guaranteed range."
         )
         estimate_columns = st.columns(2)
         if (
             preferred_forecast(result.mae_hours, result.baseline_mae_hours)
             == "train-median baseline"
         ):
-            estimate_columns[0].success(f"Validated default — {baseline_message}")
+            estimate_columns[0].success(f"Recommended — {baseline_message}")
             estimate_columns[1].info(model_message)
         else:
             estimate_columns[0].info(baseline_message)
-            estimate_columns[1].success(f"Validated default — {model_message}")
+            estimate_columns[1].success(f"Recommended — {model_message}")
 
 
 def _render_evaluation(result: ModelResult) -> None:
     columns = st.columns(4)
-    columns[0].markdown(f"**Model MAE**\n\n{result.mae_hours:.1f} hours")
-    columns[1].markdown(f"**Train-median baseline MAE**\n\n{result.baseline_mae_hours:.1f} hours")
-    columns[2].markdown(f"**Time-safe training rows**\n\n{result.train_rows:,}")
-    columns[3].markdown(f"**Chronological test rows**\n\n{result.test_rows:,}")
+    columns[0].markdown(f"**Model: average error**\n\n{result.mae_hours:.1f} hours")
+    columns[1].markdown(
+        f"**Simple benchmark: average error**\n\n{result.baseline_mae_hours:.1f} hours"
+    )
+    columns[2].markdown(f"**Past examples used**\n\n{result.train_rows:,}")
+    columns[3].markdown(f"**Recent examples tested**\n\n{result.test_rows:,}")
     st.caption(
-        f"As-of cutoff: {result.cutoff.isoformat()} · "
-        f"Purged labels unavailable at cutoff: {result.purged_rows:,}."
+        "MAE is the average number of hours each estimate missed by on recent test data; "
+        "lower is better. "
+        f"Testing starts {result.cutoff.date().isoformat()}. "
+        f"{result.purged_rows:,} earlier PRs were left out because their outcomes "
+        "were not yet known."
     )
 
     level, message = evaluation_summary(result.mae_hours, result.baseline_mae_hours)

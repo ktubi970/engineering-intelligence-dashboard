@@ -134,8 +134,8 @@ omitted.
   `ce303f2a4b5d81e98a478ec542542698e0f991b1`, decoded and verified the real PNG, enforced exact
   1440x1000 dimensions, and added corrupt/wrong-size negative cases in commit `a439c9c`.
 - **Residual risk:** the initial live observation predates the verified CI evidence on `82e86b2`
-  and the refresh in `7990089`; the current anonymous check is auth-gated. Local, CI, and live
-  evidence remain distinct and are not interchangeable.
+  and the refresh in `7990089`. Local, CI, and live evidence remain revision-specific and are not
+  interchangeable; the superseding public check is recorded in Task 10.
 
 ## Reviewer-driven hardening - current passes
 
@@ -151,3 +151,28 @@ owner rather than letting agents overwrite each other's work.
 - **RED/GREEN:** the focused pagination/guard slice moved from 4 failed and 1 passed to 5 passed;
   the complete GitHub client suite then passed 18 tests. No real network request was used.
 - **Evidence boundary:** other concurrent review findings are owned and verified separately; this
+  record does not turn an agent status report into proof.
+
+## Task 10 - merged-master and public deployment evidence
+
+- **Request:** finish the recruiter-facing publication proof after the final application tree was
+  merged, without rewriting historical local, CI, or live observations.
+- **Human decision:** approve PR #2, make it ready, merge it, and confirm the final public
+  deployment check.
+- **Files/outcome:** the four-tab application tree at
+  `abaebd6115685e049dcad37599709a67f9ec2647` was merged into `master` as
+  `a051ffe5198506a79f9be66112320cac47d0de3f`. The final evidence refresh updates the README,
+  pull-request template, quality journal, and publication contract.
+- **RED/GREEN:** the evidence contract first failed because the README still pinned the old CI run
+  and omitted `Technical stack`. The documents were then aligned to the verified master CI and
+  anonymous live-browser observations before the complete gate was rerun.
+- **CI proof:** GitHub Actions run
+  https://github.com/ktubi970/engineering-intelligence-dashboard/actions/runs/30346530403 passed
+  Ruff lint, format checking, 173 tests, and 94.68% coverage on the merged-master commit.
+- **Live proof:** a fresh anonymous browser session loaded 900 pull requests from six repositories,
+  opened all four tabs, returned an interactive forecast, showed 9.7 hours MAE versus 12.5 hours
+  for the baseline, and found no application traceback or horizontal overflow at desktop and
+  narrow widths.
+- **Residual risk:** Streamlit was configured to `codex/engineering-intelligence-dashboard`
+  during verification rather than directly to `master`. The public check is a dated observation,
+  not an uptime guarantee, and future updates must keep that deployment coordinate in mind.
