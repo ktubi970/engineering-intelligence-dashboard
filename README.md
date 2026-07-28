@@ -165,14 +165,18 @@ Of the 720 earlier candidates, 622 have labels available before the cutoff; 98 a
 - Chronological test rows: **180**
 - Purged unavailable labels: **98**
 - Training-median estimate: **9.463611111111 hours**
-- Random-forest MAE: **9.734692264131 hours**
-- Training-median baseline MAE: **12.484162037037 hours**
-- Winner: **random forest**, by **2.749469772906 hours**
+- Random-forest MAE: **9.7 hours** (rounded)
+- Training-median baseline MAE: **12.5 hours** (rounded)
+- Winner: **random forest**, with about **22% lower MAE**
 
 The random forest has lower MAE than the baseline on this fixed snapshot. This single holdout does
 not establish future or general superiority, so both estimates and both empirical MAEs remain
 visible. Inputs are only repository, pull-request number, and UTC calendar features derived from
 creation time. The target is estimated merge time among pull requests that eventually merge.
+Public model-quality values are rounded to one decimal because exact tree-ensemble results can
+vary slightly across execution environments even with the same direct dependency pins and a fixed
+seed. The observed Windows/Linux difference does not isolate a single causal factor. Exact
+environment-specific outputs are recorded in [Quality evidence](docs/quality-evidence.md).
 This is an experimental, non-causal estimate and never a developer score. See the
 [Model card](docs/model-card.md).
 

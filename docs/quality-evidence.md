@@ -228,6 +228,28 @@ hosted CI or deployment evidence. The official GitHub Actions result on `82e86b2
 **170 passed**; this separate local target result is **172 passed** because it includes integration
 evidence-contract coverage.
 
+## Cross-platform model-metric precision
+
+The candidate tree at commit `d09504f1c9eb470ff2669e62b114e34a90dd5bcd` used the same committed
+snapshot, `random_state=42`, and direct pandas/scikit-learn pins in both execution environments.
+The exact random-forest MAE differed slightly:
+
+- Windows 3.13.9: `9.734692264131` hours
+- Linux 3.13.14: `9.725297316958` hours
+
+The train-median baseline remained `12.484162037037` hours and the random forest remained the
+winner in both environments. The observations differ in operating system, Python patch version,
+and execution context, so they do not isolate a single causal factor. The difference does not
+change the one-decimal dashboard result or the model-selection conclusion.
+
+The Linux observation comes from the failed GitHub Actions contract check:
+https://github.com/ktubi970/engineering-intelligence-dashboard/actions/runs/30342316589/job/90220463967
+
+The job passed Ruff lint and format checks, then reported 172 passed and one documentation-contract
+failure because the README required the Windows result to twelve decimal places. Public
+model-quality values are therefore rounded to one decimal, while exact environment-specific
+outputs stay in this technical evidence record.
+
 ## Deployment publication check
 
 Deployment URL:

@@ -146,26 +146,20 @@ def test_agent_guardrails_allow_scoped_work_and_prohibit_unsafe_claims() -> None
 def test_published_portfolio_claims_match_verified_snapshot_and_evaluation() -> None:
     pulls, workflows, _ = load_snapshot(PROJECT_ROOT / "data" / "snapshots")
     result = train_merge_time_model(pulls)
-    model_mae = f"{result.mae_hours:.12f}"
-    baseline_mae = f"{result.baseline_mae_hours:.12f}"
-    difference = f"{abs(result.mae_hours - result.baseline_mae_hours):.12f}"
+    assert result.mae_hours == pytest.approx(9.73, abs=0.02)
+    assert result.baseline_mae_hours == pytest.approx(12.484162037037, abs=1e-12)
+    assert result.mae_hours < result.baseline_mae_hours
 
-    if result.mae_hours < result.baseline_mae_hours:
-        winner = "random forest"
-        result_sentence = (
-            "The random forest has lower MAE than the baseline on this fixed snapshot."
-        )
-        model_card_difference = f"model is {difference} hours better"
-    elif result.baseline_mae_hours < result.mae_hours:
-        winner = "baseline"
-        result_sentence = "The model underperforms the baseline on this snapshot."
-        model_card_difference = f"model is {difference} hours worse"
-    else:
-        winner = "tie"
-        result_sentence = "The model matches the baseline on this snapshot."
-        model_card_difference = "model and baseline are equal"
-
-    honest_result = "tie" if winner == "tie" else f"{winner} wins"
+    model_mae_display = f"{result.mae_hours:.1f}"
+    baseline_mae_display = f"{result.baseline_mae_hours:.1f}"
+    relative_reduction_display = (
+        f"{100 * (result.baseline_mae_hours - result.mae_hours) / result.baseline_mae_hours:.0f}%"
+    )
+    assert (model_mae_display, baseline_mae_display, relative_reduction_display) == (
+        "9.7",
+        "12.5",
+        "22%",
+    )
 
     readme = _artifact("README.md")
     for claim in (
@@ -174,9 +168,9 @@ def test_published_portfolio_claims_match_verified_snapshot_and_evaluation() -> 
         "Of the 720 earlier candidates, 622 have labels available before the cutoff; "
         "98 are purged.",
         "- As-of cutoff: **2026-07-24T08:38:56+00:00**",
-        "- Random-forest MAE: **9.734692264131 hours**",
-        "- Training-median baseline MAE: **12.484162037037 hours**",
-        "- Winner: **random forest**, by **2.749469772906 hours**",
+        f"- Random-forest MAE: **{model_mae_display} hours** (rounded)",
+        f"- Training-median baseline MAE: **{baseline_mae_display} hours** (rounded)",
+        f"- Winner: **random forest**, with about **{relative_reduction_display} lower MAE**",
         "The random forest has lower MAE than the baseline on this fixed snapshot.",
         "estimated merge time among pull requests that eventually merge",
         f"{len(pulls)} merged pull requests and {len(workflows)} completed workflow runs",
@@ -185,10 +179,6 @@ def test_published_portfolio_claims_match_verified_snapshot_and_evaluation() -> 
         f"- Purged unavailable labels: **{result.purged_rows}**",
         f"- Training-median estimate: **{result.baseline_hours:.12f} hours**",
         f"The newest 20% ({result.test_rows} rows) is a fixed chronological holdout.",
-        f"- Random-forest MAE: **{model_mae} hours**",
-        f"- Training-median baseline MAE: **{baseline_mae} hours**",
-        f"- Winner: **{winner}**, by **{difference} hours**",
-        result_sentence,
     ):
         assert claim in readme
 
@@ -202,9 +192,9 @@ def test_published_portfolio_claims_match_verified_snapshot_and_evaluation() -> 
         "| Training rows | 622 |",
         "| Test rows | 180 |",
         "| Purged unavailable labels | 98 |",
-        "| Random-forest MAE | 9.734692264131 hours |",
-        "| Train-median baseline MAE | 12.484162037037 hours |",
-        "| Difference | model is 2.749469772906 hours better |",
+        f"| Random-forest MAE | {model_mae_display} hours (rounded) |",
+        f"| Train-median baseline MAE | {baseline_mae_display} hours (rounded) |",
+        f"| Relative MAE reduction | about {relative_reduction_display} |",
         "| Honest result | random forest wins |",
         "The random forest has lower MAE on this fixed committed-snapshot holdout.",
         "estimated merge time among pull requests that eventually merge",
@@ -215,13 +205,32 @@ def test_published_portfolio_claims_match_verified_snapshot_and_evaluation() -> 
         f"| Training rows | {training_rows} |",
         f"| Purged unavailable labels | {result.purged_rows} |",
         f"| Training-median estimate | {result.baseline_hours:.12f} hours |",
-        f"| Random-forest MAE | {model_mae} hours |",
-        f"| Train-median baseline MAE | {baseline_mae} hours |",
-        f"| Difference | {model_card_difference} |",
-        f"| Honest result | {honest_result} |",
-        "The random forest has lower MAE on this fixed committed-snapshot holdout.",
     ):
         assert claim in model_card
+
+    pull_request_body = _artifact(".github/pull_request_body.md")
+    for claim in (
+        f"- Random-forest MAE: {model_mae_display} hours (rounded)",
+        f"- Training-median baseline MAE: {baseline_mae_display} hours (rounded)",
+        f"- Winner: random forest, with about {relative_reduction_display} lower MAE",
+    ):
+        assert claim in pull_request_body
+
+    for document in (readme, model_card, pull_request_body):
+        assert "rounded to one decimal" in document
+        assert "execution environments" in document
+        assert "does not isolate a single causal factor" in document
+        assert "9.734692264131" not in document
+        assert "2.749469772906" not in document
+
+    quality_evidence = _artifact("docs/quality-evidence.md")
+    for exact_environment_evidence in (
+        "Windows 3.13.9: `9.734692264131` hours",
+        "Linux 3.13.14: `9.725297316958` hours",
+        "The train-median baseline remained `12.484162037037` hours",
+        "30342316589/job/90220463967",
+    ):
+        assert exact_environment_evidence in quality_evidence
 
 
 def test_publication_artifacts_are_real_and_match_verified_remote_evidence() -> None:

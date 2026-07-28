@@ -68,14 +68,19 @@ These values were computed through `load_snapshot(Path("data/snapshots"))` follo
 | Test rows | 180 |
 | Purged unavailable labels | 98 |
 | Training-median estimate | 9.463611111111 hours |
-| Random-forest MAE | 9.734692264131 hours |
-| Train-median baseline MAE | 12.484162037037 hours |
-| Difference | model is 2.749469772906 hours better |
+| Random-forest MAE | 9.7 hours (rounded) |
+| Train-median baseline MAE | 12.5 hours (rounded) |
+| Relative MAE reduction | about 22% |
 | Honest result | random forest wins |
 
 The random forest has lower MAE on this fixed committed-snapshot holdout. That is local evidence
 for this split, not a claim of real-world or future superiority. Synthetic tests prove mechanics,
 not general model quality.
+
+Public model-quality values are rounded to one decimal because exact tree-ensemble results can
+vary slightly across execution environments even with the same direct dependency pins and a fixed
+seed. The observed Windows/Linux difference does not isolate a single causal factor. Exact
+environment-specific outputs are retained in the quality-evidence record.
 
 ## Interpretation and limitations
 

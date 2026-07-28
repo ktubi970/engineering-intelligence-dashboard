@@ -44,14 +44,19 @@ repository-scoped delivery fields rather than developer identities or credential
 - Chronological test rows: 180
 - Purged unavailable labels: 98
 - Training-median estimate: 9.463611111111 hours
-- Random-forest MAE: 9.734692264131 hours
-- Training-median baseline MAE: 12.484162037037 hours
-- Winner: random forest, by 2.749469772906 hours
+- Random-forest MAE: 9.7 hours (rounded)
+- Training-median baseline MAE: 12.5 hours (rounded)
+- Winner: random forest, with about 22% lower MAE
 
 The random forest has lower MAE than the baseline on this fixed snapshot. Both estimates remain
 visible because one holdout does not establish future superiority. The displayed target is
 estimated merge time among pull requests that eventually merge. The forecast is experimental,
 non-causal, and never a developer performance score.
+
+Public model-quality values are rounded to one decimal because exact tree-ensemble results can
+vary slightly across execution environments even with the same direct dependency pins and a fixed
+seed. The observed Windows/Linux difference does not isolate a single causal factor. Exact
+environment-specific outputs remain in `docs/quality-evidence.md`.
 
 ## Screenshot
 
