@@ -122,7 +122,7 @@ when their merge result was already known before the first test opening time. Un
 are purged. Performance is reported as:
 
 \[
-\operatorname{MAE} =
+\mathrm{MAE} =
 \frac{1}{m}\sum_{i=1}^{m}\left|Y_i-\widehat{Y}_i\right|.
 \]
 

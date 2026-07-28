@@ -99,7 +99,7 @@ its merge result was already known before the first test pull request opened; ot
 excluded. Accuracy is measured on the test set with mean absolute error:
 
 $$
-\operatorname{MAE} =
+\mathrm{MAE} =
 \frac{1}{m}\sum_{i=1}^{m}
 \left|Y_i-\widehat{Y}_i\right|.
 $$
