@@ -15,7 +15,7 @@ COLORBLIND_PALETTE = (
     "#A66F00",
     "#2A7FA8",
 )
-EMPTY_MESSAGE = "No data available for the selected filters."
+EMPTY_MESSAGE = "Nothing to show for these filters."
 
 HIGH_CONTRAST_TEMPLATE = go.layout.Template(
     layout=go.Layout(
@@ -31,7 +31,7 @@ HIGH_CONTRAST_TEMPLATE = go.layout.Template(
 
 
 def merge_time_trend_figure(frame: pd.DataFrame) -> go.Figure:
-    figure = _base_figure("Weekly merge time", "Week", "Median hours")
+    figure = _base_figure("Typical merge time each week", "Week", "Hours to merge")
     if frame.empty:
         return _with_empty_state(figure)
 
@@ -49,7 +49,7 @@ def merge_time_trend_figure(frame: pd.DataFrame) -> go.Figure:
                 hovertemplate=(
                     "Repository: %{fullData.name}<br>"
                     "Week: %{x|%Y-%m-%d}<br>"
-                    "Median merge time: %{y:.1f} hours<extra></extra>"
+                    "Typical merge time: %{y:.1f} hours<extra></extra>"
                 ),
             )
         )
@@ -58,9 +58,9 @@ def merge_time_trend_figure(frame: pd.DataFrame) -> go.Figure:
 
 def size_delay_figure(frame: pd.DataFrame) -> go.Figure:
     figure = _base_figure(
-        "Change size and merge delay — retrospective only",
-        "Change size (additions + deletions)",
-        "Merge hours",
+        "Do larger changes take longer to merge?",
+        "Lines changed (added + deleted)",
+        "Hours to merge",
     )
     if frame.empty:
         return _with_empty_state(figure)
@@ -79,8 +79,8 @@ def size_delay_figure(frame: pd.DataFrame) -> go.Figure:
                 hovertemplate=(
                     "Repository: %{fullData.name}<br>"
                     "Pull request: #%{customdata[0]}<br>"
-                    "Change size: %{x}<br>"
-                    "Merge delay: %{y:.1f} hours<extra></extra>"
+                    "Lines changed: %{x}<br>"
+                    "Time to merge: %{y:.1f} hours<extra></extra>"
                 ),
             )
         )
@@ -89,9 +89,9 @@ def size_delay_figure(frame: pd.DataFrame) -> go.Figure:
 
 def repository_comparison_figure(frame: pd.DataFrame) -> go.Figure:
     figure = _base_figure(
-        "Median merge time by repository",
+        "Typical merge time by repository",
         "Repository",
-        "Median hours",
+        "Hours to merge",
     )
     if frame.empty:
         return _with_empty_state(figure)
@@ -107,14 +107,18 @@ def repository_comparison_figure(frame: pd.DataFrame) -> go.Figure:
             x=summary["repository"],
             y=summary["median_merge_hours"],
             marker={"color": colors},
-            hovertemplate=("Repository: %{x}<br>Median merge time: %{y:.1f} hours<extra></extra>"),
+            hovertemplate=("Repository: %{x}<br>Typical merge time: %{y:.1f} hours<extra></extra>"),
         )
     )
     return figure
 
 
 def feature_importance_figure(frame: pd.DataFrame) -> go.Figure:
-    figure = _base_figure("Global feature importance", "Importance", "Feature")
+    figure = _base_figure(
+        "What the estimate relies on most",
+        "Relative influence",
+        "Input",
+    )
     if frame.empty:
         return _with_empty_state(figure)
 
@@ -126,7 +130,7 @@ def feature_importance_figure(frame: pd.DataFrame) -> go.Figure:
             y=ordered["feature"],
             orientation="h",
             marker={"color": colors},
-            hovertemplate="Feature: %{y}<br>Importance: %{x:.3f}<extra></extra>",
+            hovertemplate="Input: %{y}<br>Relative influence: %{x:.3f}<extra></extra>",
         )
     )
     return figure

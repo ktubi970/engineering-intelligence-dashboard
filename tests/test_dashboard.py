@@ -17,7 +17,10 @@ from engineering_intelligence.dashboard import (
 )
 from engineering_intelligence.transform import PULL_REQUEST_COLUMNS, WORKFLOW_COLUMNS
 
-WARNING = "Experimental forecast — not a causal measure and never a developer performance score."
+WARNING = (
+    "Experimental estimate — not a delivery promise or an explanation of cause. "
+    "Never use it to score developers."
+)
 APP_PATH = Path(__file__).parents[1] / "streamlit_app.py"
 
 
@@ -63,23 +66,26 @@ def test_dashboard_loads_snapshot_and_shows_exact_core_sections(
     assert not app.exception
     assert [title.value for title in app.title] == ["MergeLens"]
     assert [tab.label for tab in app.tabs] == [
-        "Overview",
-        "Drivers & retrospective patterns",
-        "Forecast & trust",
-        "Technical stack",
+        "Delivery overview",
+        "Where work slows down",
+        "Merge-time estimate",
     ]
-    assert len(app.metric) == 4
+    assert [metric.label for metric in app.metric] == [
+        "PRs merged",
+        "Typical merge time",
+        "90% merged within",
+        "Successful workflows",
+    ]
     assert [subheader.value for subheader in app.subheader] == [
-        "Weekly trends",
-        "Retrospective bottlenecks",
+        "Merge time by week",
+        "Patterns worth exploring",
         "Model evaluation",
         "What-if forecast",
-        "From GitHub snapshot to decision-ready signals",
     ]
     assert [warning.value for warning in app.warning] == [WARNING]
 
 
-def test_technical_stack_view_exposes_the_runtime_layers(
+def test_dashboard_copy_is_product_first_and_hides_the_technical_stack(
     snapshot_dir: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -90,20 +96,20 @@ def test_technical_stack_view_exposes_the_runtime_layers(
 
     visible_text = "\n".join(
         element.value
-        for collection in (app.subheader, app.markdown, app.caption)
+        for collection in (app.title, app.subheader, app.markdown, app.caption, app.info)
         for element in collection
     )
-    assert "From GitHub snapshot to decision-ready signals" in visible_text
-    assert all(
-        technology in visible_text
-        for technology in (
-            "Streamlit",
-            "pandas",
-            "Plotly",
-            "scikit-learn",
-            "pytest",
-        )
-    )
+    assert "Typical is the median." in visible_text
+    assert "past data" in visible_text
+    for implementation_detail in (
+        "Technical stack",
+        "Streamlit",
+        "pandas",
+        "Plotly",
+        "scikit-learn",
+        "pytest",
+    ):
+        assert implementation_detail not in visible_text
 
 
 def test_forecast_form_accepts_only_opening_time_features(
