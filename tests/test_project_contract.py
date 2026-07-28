@@ -237,7 +237,7 @@ def test_readme_defines_the_prediction_mathematically() -> None:
 
     for mathematical_anchor in (
         r"Y_i =",
-        r"\mathrm{merged\_at}_i-\mathrm{created\_at}_i",
+        r"\text{time from opening to merge for pull request } i",
         r"X_i =",
         r"\mathrm{year}(t_i)",
         r"\mathrm{weekday}(t_i)",
@@ -251,6 +251,7 @@ def test_readme_defines_the_prediction_mathematically() -> None:
 
     for model_contract in (
         "pull requests that eventually merge",
+        "if a pull request merges 9 hours and 30 minutes after it opens",
         "No developer identity",
         "200-tree random forest",
         "maximum depth 8",
