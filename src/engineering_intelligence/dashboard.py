@@ -177,8 +177,7 @@ def _render_delivery_pulse(pulls: pd.DataFrame, workflows: pd.DataFrame) -> None
 
     if pulls.empty:
         st.info(
-            "No pull requests match these filters. "
-            "Try a wider date range or another repository."
+            "No pull requests match these filters. Try a wider date range or another repository."
         )
     st.subheader("Merge time by week")
     st.plotly_chart(merge_time_trend_figure(pulls), width="stretch")
@@ -187,8 +186,7 @@ def _render_delivery_pulse(pulls: pd.DataFrame, workflows: pd.DataFrame) -> None
 def _render_bottlenecks(pulls: pd.DataFrame) -> None:
     st.subheader("Patterns worth exploring")
     st.caption(
-        "These charts show patterns in past data. "
-        "They do not prove why a pull request took longer."
+        "These charts show patterns in past data. They do not prove why a pull request took longer."
     )
     st.plotly_chart(size_delay_figure(pulls), width="stretch")
     st.plotly_chart(repository_comparison_figure(pulls), width="stretch")
@@ -271,8 +269,7 @@ def _render_evaluation(result: ModelResult) -> None:
     columns = st.columns(4)
     columns[0].markdown(f"**Model: average error**\n\n{result.mae_hours:.1f} hours")
     columns[1].markdown(
-        f"**Simple benchmark: average error**\n\n"
-        f"{result.baseline_mae_hours:.1f} hours"
+        f"**Simple benchmark: average error**\n\n{result.baseline_mae_hours:.1f} hours"
     )
     columns[2].markdown(f"**Past examples used**\n\n{result.train_rows:,}")
     columns[3].markdown(f"**Recent examples tested**\n\n{result.test_rows:,}")

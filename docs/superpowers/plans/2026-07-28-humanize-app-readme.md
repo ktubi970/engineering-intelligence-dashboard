@@ -258,8 +258,7 @@ def _render_delivery_pulse(pulls: pd.DataFrame, workflows: pd.DataFrame) -> None
 
     if pulls.empty:
         st.info(
-            "No pull requests match these filters. "
-            "Try a wider date range or another repository."
+            "No pull requests match these filters. Try a wider date range or another repository."
         )
     st.subheader("Merge time by week")
     st.plotly_chart(merge_time_trend_figure(pulls), width="stretch")
@@ -268,8 +267,7 @@ def _render_delivery_pulse(pulls: pd.DataFrame, workflows: pd.DataFrame) -> None
 def _render_bottlenecks(pulls: pd.DataFrame) -> None:
     st.subheader("Patterns worth exploring")
     st.caption(
-        "These charts show patterns in past data. "
-        "They do not prove why a pull request took longer."
+        "These charts show patterns in past data. They do not prove why a pull request took longer."
     )
     st.plotly_chart(size_delay_figure(pulls), width="stretch")
     st.plotly_chart(repository_comparison_figure(pulls), width="stretch")
@@ -363,8 +361,8 @@ In `test_dashboard_loads_snapshot_and_shows_exact_core_sections`, update the fin
 expectations to:
 
 ```python
-"How accurate is the estimate?",
-"Try an estimate",
+("How accurate is the estimate?",)
+("Try an estimate",)
 ```
 
 Replace the submission assertions with:
@@ -391,19 +389,13 @@ assert "MAE is the average number of hours" in visible_text
 Update the readable-state assertions to require:
 
 ```python
-assert any(
-    "Choose at least 80 pull requests" in info.value
-    for info in app.info
-)
+assert any("Choose at least 80 pull requests" in info.value for info in app.info)
 ```
 
 Change the empty-filter assertion to:
 
 ```python
-assert any(
-    "No pull requests match these filters." in info.value
-    for info in app.info
-)
+assert any("No pull requests match these filters." in info.value for info in app.info)
 ```
 
 Replace the evaluation-summary parameterization with:
@@ -517,10 +509,7 @@ In `_render_evaluation`, use:
 ```python
 columns = st.columns(4)
 columns[0].markdown(f"**Model: average error**\n\n{result.mae_hours:.1f} hours")
-columns[1].markdown(
-    f"**Simple benchmark: average error**\n\n"
-    f"{result.baseline_mae_hours:.1f} hours"
-)
+columns[1].markdown(f"**Simple benchmark: average error**\n\n{result.baseline_mae_hours:.1f} hours")
 columns[2].markdown(f"**Past examples used**\n\n{result.train_rows:,}")
 columns[3].markdown(f"**Recent examples tested**\n\n{result.test_rows:,}")
 st.caption(
@@ -586,8 +575,7 @@ for anchor in (
     "python scripts/refresh_data.py",
     "python -m ruff check .",
     "python -m ruff format --check .",
-    "python -m pytest --cov=engineering_intelligence "
-    "--cov-report=term-missing --cov-fail-under=85",
+    "python -m pytest --cov=engineering_intelligence --cov-report=term-missing --cov-fail-under=85",
 ):
     assert anchor in readme
 
